@@ -12,5 +12,5 @@ SITE_ENV = "preview"
 binding = "DB"
 database_name = "fidelstine"
 # Replace with the id printed by:  npx wrangler d1 create fidelstine
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "c7578596-8c6c-4ec8-b49c-5adebd1bb802"
 migrations_dir = "migrations"
