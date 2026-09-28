@@ -1,0 +1,59 @@
+---
+layout: layouts/base.njk
+title: Thank you
+pageClass: thank-you
+permalink: /donate/thank-you/
+noindex: true
+description: Thank you for supporting Fidelstine Charity Concerns and Orphanage.
+---
+<section class="section mood-light" style="min-height:70vh">
+  <div class="wrap">
+    <div class="ty" data-thankyou data-state="verifying" aria-live="polite">
+      <div class="ty__state ty__state--verifying">
+        <div class="ty__spinner" aria-hidden="true"></div>
+        <h1 style="font-size:var(--step-3)">Confirming your gift…</h1>
+        <p class="muted">We are checking your payment with Flutterwave. This usually takes a few seconds.</p>
+      </div>
+
+      <div class="ty__state ty__state--success">
+        <div class="ty__icon ty__icon--ok"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p class="eyebrow eyebrow--center">Gift received</p>
+        <h1 style="font-size:var(--step-4)">Thank you<span data-ty-name></span></h1>
+        <p class="lead">Your kindness is already at work. A receipt is on its way to your email.</p>
+        <dl class="ty__summary">
+          <dt>Amount</dt><dd data-ty-amount></dd>
+          <dt>Going to</dt><dd data-ty-campaign></dd>
+          <dt>Reference</dt><dd data-ty-ref style="font-size:.85em"></dd>
+        </dl>
+        <p class="muted">Help us reach more children: share with someone who cares.</p>
+        <div class="share-row">
+          <a href="https://wa.me/?text={{ ('I just gave to Fidelstine Charity Concerns and Orphanage. Join me: ' + site.url + '/donate/') | urlencode }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ (site.url + '/donate/') | urlencode }}" target="_blank" rel="noopener">{% icon "facebook" %}Facebook</a>
+          <a href="https://x.com/intent/post?text={{ ('I just supported @fidelstine. Join me: ' + site.url + '/donate/') | urlencode }}" target="_blank" rel="noopener">{% icon "x" %}X</a>
+        </div>
+        <div class="ty__actions"><a class="btn btn--navy" href="/">Back to home</a><a class="btn btn--outline" href="/gallery/">See the work</a></div>
+      </div>
+
+      <div class="ty__state ty__state--pending">
+        <div class="ty__icon ty__icon--warn">{% icon "clock" %}</div>
+        <h1 style="font-size:var(--step-3)">Your payment is being processed</h1>
+        <p class="muted">Bank transfers and USSD payments can take a few minutes to confirm. We will email you as soon as it is through. You can safely close this page.</p>
+        <div class="ty__actions"><a class="btn btn--navy" href="/">Back to home</a></div>
+      </div>
+
+      <div class="ty__state ty__state--cancelled">
+        <div class="ty__icon ty__icon--warn">{% icon "info" %}</div>
+        <h1 style="font-size:var(--step-3)">Payment cancelled</h1>
+        <p class="muted">No money was taken. If something went wrong, you can try again or give by bank transfer.</p>
+        <div class="ty__actions"><a class="btn btn--primary" href="/donate/">Try again</a><a class="btn btn--outline" href="/contact/">Contact us</a></div>
+      </div>
+
+      <div class="ty__state ty__state--failed">
+        <div class="ty__icon ty__icon--err">{% icon "x-circle" %}</div>
+        <h1 style="font-size:var(--step-3)">We could not confirm this payment</h1>
+        <p class="muted">If money left your account, don't worry: we will match it up and email you. Otherwise, please try again.</p>
+        <div class="ty__actions"><a class="btn btn--primary" href="/donate/">Try again</a><a class="btn btn--outline" href="/contact/">Contact us</a></div>
+      </div>
+    </div>
+  </div>
+</section>

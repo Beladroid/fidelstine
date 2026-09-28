@@ -1,0 +1,50 @@
+/* =========================================================================
+   TABLET (601px - 900px portrait, up to 1180px for the floating donate pill)
+   - header keeps a Donate button and a Menu button that opens a right-hand drawer
+   - floating "Donate" pill appears after the hero
+   - donate sheet opens as a centred card
+   - footer is a two-column grid, always expanded
+   ========================================================================= */
+@media (min-width: 601px) {
+  .footer-col > summary { pointer-events: none; cursor: default; }
+  .footer-col > summary .i { display: none; }
+
+  /* donate sheet as a centred modal card (tablet and desktop) */
+  .donate-sheet__panel {
+    left: 50%; top: 50%; width: min(540px, calc(100vw - 48px)); max-height: min(88dvh, 860px);
+    border-radius: var(--r-xl); padding: var(--space-6);
+    transform: translate(-50%, -46%) scale(0.97); opacity: 0; box-shadow: var(--shadow-lg);
+  }
+  .donate-sheet.is-open .donate-sheet__panel { transform: translate(-50%, -50%); opacity: 1; }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .menu-btn { display: inline-flex; }
+  .brand__crest { width: 48px; height: 48px; }
+
+  /* right-hand drawer */
+  .menu-panel__inner {
+    left: auto; width: min(440px, 86vw); box-shadow: -30px 0 60px rgba(9, 22, 35, 0.35);
+    transform: translateX(100%); transition: transform 0.5s var(--ease-out);
+    border-radius: var(--r-xl) 0 0 var(--r-xl);
+  }
+  .menu-panel.is-open .menu-panel__inner { transform: none; }
+  .menu-panel__nav a { font-size: 1.9rem; }
+
+  .footer-grid { grid-template-columns: 1fr 1fr; column-gap: var(--space-6); }
+  .footer-brand { grid-column: 1 / -1; display: grid; grid-template-columns: auto 1fr; gap: 0 var(--space-6); align-items: start; border-bottom: 1px solid var(--line-light); }
+  .footer-brand__row { flex-direction: column; align-items: flex-start; margin: 0; }
+  .footer-brand .socials { grid-column: 2; }
+  .footer-contact { grid-column: 1 / -1; border-top: 1px solid var(--line-light); }
+  .footer-contact .c-rows { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--space-6); }
+  .footer-contact .c-row:nth-child(2) { border-top: 0; padding-top: 0; }
+}
+
+@media (min-width: 601px) and (max-width: 1180px) {
+  .float-donate {
+    display: inline-flex; position: fixed; right: 22px; bottom: calc(22px + var(--safe-bottom)); z-index: var(--z-float);
+    transform: translateY(160%); transition: transform var(--dur-3) var(--ease-spring);
+    box-shadow: var(--shadow-red), 0 0 0 4px rgba(255, 255, 255, 0.6);
+  }
+  .float-donate.is-shown { transform: none; }
+}

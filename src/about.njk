@@ -1,0 +1,73 @@
+---
+layout: layouts/base.njk
+title: About us
+hasHero: true
+pageClass: about
+permalink: /about/
+description: Who we are, why we exist, and the values that guide Fidelstine Charity Concerns and Orphanage in Ubulu Okiti, Delta State.
+---
+{%- import "macros/components.njk" as c with context -%}
+
+{{ c.pageHero("A sacred responsibility, not charity alone", "About Fidelstine", "We restore dignity to the abandoned and hope to the forgotten, walking with children and vulnerable adults from vulnerability to self-sufficiency, one life at a time.", "home-at-sunrise", false, "About us") }}
+
+<section class="section mood-light" id="mission" aria-labelledby="mv-title">
+  <div class="wrap">
+    {{ c.sectionHead("Why we exist", "Our mission and vision", "", false, false, null, "mv-title") }}
+    <div class="duo" data-reveal>
+      <div class="duo__cell">
+        <p class="eyebrow">Mission</p>
+        <p class="lead" style="color:var(--navy-deep)">{{ copy.mission }}</p>
+        <p style="margin-top:1rem">{{ copy.missionMore }}</p>
+      </div>
+      <div class="duo__cell">
+        <p class="eyebrow">Vision</p>
+        <p class="lead" style="color:var(--navy-deep)">{{ copy.vision }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% call c.mediaBand("program-shelter", "band", "dark", true) %}
+  <p class="band-quote">&ldquo;{{ site.motto }}&rdquo;</p>
+  <p class="band-cite">Our motto</p>
+{% endcall %}
+
+{{ c.values() }}
+
+<section class="section mood-white" aria-labelledby="day-title">
+  <div class="wrap">
+    {{ c.sectionHead("Inside the home", "A day at the home", "From breakfast to bedtime, every day is built around safety, learning and belonging.", false, false, null, "day-title") }}
+    {{ c.scrolly() }}
+  </div>
+</section>
+
+<section class="section mood-light" aria-labelledby="journey-title">
+  <div class="wrap">
+    {{ c.sectionHead("Our journey", "How we got here", "", true, false, null, "journey-title") }}
+    {{ c.timeline() }}
+  </div>
+</section>
+
+{{ c.videoLibrary("library", "Our work in motion", "Films", "mood-dark") }}
+
+<section class="section mood-sand" aria-labelledby="team-title">
+  <div class="wrap">
+    {{ c.sectionHead("The people", "Founders, staff and trustees", "The adults who care for the children every day and the trustees who hold us accountable.", false, false, null, "team-title") }}
+    {{ c.team() }}
+  </div>
+</section>
+
+<section class="section mood-white" aria-labelledby="trust-title">
+  <div class="wrap">
+    {{ c.sectionHead("Accountability", "Safe, transparent and accountable", "", false, false, null, "trust-title") }}
+    <div class="pillars" data-stagger>
+      <article class="pillar">{% icon "shield" %}<h3>Safeguarding first</h3><p>Children's privacy and safety come before any photo or story. We never publish full names or locations of children.</p><a class="link-arrow" href="/safeguarding/">Our safeguarding promise {% icon "arrow" %}</a></article>
+      <article class="pillar">{% icon "file" %}<h3>Open books</h3><p>We show how donations are spent, and publish reports as they become available.</p><a class="link-arrow" href="/transparency/">See how funds are used {% icon "arrow" %}</a></article>
+      <article class="pillar">{% icon "people" %}<h3>Local roots</h3><p>Based in Ubulu Okiti, Delta State, working with families, churches and community leaders.</p><a class="link-arrow" href="/contact/">Visit or contact us {% icon "arrow" %}</a></article>
+    </div>
+  </div>
+</section>
+
+{{ c.testimonials("mood-light") }}
+
+{{ c.ctaPanel("Help us write the next chapter", "Your gift gives a child a safe home, a full plate and a place in school.", "school-bag-handover") }}

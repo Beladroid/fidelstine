@@ -1,0 +1,15 @@
+{%- import "macros/components.njk" as c with context -%}
+<dialog class="donate-sheet" id="donate-sheet" aria-labelledby="donate-sheet-title" data-donate-sheet>
+  <div class="donate-sheet__panel" data-sheet-panel>
+    <div class="donate-sheet__grip-zone" data-sheet-grip><div class="donate-sheet__grip" aria-hidden="true"></div></div>
+    <div class="donate-sheet__head">
+      <div>
+        <h2 id="donate-sheet-title">Give today</h2>
+        <p data-sheet-campaign>Where it's needed most</p>
+      </div>
+      <button class="icon-btn icon-btn--outline" type="button" data-sheet-close aria-label="Close">{% icon "close" %}</button>
+    </div>
+    {{ c.donateForm("sheet", true) }}
+    <p class="donate-sheet__more"><a class="text-link" href="/donate/">More options: choose a programme, add a message, or give by bank transfer</a></p>
+  </div>
+</dialog>

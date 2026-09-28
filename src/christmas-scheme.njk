@@ -1,0 +1,76 @@
+---
+layout: layouts/base.njk
+title: Christmas Scheme
+hasHero: true
+pageClass: christmas
+permalink: /christmas-scheme/
+description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care and gifts for children and families this Christmas.
+---
+{%- import "macros/components.njk" as c with context -%}
+{%- set camp = money.campaigns["christmas-scheme"] -%}
+{%- set photos = media.items | tagged("christmas") | exclude("flyer") | newest -%}
+
+{% call c.pageHero(copy.christmas.headline, "Christmas Scheme", "Food, clothing, medical care and gifts for children and families this Christmas. Every gift is counted towards this year's goal.", "program-crisis", true, "Christmas Scheme") %}
+  <button class="btn btn--light btn--lg" type="button" data-donate-open data-campaign="christmas-scheme">{% icon "gift" %}Give to the scheme</button>
+  <a class="btn btn--ghost btn--lg" href="#join">How to join</a>
+{% endcall %}
+
+<section class="section mood-warm" aria-labelledby="goal-title">
+  <div class="wrap campaign">
+    <div data-reveal>
+      <p class="eyebrow">This year's goal</p>
+      <h2 id="goal-title" class="split" data-split>Every family deserves a Christmas</h2>
+      <p class="lead" style="margin-top:1rem"{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{{ copy.christmas.intro }}</p>
+    </div>
+    <div class="campaign-card glass" data-reveal="right">
+      {{ c.countdown(camp.endsAt) }}
+      {{ c.progress("christmas-scheme") }}
+    </div>
+  </div>
+</section>
+
+<section class="section mood-light" aria-labelledby="receive-title">
+  <div class="wrap split">
+    <div class="split__media" data-reveal="left">
+      {%- set m = media.items | byId("new-clothes") %}
+      <div class="split__frame">{% if m %}<div class="fill" data-parallax style="--parallax:40px">{{ c.pic(m, "(max-width: 900px) 100vw, 560px") }}</div>{% endif %}</div>
+    </div>
+    <div class="split__body">
+      <p class="eyebrow">What families receive</p>
+      <h2 id="receive-title" class="split" data-split>A Christmas package, with dignity</h2>
+      <ul class="checklist" role="list" data-stagger{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{% for x in copy.christmas.receives %}<li>{{ x }}</li>{% endfor %}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="section mood-white" id="join" aria-labelledby="join-title">
+  <div class="wrap">
+    {{ c.sectionHead("Get involved", "Three ways to join the scheme", "", true, false, null, "join-title") }}
+    <div class="pillars" data-stagger>
+      {%- set icons = ["gift", "share", "people"] %}
+      {%- for s in copy.christmas.howToJoin %}
+      <article class="pillar">{% icon icons[loop.index0] %}<h3>{{ s.title }}</h3><p>{{ s.text }}</p></article>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+{{ c.beforeAfter("The need is real. The help is here.", "Before and after", "mood-light") }}
+
+{%- if photos | length %}
+<section class="section mood-sand" aria-labelledby="xmas-photos">
+  <div class="wrap">
+    {{ c.sectionHead("In pictures", "Christmas outreach", "", false, false, null, "xmas-photos") }}
+    {{ c.photoRow(photos) }}
+  </div>
+</section>
+{%- endif %}
+
+<section class="section mood-white" aria-labelledby="share-title">
+  <div class="wrap">
+    {{ c.sectionHead("Spread the word", "Share the scheme flyer", "", false, false, null, "share-title") }}
+    {{ c.flyers() }}
+  </div>
+</section>
+
+{{ c.donateSection("Give a family a Christmas to remember", "christmas-scheme") }}

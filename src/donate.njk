@@ -1,0 +1,73 @@
+---
+layout: layouts/base.njk
+title: Donate
+hasHero: true
+pageClass: donate
+permalink: /donate/
+description: Give securely to Fidelstine Charity Concerns and Orphanage in naira, pounds, dollars, euros and more. Card, bank transfer and USSD accepted.
+---
+{%- import "macros/components.njk" as c with context -%}
+{%- set pool = media.items | tagged("gallery") | ofType("image") -%}
+
+{{ c.pageHero("Every gift restores a little more dignity", "Donate", "Give once, in the currency that suits you. It takes about a minute, and Flutterwave keeps your payment secure.", "school-bag-handover", false, "Donate") }}
+
+<section class="section mood-light donate-page" id="donate" aria-labelledby="give-title">
+  <div class="wrap donate-layout donate-layout--form-first">
+    <div class="donate-card" data-reveal>
+      <h2 id="give-title" class="donate-card__title">Make a gift</h2>
+      <p class="donate-card__sub">Choose an amount and where it should go.</p>
+      {{ c.donateForm("page", false, "general") }}
+    </div>
+
+    <div class="donate-intro" data-reveal="right">
+      <p class="eyebrow">What your gift does</p>
+      <h2 class="split" data-split style="font-size:var(--step-3)">Real help for real children</h2>
+      <ul class="impact-list" role="list"{% if copy.giftImpact.placeholder %} data-placeholder{% endif %}>
+        {%- for g in copy.giftImpact.NGN %}
+        <li>
+          <span class="impact-list__thumb">{% if pool[loop.index0] %}{{ c.pic(pool[loop.index0], "64px") }}{% endif %}</span>
+          <span><strong>{{ g.amount | money("NGN") }}</strong><span>{{ g.text }}</span></span>
+        </li>
+        {%- endfor %}
+      </ul>
+      <div style="margin-top:var(--space-7)">
+        <p class="eyebrow">Christmas Scheme</p>
+        {{ c.progress("christmas-scheme", true) }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- set hasBank = site.bank.ngn.accountNumber or site.bank.domiciliary.accountNumber %}
+{%- if hasBank or site.preview %}
+<section class="section section--tight mood-white" aria-labelledby="bank-title">
+  <div class="wrap wrap--narrow">
+    <div class="bank"{% if not hasBank %} data-placeholder{% endif %}>
+      <div style="display:flex; gap:12px; align-items:center">{% icon "bank" %}<h2 id="bank-title" style="font-size:var(--step-2)">Prefer to transfer directly?</h2></div>
+      <p class="muted">You can pay straight into our bank account. Please use your name as the reference and email us so we can thank you.</p>
+      <div class="bank__grid">
+        {%- for key, acc in site.bank %}
+        <dl>
+          <dt>Account</dt><dd>{{ "Naira (NGN)" if key == "ngn" else "Domiciliary (" + acc.currency + ")" }}</dd>
+          <dt>Bank</dt><dd>{{ acc.bank or "To follow" }}</dd>
+          <dt>Name</dt><dd>{{ acc.accountName or "To follow" }}</dd>
+          <dt>Number</dt><dd>{{ acc.accountNumber or "To follow" }}{% if acc.accountNumber %}<button class="copy-btn" type="button" data-copy="{{ acc.accountNumber }}">Copy</button>{% endif %}</dd>
+        </dl>
+        {%- endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+<section class="section mood-light" aria-labelledby="faq-title">
+  <div class="wrap wrap--narrow">
+    {{ c.sectionHead("Questions", "Giving, answered", "", false, false, null, "faq-title") }}
+    <div class="faq">
+      {%- for f in copy.faqs %}
+      <details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>
+      {%- endfor %}
+    </div>
+    <p class="muted" style="margin-top:var(--space-5); font-size:var(--step--1)">Read our <a class="text-link" href="/donation-policy/">donation policy</a> and <a class="text-link" href="/privacy/">privacy policy</a>.</p>
+  </div>
+</section>

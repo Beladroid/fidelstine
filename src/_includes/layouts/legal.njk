@@ -1,0 +1,23 @@
+---
+layout: layouts/base.njk
+pageClass: legal
+hasHero: true
+---
+<section class="page-hero page-hero--plain mood-dark">
+  <div class="page-hero__content wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ title }}</span></nav>
+    <h1>{{ title }}</h1>
+    {%- if lead %}<p class="lead">{{ lead }}</p>{% endif %}
+  </div>
+</section>
+<section class="section mood-light">
+  <div class="wrap">
+    {%- if draft %}
+    <div class="draft-banner" role="note">{% icon "info" %}<span>Draft for review. This text was prepared as a starting point and must be checked by Fidelstine's trustees, and ideally a lawyer, before the site goes live.</span></div>
+    {%- endif %}
+    <div class="prose">
+      {{ content | safe }}
+      <p class="muted" style="margin-top:2.5em; font-size:var(--step--1)">Last updated: {{ updated }}</p>
+    </div>
+  </div>
+</section>

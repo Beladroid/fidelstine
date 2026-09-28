@@ -1,0 +1,48 @@
+---
+layout: layouts/base.njk
+title: Transparency
+hasHero: true
+pageClass: transparency
+permalink: /transparency/
+description: How Fidelstine Charity Concerns and Orphanage uses donations, with a spending breakdown and reports.
+---
+{%- import "macros/components.njk" as c with context -%}
+
+{{ c.pageHero("Where your money goes", "Transparency", "Integrity is one of our core values. Here is how every naira, pound and dollar is put to work.", "unloading-boxes", false, "Transparency") }}
+
+<section class="section mood-light" aria-labelledby="spend-title">
+  <div class="wrap split">
+    <div class="split__body">
+      <p class="eyebrow">Spending</p>
+      <h2 id="spend-title" class="split" data-split>How donations are used</h2>
+      <p>Figures shown are an illustration until the first annual accounts are published.</p>
+      <div class="spend" style="margin-top:var(--space-6)"{% if copy.spending.placeholder %} data-placeholder{% endif %}>
+        {%- for s in copy.spending.items %}
+        <div class="spend__row"><div class="spend__head"><span>{{ s.label }}</span><span>{{ s.percent }}%</span></div><div class="spend__bar"><i style="--w: {{ s.percent }}%"></i></div></div>
+        {%- endfor %}
+      </div>
+    </div>
+    <div class="aside-card" data-reveal="right">
+      <p class="eyebrow">Reports</p>
+      <h3>Annual reports and accounts</h3>
+      <ul class="docs" role="list">
+        <li><span>{% icon "file" %}Annual report {{ "" | year }}: coming soon</span></li>
+        <li><span>{% icon "file" %}Registration certificate: coming soon</span></li>
+      </ul>
+      <p class="muted" style="font-size:var(--step--1)">Want more detail? <a class="text-link" href="/contact/">Ask us</a>. We are happy to share.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section mood-white" aria-labelledby="promise-title">
+  <div class="wrap">
+    {{ c.sectionHead("Our promise", "Accountable to you", "", false, false, null, "promise-title") }}
+    <div class="pillars" data-stagger>
+      <article class="pillar">{% icon "lock" %}<h3>Secure giving</h3><p>Payments go through Flutterwave. Your card details never touch our website.</p></article>
+      <article class="pillar">{% icon "check-circle" %}<h3>Every gift recorded</h3><p>Each donation is logged with a reference, so we can account for every gift.</p></article>
+      <article class="pillar">{% icon "mail" %}<h3>Updates you can trust</h3><p>We report back on what your support made possible, with photos and stories.</p></article>
+    </div>
+  </div>
+</section>
+
+{{ c.ctaPanel("See it for yourself", "Give today and follow the difference your gift makes.", "books-for-every-child") }}

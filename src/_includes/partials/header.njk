@@ -1,0 +1,52 @@
+{%- set programmes = copy.programmes -%}
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="/" aria-label="{{ site.name }}, home">
+      <img class="brand__crest" src="/brand/logo-mark.jpg" alt="" width="60" height="60" eleventy:ignore>
+      <span class="brand__text">
+        <span class="brand__name">Fidelstine</span>
+        <span class="brand__tag">{{ site.tagline }}</span>
+      </span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        {%- for item in nav.primary %}
+        {%- set current = page.url.startsWith(item.url) %}
+        <li{% if item.mega %} class="has-mega"{% endif %}{% if item.hideCondensed %} data-hide-condensed{% endif %}>
+          <a class="nav-link" href="{{ item.url }}"{% if current %} aria-current="page"{% endif %}>
+            {%- if item.short %}<span data-short>{{ item.short }}</span><span data-long>{{ item.label }}</span>{% else %}{{ item.label }}{% endif %}
+            {%- if item.mega %}{% icon "chev", "i--chev" %}{% endif %}
+          </a>
+          {%- if item.mega %}
+          <div class="mega">
+            {%- for p in programmes %}
+            {%- set vid = media.items | byId(p.video) %}
+            <a class="mega__card" href="/programmes/#{{ p.id }}">
+              <div class="ratio ratio--16x9">{% if vid %}<img src="/media/{{ vid.poster }}" alt="" sizes="220px">{% endif %}</div>
+              <strong>{{ p.title }}</strong>
+              <span>{{ p.summary }}</span>
+            </a>
+            {%- endfor %}
+            <div class="mega__foot">
+              <span class="muted">Every programme is funded by people like you.</span>
+              <a class="link-arrow" href="/programmes/">All programmes {% icon "arrow" %}</a>
+            </div>
+          </div>
+          {%- endif %}
+        </li>
+        {%- endfor %}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <button class="icon-btn lite-toggle" type="button" data-lite-toggle aria-pressed="false" title="Lite mode: stop background videos to save data">
+        {% icon "leaf" %}<span class="visually-hidden">Lite mode</span>
+      </button>
+      <a class="btn btn--primary btn--sm header-donate" href="/donate/" data-magnetic>Donate</a>
+      <button class="menu-btn" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false">
+        <span class="menu-btn__bars"><span></span></span><span>Menu</span>
+      </button>
+    </div>
+  </div>
+</header>

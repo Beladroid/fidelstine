@@ -1,0 +1,79 @@
+<footer class="site-footer mood-dark" id="contact-footer">
+  <div class="wrap">
+    <div class="footer-news">
+      <div>
+        <h2>Stay close to the work</h2>
+        <p>Occasional updates on the children we serve, the Christmas Scheme and how your support is used. No spam, ever.</p>
+      </div>
+      <form class="news-form" data-newsletter-form novalidate>
+        <div class="news-form__row">
+          <label class="visually-hidden" for="news-email">Email address</label>
+          <input id="news-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required maxlength="160">
+          <button class="btn btn--primary" type="submit">Subscribe</button>
+        </div>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand__row">
+          <img src="/brand/logo-mark.jpg" alt="{{ site.name }} crest" width="84" height="84" loading="lazy" eleventy:ignore>
+          <strong>{{ site.name }}</strong>
+        </div>
+        <div>
+          <p class="footer-motto">{{ site.motto }}</p>
+          <p class="footer-about">Restoring dignity to the abandoned and hope to the forgotten, across Nigeria and beyond.</p>
+          {%- if site.registration %}<p class="footer-about">{{ site.registration }}</p>{% endif %}
+        </div>
+        <div class="socials">
+          {%- for s in site.socials %}
+          {%- if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name }}: {{ s.handle }}">{% icon s.icon %}</a>
+          {%- elif site.preview %}<a href="#" aria-label="{{ s.name }} link still needed" data-placeholder>{% icon s.icon %}</a>{% endif %}
+          {%- endfor %}
+        </div>
+      </div>
+
+      <details class="footer-col" open data-footer-acc>
+        <summary><span class="footer-col__title">About us</span>{% icon "chev" %}</summary>
+        <ul class="footer-links" role="list">{% for l in nav.footer.about %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}</ul>
+      </details>
+
+      <details class="footer-col" open data-footer-acc>
+        <summary><span class="footer-col__title">Get involved</span>{% icon "chev" %}</summary>
+        <ul class="footer-links" role="list">{% for l in nav.footer.involved %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}</ul>
+      </details>
+
+      <details class="footer-col footer-contact" open data-footer-acc>
+        <summary><span class="footer-col__title">Contact us</span>{% icon "chev" %}</summary>
+        <div class="c-rows">
+          <div class="c-row">
+            <span class="c-ico">{% icon "pin" %}</span>
+            <div><span class="c-label">{{ site.addresses.head.label }}</span><address>{{ site.addresses.head.lines }}</address>
+              <a href="{{ site.addresses.head.map }}" target="_blank" rel="noopener" style="color:var(--pink); font-size:.82rem">View on Google Maps</a></div>
+          </div>
+          <div class="c-row">
+            <span class="c-ico">{% icon "phone" %}</span>
+            <div><span class="c-label">Phone (Nigeria)</span>{% for p in site.phonesNigeria %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</div>
+          </div>
+          <div class="c-row">
+            <span class="c-ico">{% icon "globe" %}</span>
+            <div><span class="c-label">International</span>{% for p in site.phonesInternational %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</div>
+          </div>
+          <div class="c-row">
+            <span class="c-ico">{% icon "mail" %}</span>
+            <div><span class="c-label">Email</span>
+              {%- if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% else %}<a href="/contact/"{% if site.preview %} data-placeholder{% endif %}>Use our contact form</a>{% endif %}</div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {{ "" | year }} {{ site.name }}. All rights reserved.</span>
+      <nav class="footer-legal" aria-label="Legal">{% for l in nav.footer.legal %}<a href="{{ l.url }}">{{ l.label }}</a>{% endfor %}</nav>
+      <a class="to-top" href="#main">Back to top {% icon "up" %}</a>
+    </div>
+  </div>
+</footer>

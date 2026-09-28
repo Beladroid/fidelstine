@@ -1,0 +1,651 @@
+{#- =========================================================================
+    Component library. Import with:
+      {% import "macros/components.njk" as c with context %}
+    Every media component reads from media.items by tag, so new photos and
+    videos appear automatically once tagged. Empty components render nothing
+    on the live site and a "waiting for media" card in preview builds.
+    ========================================================================= -#}
+
+{#- ---------- primitives ---------- -#}
+{% macro pic(item, sizes="100vw", cls="", eager=false, usePoster=false) -%}
+{%- set file = item.poster if (usePoster or item.type == "video") else item.src -%}
+<img class="{{ cls }}" src="/media/{{ file }}" alt="{{ item.alt }}" sizes="{{ sizes }}"{% if item.width and item.type == 'image' %} width="{{ item.width }}" height="{{ item.height }}"{% endif %}{% if item.focus %} style="--focus: {{ item.focus }}"{% endif %}{% if eager %} loading="eager" fetchpriority="high"{% endif %}>
+{%- endmacro %}
+
+{% macro bgVideo(item, cls="", attr="data-bg-video") -%}
+<video class="{{ cls }}" {{ attr }} muted loop playsinline preload="none" poster="{{ item.poster | mediaUrl }}" aria-hidden="true" tabindex="-1"{% if item.focus %} style="--focus: {{ item.focus }}"{% endif %}>
+  {%- if item.mobile %}<source src="{{ item.mobile | mediaUrl(item.host) }}" type="video/mp4" media="(max-width: 600px)">{% endif %}
+  <source src="{{ item.src | mediaUrl(item.host) }}" type="video/mp4">
+</video>
+{%- endmacro %}
+
+{% macro slotEmpty(slotId, what) -%}
+{%- if site.preview -%}
+{%- set slot = slots.slots | findBy("id", slotId) -%}
+<div class="slot-empty">
+  {% icon "film" %}
+  <strong>Waiting for media: {{ slot.label if slot else what }}</strong>
+  <span>{{ slot.hint if slot else "" }}</span>
+  <span>Add files with <code>npm run media</code>. This card is only shown in preview builds.</span>
+</div>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro sectionHead(eyebrow, title, lead="", center=false, placeholder=false, link=null, id="") -%}
+<div class="section-head{% if center %} section-head--center{% endif %}{% if link %} section-head--split{% endif %}">
+  <div>
+    {%- if eyebrow %}<p class="eyebrow{% if center %} eyebrow--center{% endif %}">{{ eyebrow }}</p>{% endif %}
+    <h2{% if id %} id="{{ id }}"{% endif %} class="split" data-split>{{ title }}</h2>
+    {%- if lead %}<p class="lead"{% if placeholder %} data-placeholder{% endif %}>{{ lead }}</p>{% endif %}
+  </div>
+  {%- if link %}<a class="link-arrow" href="{{ link.url }}">{{ link.label }} {% icon "arrow" %}</a>{% endif %}
+</div>
+{%- endmacro %}
+
+{#- ---------- home hero ---------- -#}
+{% macro homeHero() -%}
+{%- set slides = media.items | tagged("hero") | ofType("image") -%}
+{%- set vids = media.items | tagged("hero-video") | ofType("video") -%}
+{%- set nPresets = money.currencies.NGN.presets -%}
+<section class="hero" data-hero aria-label="Welcome">
+  <div class="hero__media">
+    {%- for s in slides %}
+    <div class="hero__slide fill{% if loop.first %} is-active{% endif %}" data-hero-slide data-caption="{{ s.caption }}">{{ pic(s, "100vw", "", loop.first) }}</div>
+    {%- endfor %}
+    {%- if vids | length %}
+    <video class="hero__video" data-hero-video="a" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+    <video class="hero__video" data-hero-video="b" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+    <script type="application/json" data-hero-playlist>{{ vids | mediaJson | safe }}</script>
+    {%- endif %}
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__content wrap">
+    <p class="eyebrow hero__eyebrow">Nigeria &amp; beyond</p>
+    <h1 class="hero__title split" data-split data-split-now>Restoring dignity to the abandoned, hope to the forgotten.</h1>
+    <p class="hero__motto">&ldquo;{{ site.motto }}&rdquo;</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="/donate/" data-magnetic>{% icon "heart" %}Support a child today</a>
+      <a class="btn btn--ghost btn--lg" href="/about/">Our story</a>
+    </div>
+  </div>
+
+  <aside class="hero__quickgive quickgive glass" aria-label="Quick give">
+    <div>
+      <p class="quickgive__title">Give in seconds</p>
+      <p class="quickgive__text">Card, bank transfer or USSD. Secure by Flutterwave.</p>
+    </div>
+    <div class="quickgive__pills">
+      {%- for a in nPresets %}
+      <a class="quick-pill" href="/donate/?amount={{ a }}&amp;currency=NGN" data-quick-amount="{{ a }}">{{ a | money("NGN") }}</a>
+      {%- endfor %}
+      <a class="btn btn--primary btn--sm" href="/donate/">Other amount</a>
+    </div>
+  </aside>
+
+  <div class="hero__controls">
+    {%- if slides | length > 1 %}
+    <div class="hero__dots" role="group" aria-label="Choose a photo">
+      {%- for s in slides %}<button type="button" aria-label="Photo {{ loop.index }} of {{ slides | length }}"{% if loop.first %} aria-current="true"{% endif %} data-hero-dot="{{ loop.index0 }}"></button>{% endfor %}
+    </div>
+    {%- endif %}
+    <button class="icon-btn icon-btn--glass video-toggle" type="button" data-hero-toggle aria-label="Pause background motion" hidden>
+      <svg class="i i-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="i i-play" aria-hidden="true"><use href="#i-play"/></svg>
+    </button>
+  </div>
+  <p class="hero__caption" data-hero-caption aria-live="off">{{ slides[0].caption if slides | length else "" }}</p>
+  <a class="scroll-cue" href="#after-hero" aria-label="Scroll to content"><span class="scroll-cue__mouse"></span>Scroll</a>
+</section>
+<span id="after-hero"></span>
+{%- endmacro %}
+
+{#- ---------- inner page hero ---------- -#}
+{% macro pageHero(title, eyebrow="", lead="", mediaId="", warm=false, crumb="", plain=false) -%}
+{%- set m = media.items | byId(mediaId) if mediaId else null -%}
+<section class="page-hero{% if warm %} page-hero--warm{% endif %}{% if plain or not m %} page-hero--plain mood-dark{% endif %}">
+  {%- if m %}
+  <div class="page-hero__media fill" data-parallax>
+    {%- if m.type == "video" %}{{ bgVideo(m) }}{% else %}{{ pic(m, "100vw", "", true) }}{% endif %}
+  </div>
+  <div class="page-hero__scrim" aria-hidden="true"></div>
+  {%- endif %}
+  <div class="page-hero__content wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ crumb or title }}</span></nav>
+    {%- if eyebrow %}<p class="eyebrow">{{ eyebrow }}</p>{% endif %}
+    <h1 class="split" data-split data-split-now>{{ title }}</h1>
+    {%- if lead %}<p class="lead">{{ lead }}</p>{% endif %}
+    {%- if caller %}<div class="page-hero__actions">{{ caller() }}</div>{% endif %}
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- impact ---------- -#}
+{% macro impact() -%}
+<section class="section section--tight mood-white" aria-labelledby="impact-title">
+  <div class="wrap">
+    <h2 id="impact-title" class="visually-hidden">Our impact so far</h2>
+    <div class="stats" data-stagger{% if copy.impact.placeholder %} data-placeholder{% endif %}>
+      {%- for s in copy.impact.items %}
+      <div class="stat">
+        <div class="stat__num" data-count="{{ s.value }}" data-suffix="{{ s.suffix or '' }}">{{ s.value }}{{ s.suffix or "" }}</div>
+        <div class="stat__label">{{ s.label }}</div>
+      </div>
+      {%- endfor %}
+    </div>
+    <div class="trust">
+      {%- for t in copy.trust %}
+      <div class="trust__item"{% if t.placeholder %} data-placeholder{% endif %}>{% icon t.icon %}{{ t.text }}</div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- programme cards ---------- -#}
+{% macro programmeCards() -%}
+<div data-rail>
+  <ul class="rail rail--span-last" role="list" style="--cols-desktop:3; --cols-tablet:2" data-stagger>
+    {%- for p in copy.programmes %}
+    {%- set v = media.items | byId(p.video) %}
+    <li>
+      <article class="prog-card" data-tilt>
+        <div class="prog-card__media">
+          <span class="tag prog-card__kicker">{{ p.kicker }}</span>
+          {%- if v %}{{ pic(v, "(max-width: 600px) 84vw, (max-width: 900px) 50vw, 380px") }}{{ bgVideo(v, "", "data-inview") }}{% endif %}
+        </div>
+        <div class="prog-card__body">
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.summary }}</p>
+          <a class="link-arrow prog-card__link" href="/programmes/#{{ p.id }}">Explore {% icon "arrow" %}<span class="visually-hidden"> {{ p.title }}</span></a>
+        </div>
+      </article>
+    </li>
+    {%- endfor %}
+  </ul>
+</div>
+{%- endmacro %}
+
+{#- ---------- media band ---------- -#}
+{% macro mediaBand(mediaId="", tag="band", variant="navy", center=false, index=0, labelledby="") -%}
+{%- set pool = media.items | tagged(tag) | ofType("video") -%}
+{%- set m = (media.items | byId(mediaId)) if mediaId else (pool[index % (pool | length)] if pool | length else null) -%}
+<section class="media-band media-band--{{ variant }}{% if center %} media-band--center{% endif %}"{% if labelledby %} aria-labelledby="{{ labelledby }}"{% endif %}>
+  {%- if m %}
+  <div class="media-band__media fill" data-parallax>
+    {%- if m.type == "video" %}{{ bgVideo(m) }}{% else %}{{ pic(m) }}{% endif %}
+  </div>
+  {%- endif %}
+  <div class="media-band__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="media-band__content on-media" data-reveal>{{ caller() }}</div>
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- stories reel ---------- -#}
+{% macro reel(tag="reel", title="Stories from the home", eyebrow="Watch") -%}
+{%- set items = media.items | tagged(tag) | ofType("video") | newest -%}
+{%- if items | length or site.preview %}
+<section class="section mood-light" aria-labelledby="reel-{{ tag }}">
+  <div class="wrap">
+    <div class="section-head section-head--split">
+      <div><p class="eyebrow">{{ eyebrow }}</p><h2 id="reel-{{ tag }}" class="split" data-split>{{ title }}</h2></div>
+      {%- if items | length > 1 %}<p class="muted">Tap a story to watch full screen.</p>{% endif %}
+    </div>
+    {%- if items | length %}
+    <div data-reel>
+      <ul class="reel{% if items | length == 1 %} reel--single{% endif %}" role="list">
+        {%- for r in items %}
+        <li>
+          <button class="reel__card" type="button" data-reel-open="{{ loop.index0 }}" aria-label="Play story: {{ r.caption or r.alt }}">
+            {{ pic(r, "230px") }}
+            {{ bgVideo(r, "", "data-inview") }}
+            <span class="reel__ring"><img src="/brand/logo-mark.jpg" alt="" width="34" height="34" eleventy:ignore></span>
+            {%- if r.duration %}<span class="reel__dur">{{ r.duration | duration }}</span>{% endif %}
+            <span class="reel__label">{{ r.caption or r.alt }}</span>
+          </button>
+        </li>
+        {%- if items | length == 1 %}
+        <li class="stack"><p class="lead">{{ r.caption }}</p><p class="muted">More stories are on the way.</p></li>
+        {%- endif %}
+        {%- endfor %}
+      </ul>
+      <script type="application/json" data-reel-items>{{ items | mediaJson | safe }}</script>
+    </div>
+    {%- else %}
+    {{ slotEmpty("reel") }}
+    {%- endif %}
+  </div>
+</section>
+{%- endif %}
+{%- endmacro %}
+
+{#- ---------- values ---------- -#}
+{% macro values(withHead=true) -%}
+<section class="section mood-dark" id="values" aria-labelledby="values-title">
+  <div class="wrap">
+    {%- if withHead %}
+    <div class="section-head">
+      <p class="eyebrow">What guides us</p>
+      <h2 id="values-title" class="split" data-split>Six values behind every decision</h2>
+    </div>
+    {%- endif %}
+    <div data-rail>
+      <ul class="rail" role="list" style="--cols-desktop:3; --cols-tablet:2; --rail-item:78%" data-stagger>
+        {%- for v in copy.values %}
+        <li>
+          <article class="value-card">
+            <span class="value-card__num" aria-hidden="true">{{ loop.index | pad2 }}</span>
+            <div class="value-card__icon">{% icon v.icon %}</div>
+            <h3>{{ v.name }}</h3>
+            <p>{{ v.text }}</p>
+          </article>
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- video library ---------- -#}
+{% macro videoLibrary(tag="library", title="Our work in motion", eyebrow="Films", mood="mood-dark") -%}
+{%- set items = media.items | tagged(tag) | ofType("video") | newest -%}
+{%- if items | length or site.preview %}
+<section class="section {{ mood }}" aria-labelledby="vlib-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">{{ eyebrow }}</p>
+      <h2 id="vlib-title" class="split" data-split>{{ title }}</h2>
+    </div>
+    {%- if items | length %}
+    {%- set first = items[0] %}
+    <div class="vlib{% if items | length > 1 %} vlib--multi{% endif %}" data-vlib data-reveal>
+      <div class="vlib__stage" data-vlib-stage>
+        <video data-vlib-video controls playsinline preload="none" poster="{{ first.poster | mediaUrl }}">
+          {%- if first.mobile %}<source src="{{ first.mobile | mediaUrl(first.host) }}" type="video/mp4" media="(max-width: 600px)">{% endif %}
+          <source src="{{ first.src | mediaUrl(first.host) }}" type="video/mp4">
+        </video>
+        <button class="vlib__cover" type="button" data-vlib-play aria-label="Play film: {{ first.caption or first.alt }}">
+          <span class="vlib__cover-inner"><span class="play-btn">{% icon "play" %}</span><strong data-vlib-title>{{ first.caption or first.alt }}</strong></span>
+        </button>
+      </div>
+      {%- if items | length > 1 %}
+      <ol class="vlib__list" role="list">
+        {%- for v in items %}
+        <li><button class="vlib__item" type="button" data-vlib-index="{{ loop.index0 }}"{% if loop.first %} aria-current="true"{% endif %}>
+          <span class="vlib__thumb">{{ pic(v, "124px") }}{% if v.duration %}<span>{{ v.duration | duration }}</span>{% endif %}</span>
+          <span><strong>{{ v.caption or v.alt }}</strong><small>{{ v.duration | duration }}</small></span>
+        </button></li>
+        {%- endfor %}
+      </ol>
+      {%- endif %}
+      <script type="application/json" data-vlib-items>{{ items | mediaJson | safe }}</script>
+    </div>
+    {%- else %}
+    {{ slotEmpty("library") }}
+    {%- endif %}
+  </div>
+</section>
+{%- endif %}
+{%- endmacro %}
+
+{#- ---------- before / after ---------- -#}
+{% macro beforeAfter(title="The need is real. The help is here.", eyebrow="Before and after", mood="mood-light") -%}
+{%- set pairs = media.items | pairs -%}
+{%- if pairs | length or site.preview %}
+<section class="section {{ mood }}" aria-labelledby="ba-title">
+  <div class="wrap wrap--narrow">
+    <div class="section-head section-head--center"><p class="eyebrow eyebrow--center">{{ eyebrow }}</p><h2 id="ba-title" class="split" data-split>{{ title }}</h2></div>
+    {%- if pairs | length %}
+    {%- for p in pairs %}
+    <figure data-reveal>
+      <div class="ba" data-ba>
+        <div class="ba__img">{{ pic(p.after, "(max-width: 760px) 100vw, 760px") }}</div>
+        <div class="ba__img ba__before">{{ pic(p.before, "(max-width: 760px) 100vw, 760px") }}</div>
+        <span class="ba__label ba__label--before">Before</span>
+        <span class="ba__label ba__label--after">After</span>
+        <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+        <span class="ba__handle" aria-hidden="true"></span>
+      </div>
+      {%- if p.after.caption %}<figcaption class="ba-caption">{{ p.after.caption }}</figcaption>{% endif %}
+    </figure>
+    {%- endfor %}
+    {%- else %}
+    {{ slotEmpty("before-after") }}
+    {%- endif %}
+  </div>
+</section>
+{%- endif %}
+{%- endmacro %}
+
+{#- ---------- campaign progress + countdown ---------- -#}
+{% macro countdown(endsAt) -%}
+<div class="countdown" data-countdown="{{ endsAt }}" aria-label="Time left">
+  <div class="countdown__unit"><span class="countdown__num" data-cd="d">--</span><span class="countdown__label">Days</span></div>
+  <div class="countdown__unit"><span class="countdown__num" data-cd="h">--</span><span class="countdown__label">Hours</span></div>
+  <div class="countdown__unit"><span class="countdown__num" data-cd="m">--</span><span class="countdown__label">Mins</span></div>
+  <div class="countdown__unit"><span class="countdown__num" data-cd="s">--</span><span class="countdown__label">Secs</span></div>
+</div>
+{%- endmacro %}
+
+{% macro progress(slug, light=false) -%}
+{%- set camp = money.campaigns[slug] -%}
+<div class="progress{% if light %} progress--light{% endif %}" data-campaign-progress="{{ slug }}" data-target="{{ camp.targetNGN }}"{% if camp.placeholder %} data-placeholder{% endif %}>
+  <div class="progress__meta"><span><span class="progress__raised" data-raised>₦0</span> raised</span><span>of {{ camp.targetNGN | money("NGN") }} goal</span></div>
+  <div class="progress__bar" role="progressbar" aria-label="Amount raised" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="progress__fill"></span></div>
+  <div class="progress__meta"><span data-donors>Be one of the first to give</span><span data-percent></span></div>
+</div>
+{%- endmacro %}
+
+{% macro campaignBand() -%}
+{%- set camp = money.campaigns["christmas-scheme"] -%}
+{%- set v = media.items | tagged("christmas") | ofType("video") -%}
+<section class="section mood-warm" aria-labelledby="xmas-title" style="overflow:hidden">
+  {%- if v | length %}<div class="media-band__media fill" style="opacity:.28; z-index:-1" data-parallax>{{ bgVideo(v[0]) }}</div>{% endif %}
+  <div class="wrap campaign">
+    <div data-reveal>
+      <p class="eyebrow">Seasonal campaign</p>
+      <h2 id="xmas-title" class="split" data-split>{{ copy.christmas.headline }}</h2>
+      <p class="lead" style="margin-top:var(--space-4)"{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{{ copy.christmas.intro }}</p>
+      <div class="need-tags">{% for n in copy.christmas.needs %}<span>{{ n }}</span>{% endfor %}</div>
+    </div>
+    <div class="campaign-card glass" data-reveal="right">
+      {{ countdown(camp.endsAt) }}
+      {{ progress("christmas-scheme") }}
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <button class="btn btn--light btn--lg" style="flex:1" type="button" data-donate-open data-campaign="christmas-scheme">{% icon "gift" %}Give to the scheme</button>
+        <a class="btn btn--ghost btn--lg" style="flex:1" href="/christmas-scheme/">Learn more</a>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- testimonials ---------- -#}
+{% macro testimonials(mood="mood-sand") -%}
+<section class="section {{ mood }}" aria-labelledby="stories-title">
+  <div class="wrap">
+    <div class="section-head"><p class="eyebrow">In their words</p><h2 id="stories-title" class="split" data-split>Lives changed, told by the people who lived them</h2></div>
+    <div class="carousel" data-carousel data-autoplay="9000"{% if copy.testimonials.placeholder %} data-placeholder{% endif %}>
+      <ul class="carousel__track" role="list" data-carousel-track>
+        {%- for t in copy.testimonials.items %}
+        <li class="carousel__slide" aria-roledescription="slide" aria-label="{{ loop.index }} of {{ copy.testimonials.items | length }}">
+          <figure class="testimonial">
+            <div class="testimonial__avatar" aria-hidden="true">{{ t.name | initials }}</div>
+            <div>
+              <blockquote class="testimonial__quote">&ldquo;{{ t.quote }}&rdquo;</blockquote>
+              <figcaption class="testimonial__who">{{ t.name }}<span>{{ t.role }}</span></figcaption>
+            </div>
+          </figure>
+        </li>
+        {%- endfor %}
+      </ul>
+      <div class="carousel__nav">
+        <div class="carousel__dots" data-carousel-dots></div>
+        <div class="carousel__arrows">
+          <button class="icon-btn" type="button" data-carousel-prev aria-label="Previous story">{% icon "arrow-left" %}</button>
+          <button class="icon-btn" type="button" data-carousel-next aria-label="Next story">{% icon "arrow" %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- photo ribbon ---------- -#}
+{% macro ribbon(tag="gallery", limit=14) -%}
+{%- set items = media.items | tagged(tag) | ofType("image") | newest | limit(limit) -%}
+{%- if items | length >= 4 %}
+<div class="ribbon" data-ribbon aria-label="Photos from our work">
+  <div class="ribbon__track">
+    {%- for round in [1, 2] %}
+    {%- for m in items %}
+    <a class="ribbon__item" href="/gallery/"{% if round == 2 %} aria-hidden="true" tabindex="-1"{% endif %}>{{ pic(m, "250px") }}</a>
+    {%- endfor %}
+    {%- endfor %}
+  </div>
+</div>
+{%- endif %}
+{%- endmacro %}
+
+{#- ---------- gallery ---------- -#}
+{% macro gallery(items, filters=true, id="gallery") -%}
+{%- set topics = [["shelter","Shelter"],["education","Education"],["crisis","Crisis response"],["christmas","Christmas"],["community","Community"],["events","Events"]] -%}
+<div data-gallery data-lightbox-group id="{{ id }}">
+  {%- if filters %}
+  <div class="gallery-bar">
+    <div class="chips" role="toolbar" aria-label="Filter the gallery">
+      <button class="chip is-active" type="button" data-filter="all" aria-pressed="true">All <span>{{ items | length }}</span></button>
+      {%- for t in topics %}{% set n = items | countTagged(t[0]) %}{% if n >= 2 %}
+      <button class="chip" type="button" data-filter="{{ t[0] }}" aria-pressed="false">{{ t[1] }} <span>{{ n }}</span></button>
+      {%- endif %}{% endfor %}
+      {%- set nv = items | ofType("video") | length %}{% if nv %}
+      <button class="chip" type="button" data-filter="video" aria-pressed="false">Videos <span>{{ nv }}</span></button>
+      {%- endif %}
+    </div>
+    <span class="gallery-count" data-gallery-count>{{ items | length }} items</span>
+  </div>
+  {%- endif %}
+  <ul class="masonry" role="list">
+    {%- for m in items %}
+    <li class="masonry__item" data-tags="{{ m.tags | join(' ') }} {{ m.type }}">
+      <button class="tile{% if m.type == 'video' %} tile--video{% endif %}" type="button" data-lb-index="{{ loop.index0 }}" aria-label="Open {{ m.type }}: {{ m.caption or m.alt }}">
+        {{ pic(m, "(max-width: 600px) 50vw, (max-width: 900px) 33vw, 300px") }}
+        {%- if m.type == "video" %}
+        {{ bgVideo(m, "tile__preview", "data-hover-preview") }}
+        <span class="tile__badge">{% icon "play" %}{{ m.duration | duration }}</span>
+        {%- endif %}
+        {%- if m.caption %}<span class="tile__caption">{{ m.caption }}</span>{% endif %}
+      </button>
+    </li>
+    {%- endfor %}
+  </ul>
+  <script type="application/json" data-lightbox-items>{{ items | mediaJson | safe }}</script>
+</div>
+{%- endmacro %}
+
+{% macro photoRow(items) -%}
+<div data-lightbox-group>
+  <ul class="hscroll photo-row" role="list">
+    {%- for m in items %}
+    <li><button class="photo-card{% if m.type == 'video' %} photo-card--video{% endif %}" type="button" data-lb-index="{{ loop.index0 }}" aria-label="Open {{ m.caption or m.alt }}">
+      {{ pic(m, "340px") }}
+      {%- if m.type == "video" %}<span class="tile__badge">{% icon "play" %}{{ m.duration | duration }}</span>{% endif %}
+    </button></li>
+    {%- endfor %}
+  </ul>
+  <script type="application/json" data-lightbox-items>{{ items | mediaJson | safe }}</script>
+</div>
+{%- endmacro %}
+
+{#- ---------- scroll story ---------- -#}
+{% macro scrolly() -%}
+{%- set own = media.items | tagged("about-day") | ofType("image") -%}
+{%- set pool = own if own | length >= 4 else (media.items | taggedAny(["shelter", "education"]) ) -%}
+{%- set steps = copy.dayAtHome.steps -%}
+<div class="scrolly" data-scrolly{% if copy.dayAtHome.placeholder %} data-placeholder{% endif %}>
+  <div class="scrolly__media" aria-hidden="true">
+    {%- for s in steps %}{% set m = pool[loop.index0 % (pool | length)] %}
+    <div class="scrolly__frame{% if loop.first %} is-active{% endif %}" data-scrolly-frame="{{ loop.index0 }}">{% if m %}{{ pic(m, "(max-width: 1180px) 55vw, 640px") }}{% endif %}</div>
+    {%- endfor %}
+    <span class="scrolly__counter" data-scrolly-counter>01 / {{ steps | length | pad2 }}</span>
+  </div>
+  <ol class="scrolly__steps" role="list">
+    {%- for s in steps %}{% set m = pool[loop.index0 % (pool | length)] %}
+    <li class="scrolly__step{% if loop.first %} is-active{% endif %}" data-scrolly-step="{{ loop.index0 }}">
+      {%- if m %}<div class="scrolly__step-media">{{ pic(m, "(max-width: 600px) 100vw, 50vw") }}</div>{% endif %}
+      <span class="scrolly__time">{{ s.time }}</span>
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.text }}</p>
+    </li>
+    {%- endfor %}
+  </ol>
+</div>
+{%- endmacro %}
+
+{#- ---------- timeline ---------- -#}
+{% macro timeline() -%}
+{%- set photos = media.items | tagged("timeline") | ofType("image") -%}
+<div class="timeline-wrap"{% if copy.timeline.placeholder %} data-placeholder{% endif %}>
+  <span class="timeline__line" data-scroll-grow aria-hidden="true"></span>
+  <ol class="timeline" role="list">
+    {%- for t in copy.timeline.items %}
+    <li class="timeline__item" data-reveal="{{ 'left' if loop.index % 2 else 'right' }}">
+      <span class="timeline__dot" aria-hidden="true"></span>
+      <p class="timeline__year">{{ t.year }}</p>
+      <h3>{{ t.title }}</h3>
+      <p>{{ t.text }}</p>
+      {%- if photos[loop.index0] %}<div class="timeline__media">{{ pic(photos[loop.index0], "460px") }}</div>{% endif %}
+    </li>
+    {%- endfor %}
+  </ol>
+</div>
+{%- endmacro %}
+
+{#- ---------- team ---------- -#}
+{% macro team() -%}
+{%- set photos = media.items | tagged("team") | ofType("image") -%}
+<div data-rail{% if copy.team.placeholder %} data-placeholder{% endif %}>
+  <ul class="rail" role="list" style="--cols-desktop:4; --cols-tablet:2; --rail-item:62%" data-stagger>
+    {%- for p in copy.team.items %}
+    <li class="team-card">
+      <div class="team-card__photo">{% if photos[loop.index0] %}{{ pic(photos[loop.index0], "180px") }}{% else %}{{ p.role | initials }}{% endif %}</div>
+      <h3>{{ p.name }}</h3>
+      <p>{{ p.role }}</p>
+    </li>
+    {%- endfor %}
+  </ul>
+</div>
+{%- endmacro %}
+
+{#- ---------- flyers ---------- -#}
+{% macro flyers() -%}
+{%- set items = media.items | tagged("flyer") -%}
+{%- if items | length %}
+<div class="flyers" data-lightbox-group>
+  {%- for f in items %}
+  <figure class="flyer" data-reveal>
+    <button type="button" data-lb-index="{{ loop.index0 }}" aria-label="View {{ f.alt }}">{{ pic(f, "(max-width: 600px) 100vw, 540px") }}</button>
+    <figcaption class="flyer__foot"><span>{{ f.caption }}</span><a class="link-arrow" href="/media/{{ f.src }}" download>Download {% icon "download" %}</a></figcaption>
+  </figure>
+  {%- endfor %}
+  <script type="application/json" data-lightbox-items>{{ items | mediaJson | safe }}</script>
+</div>
+{%- endif %}
+{%- endmacro %}
+
+{#- ---------- donate form ---------- -#}
+{% macro donateForm(id="main", compact=false, campaign="general", amount=null) -%}
+{%- set ngn = money.currencies.NGN -%}
+{%- set def = amount or ngn.presets[1] -%}
+<form class="donate-form{% if compact %} donate-form--compact{% endif %}" data-donate-form data-default-campaign="{{ campaign }}" novalidate>
+  <fieldset>
+    <div class="donate-form__top">
+      <legend class="label">Choose an amount</legend>
+      <label class="visually-hidden" for="currency-{{ id }}">Currency</label>
+      <select class="currency-select" id="currency-{{ id }}" name="currency" data-currency>
+        {%- for code, c in money.currencies %}
+        <option value="{{ code }}"{% if code == "NGN" %} selected{% endif %}>{{ code }} {{ c.symbol }}</option>
+        {%- endfor %}
+      </select>
+    </div>
+    <div class="amount-grid" data-amounts>
+      {%- for a in ngn.presets %}
+      <label class="amount-pill"><input type="radio" name="preset-{{ id }}" value="{{ a }}"{% if a == def %} checked{% endif %}><span>{{ a | money("NGN") }}</span></label>
+      {%- endfor %}
+      <label class="amount-pill"><input type="radio" name="preset-{{ id }}" value="other"><span>Other</span></label>
+    </div>
+    <div class="custom-amount" data-custom hidden>
+      <span class="custom-amount__symbol" data-symbol>₦</span>
+      <label class="visually-hidden" for="custom-{{ id }}">Amount</label>
+      <input id="custom-{{ id }}" type="number" inputmode="decimal" name="customAmount" min="{{ ngn.min }}" step="any" placeholder="Enter amount">
+    </div>
+    <p class="gift-impact" data-gift-impact aria-live="polite">{% icon "heart" %}<span data-gift-impact-text>{{ copy.giftImpact.NGN[1].text }}</span></p>
+  </fieldset>
+
+  {%- if compact %}
+  <input type="hidden" name="campaign" value="{{ campaign }}" data-campaign-input>
+  {%- else %}
+  <div class="field donate-form__campaign">
+    <label for="campaign-{{ id }}">Where should your gift go?</label>
+    <select id="campaign-{{ id }}" name="campaign" data-campaign-input>
+      {%- for slug, c in money.campaigns %}
+      <option value="{{ slug }}"{% if slug == campaign %} selected{% endif %}>{{ c.title }}</option>
+      {%- endfor %}
+    </select>
+  </div>
+  {%- endif %}
+
+  <div class="field-grid{% if not compact %} field-grid--2{% endif %}">
+    <div class="field"><label for="name-{{ id }}">Full name</label><input id="name-{{ id }}" name="name" autocomplete="name" required maxlength="120"></div>
+    <div class="field"><label for="email-{{ id }}">Email <span class="hint">for your receipt</span></label><input id="email-{{ id }}" type="email" name="email" autocomplete="email" required maxlength="160"></div>
+    {%- if not compact %}
+    <div class="field"><label for="phone-{{ id }}">Phone <span class="hint">optional</span></label><input id="phone-{{ id }}" type="tel" name="phone" autocomplete="tel" maxlength="30"></div>
+    <div class="field"><label for="country-{{ id }}">Country <span class="hint">optional</span></label><input id="country-{{ id }}" name="country" autocomplete="country-name" maxlength="60"></div>
+    <div class="field field--full"><label for="message-{{ id }}">Message <span class="hint">optional</span></label><textarea id="message-{{ id }}" name="message" maxlength="500" rows="3"></textarea></div>
+    {%- endif %}
+  </div>
+
+  <div class="donate-form__checks">
+    <label class="check"><input type="checkbox" name="anonymous" value="1">Give anonymously. Your name will never be shown publicly.</label>
+    <label class="check"><input type="checkbox" name="newsletter" value="1">Send me occasional updates about the children and the work.</label>
+  </div>
+  <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <p class="form-error" data-form-error role="alert" hidden></p>
+  <button class="btn btn--primary btn--lg btn--block" type="submit" data-donate-submit><span data-submit-label>Donate {{ def | money("NGN") }}</span>{% icon "arrow", "i--arrow" %}</button>
+  <p class="secure-note">{% icon "lock" %}Secure payment by Flutterwave. Card, bank transfer, USSD and more.</p>
+</form>
+{%- endmacro %}
+
+{#- ---------- donate section (home + other pages) ---------- -#}
+{% macro donateSection(title="Every gift restores a little more dignity", campaign="general") -%}
+{%- set bg = media.items | byId("hero-video") -%}
+{%- set pool = media.items | tagged("gallery") | ofType("image") -%}
+<section class="section mood-dark donate-section" id="donate" aria-labelledby="donate-title">
+  {%- if bg %}<div class="media-band__media fill" aria-hidden="true">{{ bgVideo(bg) }}</div>{% endif %}
+  <div class="wrap donate-layout">
+    <div class="donate-intro" data-reveal>
+      <p class="eyebrow">Give today</p>
+      <h2 id="donate-title" class="split" data-split>{{ title }}</h2>
+      <p class="lead">Your gift pays for shelter, food, school and care. Give in naira, pounds, dollars and more.</p>
+      <ul class="impact-list" role="list"{% if copy.giftImpact.placeholder %} data-placeholder{% endif %}>
+        {%- for g in copy.giftImpact.NGN %}
+        <li>
+          <span class="impact-list__thumb">{% if pool[loop.index0 + 2] %}{{ pic(pool[loop.index0 + 2], "64px") }}{% endif %}</span>
+          <span><strong>{{ g.amount | money("NGN") }}</strong><span>{{ g.text }}</span></span>
+        </li>
+        {%- endfor %}
+      </ul>
+      <div class="donate-trust">
+        <span>{% icon "lock" %}Secure checkout</span>
+        <span>{% icon "globe" %}8 currencies</span>
+        <span>{% icon "mail" %}Email receipt</span>
+      </div>
+    </div>
+    <div class="donate-card" data-reveal="right">
+      <h3 class="donate-card__title">Make a gift</h3>
+      <p class="donate-card__sub">It takes about a minute.</p>
+      {{ donateForm("section", false, campaign) }}
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{#- ---------- CTA panel ---------- -#}
+{% macro ctaPanel(title, text, mediaId="hero-photo") -%}
+{%- set m = media.items | byId(mediaId) -%}
+<section class="section mood-light">
+  <div class="wrap">
+    <div class="cta-panel" data-reveal="scale">
+      {%- if m %}<div class="cta-panel__media fill">{{ pic(m) }}</div>{% endif %}
+      <h2 class="split" data-split>{{ title }}</h2>
+      <p>{{ text }}</p>
+      <div class="cta-panel__actions">
+        <button class="btn btn--primary btn--lg" type="button" data-donate-open data-magnetic>{% icon "heart" %}Give now</button>
+        <a class="btn btn--ghost btn--lg" href="/contact/">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}

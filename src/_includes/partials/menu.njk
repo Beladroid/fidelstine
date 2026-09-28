@@ -1,0 +1,44 @@
+<dialog class="menu-panel" id="site-menu" aria-label="Site menu" data-menu>
+  <div class="menu-panel__inner">
+    <div class="menu-panel__top">
+      <a class="brand" href="/">
+        <img class="brand__crest" src="/brand/logo-mark.jpg" alt="" width="44" height="44" eleventy:ignore>
+        <span class="brand__text"><span class="brand__name">Fidelstine</span><span class="brand__tag" style="color:var(--pink)">{{ site.tagline }}</span></span>
+      </a>
+      <button class="icon-btn icon-btn--glass" type="button" data-menu-close aria-label="Close menu">{% icon "close" %}</button>
+    </div>
+
+    <nav class="menu-panel__nav" aria-label="Menu">
+      <ol>
+        <li><a href="/"{% if page.url == "/" %} aria-current="page"{% endif %}>Home</a></li>
+        {%- for item in nav.primary %}
+        <li><a href="{{ item.url }}"{% if page.url.startsWith(item.url) %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+        {%- endfor %}
+      </ol>
+    </nav>
+
+    <div class="menu-panel__donate">
+      <p>"Every gift restores a little more dignity."</p>
+      <button class="btn btn--primary btn--block" type="button" data-donate-open>{% icon "heart" %}Give today</button>
+    </div>
+
+    <div class="menu-panel__quick">
+      <a class="quick-action" href="tel:{{ site.phonesNigeria[0].tel }}">{% icon "phone" %}Call</a>
+      {%- if site.whatsapp %}
+      <a class="quick-action" href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>
+      {%- endif %}
+      <a class="quick-action" href="{{ site.addresses.head.map }}" target="_blank" rel="noopener">{% icon "pin" %}Find us</a>
+    </div>
+
+    <div class="menu-panel__meta">
+      <div class="socials">
+        {%- for s in site.socials %}{% if s.url %}
+        <a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name }}: {{ s.handle }}">{% icon s.icon %}</a>
+        {%- endif %}{% endfor %}
+      </div>
+      <button class="switch" type="button" data-lite-toggle aria-pressed="false">
+        <span class="switch__track" aria-hidden="true"></span>Lite mode
+      </button>
+    </div>
+  </div>
+</dialog>

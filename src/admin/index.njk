@@ -1,0 +1,64 @@
+---
+layout: layouts/base.njk
+title: Admin
+pageClass: admin
+permalink: /admin/
+noindex: true
+eleventyExcludeFromCollections: true
+---
+<link rel="stylesheet" href="/css/admin.css?v={{ site.buildTime }}">
+<section class="section mood-light admin" data-admin>
+  <div class="wrap">
+    <div class="admin__head">
+      <div>
+        <p class="eyebrow">Staff only</p>
+        <h1 style="font-size:var(--step-4)">Donations dashboard</h1>
+        <p class="muted" data-admin-user>Checking your sign-in…</p>
+      </div>
+      <div class="admin__tabs" role="tablist">
+        <button class="chip is-active" role="tab" aria-selected="true" data-tab="donations">Donations</button>
+        <button class="chip" role="tab" aria-selected="false" data-tab="newsletter">Subscribers</button>
+        <button class="chip" role="tab" aria-selected="false" data-tab="messages">Messages</button>
+      </div>
+    </div>
+
+    <p class="form-error" data-admin-error role="alert" hidden></p>
+
+    <div data-panel="donations">
+      <form class="admin__filters" data-admin-filters>
+        <div class="field"><label for="f-status">Status</label>
+          <select id="f-status" name="status"><option value="successful">Successful</option><option value="">All</option><option value="pending">Pending</option><option value="failed">Failed</option><option value="abandoned">Abandoned</option></select></div>
+        <div class="field"><label for="f-currency">Currency</label>
+          <select id="f-currency" name="currency"><option value="">All</option>{% for code, cur in money.currencies %}<option>{{ code }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="f-campaign">Campaign</label>
+          <select id="f-campaign" name="campaign"><option value="">All</option>{% for slug, camp in money.campaigns %}<option value="{{ slug }}">{{ camp.title }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="f-from">From</label><input id="f-from" type="date" name="from"></div>
+        <div class="field"><label for="f-to">To</label><input id="f-to" type="date" name="to"></div>
+        <div class="field"><label for="f-q">Search</label><input id="f-q" type="search" name="q" placeholder="Name, email or reference"></div>
+        <div class="admin__filter-actions">
+          <button class="btn btn--navy" type="submit">Apply</button>
+          <a class="btn btn--outline" href="#" data-admin-csv>{% icon "download" %}Export CSV</a>
+        </div>
+      </form>
+
+      <div class="admin__totals" data-admin-totals></div>
+
+      <div class="admin__table-wrap">
+        <table class="admin__table">
+          <thead><tr><th>Date</th><th>Donor</th><th>Amount</th><th>Campaign</th><th>Method</th><th>Status</th><th>Reference</th></tr></thead>
+          <tbody data-admin-rows><tr><td colspan="7" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+      <div class="admin__pager"><button class="btn btn--outline btn--sm" type="button" data-admin-more hidden>Load more</button></div>
+    </div>
+
+    <div data-panel="newsletter" hidden>
+      <div class="admin__filter-actions" style="margin-bottom:1rem"><a class="btn btn--outline" href="/api/admin/newsletter?format=csv">{% icon "download" %}Export CSV</a></div>
+      <div class="admin__table-wrap"><table class="admin__table"><thead><tr><th>Date</th><th>Email</th><th>Source</th></tr></thead><tbody data-admin-newsletter></tbody></table></div>
+    </div>
+
+    <div data-panel="messages" hidden>
+      <div class="admin__table-wrap"><table class="admin__table"><thead><tr><th>Date</th><th>From</th><th>About</th><th>Message</th></tr></thead><tbody data-admin-messages></tbody></table></div>
+    </div>
+  </div>
+</section>

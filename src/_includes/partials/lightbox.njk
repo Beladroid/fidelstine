@@ -1,0 +1,28 @@
+<dialog class="lightbox" aria-label="Media viewer" data-lightbox>
+  <div class="lightbox__top">
+    <span class="lightbox__count" data-lb-count></span>
+    <button class="icon-btn icon-btn--glass" type="button" data-lb-close aria-label="Close viewer">{% icon "close" %}</button>
+  </div>
+  <div class="lightbox__stage" data-lb-stage></div>
+  <button class="icon-btn icon-btn--glass lightbox__nav lightbox__nav--prev" type="button" data-lb-prev aria-label="Previous">{% icon "arrow-left" %}</button>
+  <button class="icon-btn icon-btn--glass lightbox__nav lightbox__nav--next" type="button" data-lb-next aria-label="Next">{% icon "arrow" %}</button>
+  <p class="lightbox__caption" data-lb-caption></p>
+</dialog>
+
+<dialog class="story-player" aria-label="Story player" data-story-player>
+  <div class="story-player__stage">
+    <video class="story-player__video" playsinline preload="auto" data-sp-video></video>
+    <div class="story-player__bars" data-sp-bars></div>
+    <div class="story-player__top">
+      <img src="/brand/logo-mark.jpg" alt="" width="34" height="34" eleventy:ignore>
+      <strong>Fidelstine</strong>
+      <button class="icon-btn" type="button" data-sp-mute aria-label="Turn sound on" style="color:#fff">{% icon "mute" %}</button>
+      <button class="icon-btn" type="button" data-sp-close aria-label="Close stories" style="color:#fff">{% icon "close" %}</button>
+    </div>
+    <button class="story-player__tap story-player__tap--prev" type="button" data-sp-prev aria-label="Previous story"></button>
+    <button class="story-player__tap story-player__tap--next" type="button" data-sp-next aria-label="Next story"></button>
+    <p class="story-player__caption" data-sp-caption></p>
+  </div>
+  <button class="icon-btn icon-btn--glass story-player__arrow story-player__arrow--prev" type="button" data-sp-prev aria-label="Previous story">{% icon "arrow-left" %}</button>
+  <button class="icon-btn icon-btn--glass story-player__arrow story-player__arrow--next" type="button" data-sp-next aria-label="Next story">{% icon "arrow" %}</button>
+</dialog>

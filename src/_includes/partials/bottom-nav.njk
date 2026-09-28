@@ -1,0 +1,14 @@
+<nav class="bottom-nav" aria-label="Quick navigation" data-bottom-nav>
+  {%- for item in nav.bottom %}
+  {%- if item.action == "donate" %}
+  <button class="bottom-nav__give" type="button" data-donate-open>
+    <span class="bottom-nav__give-disc">{% icon item.icon %}</span>{{ item.label }}
+  </button>
+  {%- elif item.action == "menu" %}
+  <button class="bottom-nav__item" type="button" data-menu-open aria-controls="site-menu" aria-expanded="false">{% icon item.icon %}{{ item.label }}</button>
+  {%- else %}
+  {%- set current = (page.url == item.url) if item.url == "/" else page.url.startsWith(item.url) %}
+  <a class="bottom-nav__item" href="{{ item.url }}"{% if current %} aria-current="page"{% endif %}>{% icon item.icon %}{{ item.label }}</a>
+  {%- endif %}
+  {%- endfor %}
+</nav>

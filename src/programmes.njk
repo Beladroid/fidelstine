@@ -1,0 +1,63 @@
+---
+layout: layouts/base.njk
+title: Our programmes
+hasHero: true
+pageClass: programmes
+permalink: /programmes/
+description: Safe shelter and family care, education and vocational training, and crisis response. See how Fidelstine walks with children and families.
+---
+{%- import "macros/components.njk" as c with context -%}
+
+{{ c.pageHero("How we walk with them", "Our programmes", "Three programmes that meet children and families where they are: a safe home, an education, and help in a crisis.", "hero-video", false, "Programmes") }}
+
+<nav class="prog-nav" aria-label="Programmes on this page">
+  <div class="wrap">
+    <div class="chips">
+      {%- for p in copy.programmes %}<a class="chip" href="#{{ p.id }}">{{ p.title }}</a>{% endfor %}
+      <a class="chip" href="#donate">Give</a>
+    </div>
+  </div>
+</nav>
+
+{%- for p in copy.programmes %}
+{%- set v = media.items | byId(p.video) %}
+{%- set photos = media.items | tagged(p.id) | exclude("flyer") | newest %}
+<article class="programme" id="{{ p.id }}" aria-labelledby="{{ p.id }}-title">
+  {% call c.mediaBand(p.video, "band", "red" if loop.index == 3 else "navy", false) %}
+    <p class="eyebrow">{{ loop.index | pad2 }} &middot; {{ p.kicker }}</p>
+    <h2 id="{{ p.id }}-title" class="split" data-split>{{ p.title }}</h2>
+    <p class="lead" style="margin-top:1rem">{{ p.summary }}</p>
+  {% endcall %}
+
+  <section class="section {{ 'mood-light' if loop.index % 2 else 'mood-white' }}">
+    <div class="wrap">
+      <div class="programme__intro">
+        <div class="stack" style="--stack:1.2rem">
+          <p class="lead"{% if p.placeholder %} data-placeholder{% endif %}>{{ p.body }}</p>
+          <h3>What this programme provides</h3>
+          <ul class="checklist" role="list" data-stagger>{% for x in p.provides %}<li>{{ x }}</li>{% endfor %}</ul>
+        </div>
+        <aside class="aside-card" data-reveal="right">
+          <p class="eyebrow">Support this work</p>
+          <h3>Give to {{ p.title }}</h3>
+          <p class="muted">Your gift goes directly to this programme.</p>
+          <button class="btn btn--primary btn--lg btn--block" type="button" data-donate-open data-campaign="{{ p.id }}">{% icon "heart" %}Give now</button>
+          <a class="link-arrow" href="/donate/?campaign={{ p.id }}">More giving options {% icon "arrow" %}</a>
+        </aside>
+      </div>
+      {%- if photos | length %}
+      <div style="margin-top:var(--space-7)">
+        <p class="eyebrow">In pictures</p>
+        {{ c.photoRow(photos) }}
+      </div>
+      {%- elif site.preview %}
+      <div style="margin-top:var(--space-7)">{{ c.slotEmpty(p.id) }}</div>
+      {%- endif %}
+    </div>
+  </section>
+</article>
+{%- endfor %}
+
+{{ c.reel("reel", "Stories from the programmes", "Watch") }}
+
+{{ c.donateSection("Choose where your gift goes") }}

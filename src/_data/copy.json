@@ -1,0 +1,150 @@
+{
+  "_note": "Text content for the site. Anything with \"placeholder\": true is shown with a dashed outline in preview builds until real content replaces it.",
+
+  "mission": "At Fidelstine Charity Concerns and Orphanage, we exist to restore dignity to the abandoned and hope to the forgotten. We provide safe shelter, nourishing care, quality education, and unwavering emotional support to orphaned and vulnerable children and adults, not as charity alone, but as a sacred responsibility. Every child who walks through our doors is met with love, protection, and the tools to build a future of their own choosing.",
+  "missionShort": "We provide safe shelter, nourishing care, quality education, and unwavering emotional support to orphaned and vulnerable children and adults. Every child who walks through our doors is met with love, protection, and the tools to build a future of their own choosing.",
+  "missionMore": "Through compassionate caregiving, family reunification, vocational training, empowerment, and crisis response, we stand in the gap for those society has overlooked, walking with them from vulnerability to self-sufficiency, one life at a time.",
+  "vision": "We envision a world where no child grows up unseen, unheard, or unloved, where every abandoned life is given a second chance at wholeness. Fidelstine aspires to be a beacon of hope across Nigeria and beyond: a home where broken stories are rewritten, where trauma gives way to resilience, and where vulnerable children and adults are equipped not just to survive, but to thrive, lead, and give back to the communities that once overlooked them.",
+  "visionShort": "A world where no child grows up unseen, unheard, or unloved. A home where broken stories are rewritten and vulnerable lives are equipped not just to survive, but to thrive, lead, and give back.",
+
+  "values": [
+    { "name": "Compassion", "icon": "heart", "text": "We treat every child, the less privileged, the abandoned and vulnerable adult with tenderness, patience and empathy, seeing beyond circumstance to the person within." },
+    { "name": "Dignity", "icon": "crown", "text": "We uphold the worth of every individual in our care, ensuring they are never defined by their past, but empowered by their potential." },
+    { "name": "Integrity", "icon": "shield", "text": "We operate with transparency and accountability in all we do, honouring the trust placed in us by donors, partners and communities." },
+    { "name": "Resilience", "icon": "sprout", "text": "We equip those we serve with the emotional strength, education and life skills to rise above trauma and build independent lives." },
+    { "name": "Community", "icon": "people", "text": "Healing happens in relationship: family reunification, local partnerships and a sense of belonging for every child." },
+    { "name": "Advocacy", "icon": "voice", "text": "We speak up for the rights of the vulnerable, working to influence policy and practice that protects those who cannot protect themselves." }
+  ],
+
+  "impact": {
+    "placeholder": true,
+    "items": [
+      { "value": 240, "suffix": "+", "label": "Children sheltered" },
+      { "value": 18, "label": "Communities reached" },
+      { "value": 95, "label": "Family reunifications" },
+      { "value": 6, "label": "Years of service" }
+    ]
+  },
+
+  "trust": [
+    { "icon": "shield", "text": "Registered charity, details to follow", "placeholder": true },
+    { "icon": "check", "text": "Transparent, accountable use of funds" },
+    { "icon": "people", "text": "Local partnerships across Nigeria" },
+    { "icon": "lock", "text": "Secure payments by Flutterwave" }
+  ],
+
+  "programmes": [
+    {
+      "id": "shelter",
+      "title": "Safe Shelter & Family Care",
+      "kicker": "Home",
+      "summary": "A safe, loving home with meals, care and the steady adults every child deserves.",
+      "body": "Placeholder: details of the residential care programme, including capacity, age range and daily life at the home.",
+      "provides": ["Safe beds and a secure home", "Three nourishing meals a day", "Health checks and medical care", "Emotional support and counselling", "Family tracing and reunification"],
+      "video": "program-shelter",
+      "placeholder": true
+    },
+    {
+      "id": "education",
+      "title": "Education & Vocational Training",
+      "kicker": "Learning",
+      "summary": "School fees, books, tutoring and practical skills that open doors to independence.",
+      "body": "Placeholder: details of school sponsorships, tutoring and skills training offered to older beneficiaries.",
+      "provides": ["School fees and uniforms", "Books and learning materials", "After-school tutoring", "Vocational and skills training", "Mentoring into work"],
+      "video": "program-education",
+      "placeholder": true
+    },
+    {
+      "id": "crisis",
+      "title": "Crisis Response",
+      "kicker": "Relief",
+      "summary": "Emergency food, clothing, medical care and shelter when disaster strikes.",
+      "body": "Placeholder: details of emergency food, clothing, medical care and shelter distributed during crises.",
+      "provides": ["Emergency food packs", "Clothing and blankets", "Medical care and medicines", "Temporary shelter", "Follow-up support for families"],
+      "video": "program-crisis",
+      "placeholder": true
+    }
+  ],
+
+  "giftImpact": {
+    "placeholder": true,
+    "NGN": [
+      { "amount": 5000, "text": "Books and school supplies for one child for a term" },
+      { "amount": 15000, "text": "Food for one child for a month" },
+      { "amount": 50000, "text": "A full Christmas package for a family" }
+    ],
+    "generic": "Every gift goes straight to shelter, food, schooling and care for children and vulnerable adults."
+  },
+
+  "christmas": {
+    "placeholder": true,
+    "headline": "The Christmas Scheme is open",
+    "intro": "Placeholder: describe what beneficiaries receive and how supporters can join this year's scheme.",
+    "receives": ["Food hampers", "New clothing", "Medical checks", "Gifts for children", "A Christmas meal together"],
+    "howToJoin": [
+      { "title": "Give", "text": "Donate any amount towards Christmas packages." },
+      { "title": "Share", "text": "Send the scheme link to friends and family." },
+      { "title": "Volunteer", "text": "Help pack and deliver in December. Contact us to join." }
+    ],
+    "needs": ["Food", "Clothing", "Medical care", "Shelter"]
+  },
+
+  "testimonials": {
+    "placeholder": true,
+    "items": [
+      { "quote": "Placeholder quote: replace with a real testimonial from a family, volunteer or partner describing how Fidelstine changed their situation.", "name": "Placeholder name", "role": "Volunteer" },
+      { "quote": "Placeholder quote: a second real story goes here. Short, specific and in the person's own words works best.", "name": "Placeholder name", "role": "Parent" },
+      { "quote": "Placeholder quote: a partner or donor explaining why they trust Fidelstine with their support.", "name": "Placeholder name", "role": "Partner" }
+    ]
+  },
+
+  "timeline": {
+    "placeholder": true,
+    "items": [
+      { "year": "Year TBC", "title": "Where it began", "text": "Placeholder: how and why Fidelstine was founded." },
+      { "year": "Year TBC", "title": "The home opens", "text": "Placeholder: opening of the home in Ubulu Okiti." },
+      { "year": "Year TBC", "title": "Education programme", "text": "Placeholder: first school sponsorships and skills training." },
+      { "year": "Year TBC", "title": "First Christmas Scheme", "text": "Placeholder: the first seasonal outreach." },
+      { "year": "Today", "title": "Growing together", "text": "Placeholder: where the work stands now and what comes next." }
+    ]
+  },
+
+  "dayAtHome": {
+    "placeholder": true,
+    "steps": [
+      { "time": "Morning", "title": "A good start", "text": "Placeholder: breakfast, prayer and getting ready for school." },
+      { "time": "Day", "title": "Learning", "text": "Placeholder: school, homework help and skills classes." },
+      { "time": "Afternoon", "title": "Play and friendship", "text": "Placeholder: games, sport and time together." },
+      { "time": "Evening", "title": "Family time", "text": "Placeholder: dinner, devotion and bedtime in a safe home." }
+    ]
+  },
+
+  "team": {
+    "placeholder": true,
+    "items": [
+      { "name": "Name to follow", "role": "Founder" },
+      { "name": "Name to follow", "role": "Home director" },
+      { "name": "Name to follow", "role": "Trustee" },
+      { "name": "Name to follow", "role": "Trustee" }
+    ]
+  },
+
+  "spending": {
+    "placeholder": true,
+    "items": [
+      { "label": "Care, food and shelter", "percent": 55 },
+      { "label": "Education and training", "percent": 25 },
+      { "label": "Crisis response", "percent": 12 },
+      { "label": "Running costs", "percent": 8 }
+    ]
+  },
+
+  "faqs": [
+    { "q": "Is my payment secure?", "a": "Yes. Payments are handled by Flutterwave, a licensed payment company. Your card or bank details never touch our website." },
+    { "q": "Which currencies can I give in?", "a": "Naira, pounds, dollars, euros and several African currencies. Choose yours at the top of the form." },
+    { "q": "Which payment methods are available?", "a": "Card, bank transfer, USSD and, in some countries, mobile money. The options depend on your currency." },
+    { "q": "Will I get a receipt?", "a": "Yes. Flutterwave emails a payment receipt, and we send a thank-you email confirming your gift." },
+    { "q": "Can I give monthly?", "a": "Monthly giving is coming soon. For now you can make a one-time gift as often as you like." },
+    { "q": "Can I give anonymously?", "a": "Yes. Tick \"Give anonymously\" and your name will never be shown publicly." }
+  ]
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" class="no-js" data-env="{{ site.env }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{%- set pageTitle = (title + " | " + site.shortName) if (title and not isHome) else (site.name + " | " + site.motto) %}
+<title>{{ pageTitle }}</title>
+<meta name="description" content="{{ description or site.description }}">
+<link rel="canonical" href="{{ page.url | absoluteUrl(site.url) }}">
+<meta name="theme-color" content="#0E2338">
+<meta name="color-scheme" content="light">
+{%- if site.preview or noindex %}<meta name="robots" content="noindex">{% endif %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:locale" content="{{ site.locale }}">
+<meta property="og:title" content="{{ title or site.name }}">
+<meta property="og:description" content="{{ description or site.description }}">
+<meta property="og:url" content="{{ page.url | absoluteUrl(site.url) }}">
+<meta property="og:image" content="{{ (ogImage or '/brand/og-default.jpg') | absoluteUrl(site.url) }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@fidelstine">
+<link rel="icon" href="/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/brand/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Work+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/css/site.css?v={{ site.buildTime }}">
+<script>
+  (function () {
+    var d = document.documentElement;
+    d.classList.remove("no-js");
+    if ("IntersectionObserver" in window) d.classList.add("js");
+    try {
+      var lite = localStorage.getItem("fid-lite");
+      var saver = navigator.connection && navigator.connection.saveData;
+      if (lite === "1" || (lite === null && saver)) d.classList.add("lite");
+      {%- if isHome %}
+      if (!sessionStorage.getItem("fid-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        d.classList.add("intro");
+        sessionStorage.setItem("fid-intro", "1");
+      }
+      {%- endif %}
+    } catch (e) {}
+  })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NGO",
+  "name": {{ site.name | json | safe }},
+  "slogan": {{ site.motto | json | safe }},
+  "url": {{ site.url | json | safe }},
+  "logo": {{ "/brand/logo-mark.jpg" | absoluteUrl(site.url) | json | safe }},
+  "description": {{ site.description | json | safe }},
+  "telephone": {{ site.phonesNigeria[0].tel | json | safe }},
+  "address": { "@type": "PostalAddress", "streetAddress": "1, Market Road, Idumu Uzu Quarters", "addressLocality": "Ubulu Okiti", "addressRegion": "Delta State", "addressCountry": "NG" },
+  "sameAs": [{% for s in site.socials %}{% if s.url %}{{ s.url | json | safe }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}]
+}
+</script>
+{%- if site.analyticsToken %}
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.analyticsToken }}"}'></script>
+{%- endif %}
+{%- block head %}{% endblock %}
+</head>
+<body class="page-{{ pageClass or 'default' }}{% if hasHero %} has-hero{% endif %}">
+{% include "partials/icons.njk" %}
+{%- if isHome %}<div class="intro-curtain" aria-hidden="true"><img src="/brand/logo-mark.jpg" alt="" width="96" height="96" eleventy:ignore></div>{% endif %}
+<a class="skip-link" href="#main">Skip to content</a>
+{% include "partials/header.njk" %}
+<main id="main" tabindex="-1">
+{{ content | safe }}
+</main>
+{% include "partials/footer.njk" %}
+{% include "partials/menu.njk" %}
+{% include "partials/bottom-nav.njk" %}
+{% include "partials/donate-sheet.njk" %}
+{% include "partials/lightbox.njk" %}
+<button class="btn btn--primary float-donate" type="button" data-donate-open data-float-donate>{% icon "heart" %}Donate</button>
+<div class="toast" role="status" aria-live="polite" data-toast></div>
+{%- if site.preview %}
+<div class="editor-note" data-editor-note>
+  <button type="button" aria-label="Dismiss note" data-editor-note-close>&times;</button>
+  Preview build. Items with a dashed red outline are placeholders waiting for real content from the charity.
+</div>
+{%- endif %}
+<script type="application/json" id="money-config">{{ money | json | safe }}</script>
+<script type="application/json" id="gift-impact-data">{{ copy.giftImpact | json | safe }}</script>
+<script type="module" src="/js/main.js?v={{ site.buildTime }}"></script>
+</body>
+</html>

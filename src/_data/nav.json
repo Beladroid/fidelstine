@@ -1,0 +1,36 @@
+{
+  "primary": [
+    { "label": "About", "url": "/about/" },
+    { "label": "Programmes", "url": "/programmes/", "mega": true },
+    { "label": "Gallery", "url": "/gallery/" },
+    { "label": "Christmas Scheme", "url": "/christmas-scheme/", "short": "Christmas" },
+    { "label": "Transparency", "url": "/transparency/", "hideCondensed": true },
+    { "label": "Contact", "url": "/contact/" }
+  ],
+  "bottom": [
+    { "label": "Home", "url": "/", "icon": "home" },
+    { "label": "Programmes", "url": "/programmes/", "icon": "heart" },
+    { "label": "Give", "action": "donate", "icon": "give" },
+    { "label": "Gallery", "url": "/gallery/", "icon": "gallery" },
+    { "label": "More", "action": "menu", "icon": "menu" }
+  ],
+  "footer": {
+    "about": [
+      { "label": "Our story", "url": "/about/" },
+      { "label": "Mission & values", "url": "/about/#mission" },
+      { "label": "Transparency", "url": "/transparency/" },
+      { "label": "Safeguarding", "url": "/safeguarding/" }
+    ],
+    "involved": [
+      { "label": "Our programmes", "url": "/programmes/" },
+      { "label": "Christmas Scheme", "url": "/christmas-scheme/" },
+      { "label": "Gallery", "url": "/gallery/" },
+      { "label": "Donate", "url": "/donate/" }
+    ],
+    "legal": [
+      { "label": "Privacy policy", "url": "/privacy/" },
+      { "label": "Donation policy", "url": "/donation-policy/" },
+      { "label": "Terms of use", "url": "/terms/" }
+    ]
+  }
+}

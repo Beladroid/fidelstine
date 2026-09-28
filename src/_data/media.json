@@ -1,0 +1,384 @@
+{
+  "_help": "Every photo and video on the site. Add new ones with `npm run media` (see docs/MEDIA-GUIDE.md). Tags decide where an item appears: hero, hero-video, band, reel, library, testimonial, gallery, flyer, before/after (with a shared \"pair\"), team, timeline, about-day. Topic tags (shelter, education, crisis, christmas, events, community) drive gallery filters and programme pages. \"focus\" is the CSS object-position used when cropping.",
+  "items": [
+    {
+      "id": "hero-photo",
+      "type": "image",
+      "src": "photos/hero-photo.jpg",
+      "alt": "A Fidelstine volunteer handing supplies to a man at a tented settlement at dusk",
+      "caption": "Relief supplies reach families at a settlement.",
+      "tags": [
+        "hero",
+        "gallery",
+        "crisis"
+      ],
+      "focus": "50% 30%",
+      "consent": "stand-in image",
+      "added": "2026-09-27",
+      "width": 1024,
+      "height": 468,
+      "orientation": "landscape"
+    },
+    {
+      "id": "hero-slide-urgent",
+      "type": "image",
+      "src": "photos/hero-slide-urgent.jpg",
+      "alt": "Families at a camp receiving food, clothing and medical care from volunteers at sunset",
+      "caption": "Urgent assistance: food, clothing, medical care and shelter.",
+      "tags": [
+        "hero",
+        "gallery",
+        "crisis"
+      ],
+      "focus": "50% 100%",
+      "consent": "stand-in image",
+      "added": "2026-09-27",
+      "width": 1024,
+      "height": 852,
+      "orientation": "landscape"
+    },
+    {
+      "id": "hero-slide-christmas",
+      "type": "image",
+      "src": "photos/hero-slide-christmas.jpg",
+      "alt": "Before and after: hunger and hopelessness met by food, medicine, shelter and dignity",
+      "caption": "The need is real. The help is here.",
+      "tags": [
+        "hero",
+        "christmas"
+      ],
+      "focus": "30% 60%",
+      "consent": "stand-in image",
+      "added": "2026-09-27",
+      "width": 1024,
+      "height": 813,
+      "orientation": "landscape"
+    },
+    {
+      "id": "flyer-urgent-needs",
+      "type": "image",
+      "src": "photos/flyer-urgent-needs.jpg",
+      "alt": "Fidelstine urgent assistance flyer listing food, clothing, medical care and shelter",
+      "caption": "Urgent needs flyer, ready to share on social media.",
+      "tags": [
+        "flyer",
+        "crisis"
+      ],
+      "consent": "stand-in image",
+      "added": "2026-09-27",
+      "width": 1024,
+      "height": 1024,
+      "orientation": "square"
+    },
+    {
+      "id": "flyer-christmas-scheme",
+      "type": "image",
+      "src": "photos/flyer-christmas-scheme.jpg",
+      "alt": "Fidelstine Christmas Scheme flyer in a before and after style",
+      "caption": "Christmas Scheme flyer, ready to share on social media.",
+      "tags": [
+        "flyer",
+        "christmas"
+      ],
+      "consent": "stand-in image",
+      "added": "2026-09-27",
+      "width": 1024,
+      "height": 1024,
+      "orientation": "square"
+    },
+    {
+      "id": "hero-video",
+      "type": "video",
+      "src": "videos/hero-video.mp4",
+      "poster": "posters/poster-hero-video.jpg",
+      "host": "local",
+      "alt": "Volunteers in green vests loading boxes of food, school bags and books from a truck",
+      "caption": "Packing food, school bags and books for distribution.",
+      "tags": [
+        "hero-video",
+        "band",
+        "gallery",
+        "crisis",
+        "education"
+      ],
+      "focus": "50% 35%",
+      "consent": "stand-in footage",
+      "added": "2026-09-27",
+      "width": 1280,
+      "height": 720,
+      "duration": 10,
+      "audio": false,
+      "orientation": "landscape",
+      "mobile": "videos/hero-video-480.mp4"
+    },
+    {
+      "id": "program-shelter",
+      "type": "video",
+      "src": "videos/program-shelter.mp4",
+      "poster": "posters/poster-shelter.jpg",
+      "host": "local",
+      "alt": "A volunteer drawing and colouring with a group of smiling children at the home",
+      "caption": "Drawing and colouring time at the home.",
+      "tags": [
+        "band",
+        "gallery",
+        "shelter"
+      ],
+      "consent": "stand-in footage",
+      "added": "2026-09-27",
+      "width": 1280,
+      "height": 720,
+      "duration": 10,
+      "audio": false,
+      "orientation": "landscape",
+      "mobile": "videos/program-shelter-480.mp4"
+    },
+    {
+      "id": "program-education",
+      "type": "video",
+      "src": "videos/program-education.mp4",
+      "poster": "posters/poster-education.jpg",
+      "host": "local",
+      "alt": "Volunteers helping children read and write in notebooks",
+      "caption": "Reading and writing support.",
+      "tags": [
+        "band",
+        "gallery",
+        "education"
+      ],
+      "consent": "stand-in footage",
+      "added": "2026-09-27",
+      "width": 1280,
+      "height": 720,
+      "duration": 20,
+      "audio": false,
+      "orientation": "landscape",
+      "mobile": "videos/program-education-480.mp4"
+    },
+    {
+      "id": "program-crisis",
+      "type": "video",
+      "src": "videos/program-crisis.mp4",
+      "poster": "posters/poster-crisis.jpg",
+      "host": "local",
+      "alt": "Relief volunteers handing out backpacks and supplies to children",
+      "caption": "Relief volunteers hand out backpacks and supplies.",
+      "tags": [
+        "band",
+        "gallery",
+        "crisis",
+        "christmas"
+      ],
+      "consent": "stand-in footage",
+      "added": "2026-09-27",
+      "width": 1280,
+      "height": 720,
+      "duration": 10,
+      "audio": false,
+      "orientation": "landscape",
+      "mobile": "videos/program-crisis-480.mp4"
+    },
+    {
+      "id": "story-video",
+      "type": "video",
+      "src": "videos/story-video.mp4",
+      "poster": "posters/poster-story-video.jpg",
+      "host": "local",
+      "alt": "Fidelstine volunteers preparing and distributing supplies",
+      "caption": "Our work in motion",
+      "tags": [
+        "library",
+        "gallery",
+        "crisis"
+      ],
+      "consent": "stand-in footage",
+      "added": "2026-09-27",
+      "width": 1280,
+      "height": 720,
+      "duration": 41,
+      "audio": true,
+      "orientation": "landscape",
+      "mobile": "videos/story-video-480.mp4"
+    },
+    {
+      "id": "new-clothes",
+      "type": "image",
+      "src": "photos/new-clothes.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "A smiling boy receiving a stack of new clothes",
+      "caption": "New clothes, and a smile to match.",
+      "tags": [
+        "gallery",
+        "christmas",
+        "crisis"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "backpack-smile",
+      "type": "image",
+      "src": "photos/backpack-smile.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "A smiling girl holding a new blue school bag and books",
+      "caption": "A new school bag and a big smile.",
+      "tags": [
+        "gallery",
+        "crisis"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "supplies-loaded",
+      "type": "image",
+      "src": "photos/supplies-loaded.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "A white truck with its doors open, loaded with boxes of supplies",
+      "caption": "Supplies loaded and ready to go.",
+      "tags": [
+        "gallery",
+        "crisis"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "unloading-boxes",
+      "type": "image",
+      "src": "photos/unloading-boxes.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "Volunteers in green vests unloading boxes of supplies from a van",
+      "caption": "Unloading supplies for families.",
+      "tags": [
+        "gallery",
+        "crisis"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "books-for-every-child",
+      "type": "image",
+      "src": "photos/books-for-every-child.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "Volunteers handing books to a line of children outside",
+      "caption": "Books for every child.",
+      "tags": [
+        "gallery",
+        "education"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "welcome-at-school",
+      "type": "image",
+      "src": "photos/welcome-at-school.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "A volunteer kneeling to greet a small boy as children arrive",
+      "caption": "A warm welcome for every child.",
+      "tags": [
+        "gallery",
+        "education"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "new-school-bags",
+      "type": "image",
+      "src": "photos/new-school-bags.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "Volunteers laying out new school bags and shoes on a table",
+      "caption": "New school bags and shoes laid out.",
+      "tags": [
+        "gallery",
+        "education",
+        "christmas"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "school-bag-handover",
+      "type": "image",
+      "src": "photos/school-bag-handover.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "Volunteers handing school bags to excited children",
+      "caption": "School bags handed out to children.",
+      "tags": [
+        "gallery",
+        "education",
+        "community"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "books-held-high",
+      "type": "image",
+      "src": "photos/books-held-high.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "A crowd of children holding new books above their heads with volunteers",
+      "caption": "Books held high on distribution day.",
+      "tags": [
+        "gallery",
+        "education",
+        "crisis"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "home-at-sunrise",
+      "type": "image",
+      "src": "photos/home-at-sunrise.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "A white truck parked at the gate of a walled compound at sunrise",
+      "caption": "Early start at the home.",
+      "tags": [
+        "gallery",
+        "shelter"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "proud-of-my-drawing",
+      "type": "image",
+      "src": "photos/proud-of-my-drawing.jpg",
+      "width": 1100,
+      "height": 619,
+      "orientation": "landscape",
+      "alt": "Children at the home proudly showing a colourful drawing",
+      "caption": "Proud of a new drawing.",
+      "tags": [
+        "gallery",
+        "shelter"
+      ],
+      "consent": "stand-in (still from stand-in footage)",
+      "added": "2026-09-28"
+    }
+  ]
+}

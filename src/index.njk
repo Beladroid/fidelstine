@@ -1,0 +1,67 @@
+---
+layout: layouts/base.njk
+isHome: true
+hasHero: true
+pageClass: home
+description: Fidelstine Charity Concerns and Orphanage restores dignity to the abandoned and hope to the forgotten in Delta State, Nigeria and beyond. Give securely in naira, pounds, dollars and more.
+---
+{%- import "macros/components.njk" as c with context -%}
+
+{{ c.homeHero() }}
+
+{{ c.impact() }}
+
+{#- mission, editorial light -#}
+<section class="section mood-light" aria-labelledby="mission-title">
+  <div class="wrap split">
+    {%- set m = media.items | byId("proud-of-my-drawing") or media.items | byId("hero-photo") %}
+    <div class="split__media" data-reveal="left">
+      <div class="split__frame">{% if m %}<div class="fill" data-parallax style="--parallax: 40px">{{ c.pic(m, "(max-width: 900px) 100vw, 560px") }}</div>{% endif %}</div>
+      <p class="split__badge">"Not as charity alone, but as a sacred responsibility."</p>
+    </div>
+    <div class="split__body">
+      <p class="eyebrow">Why we exist</p>
+      <h2 id="mission-title" class="split" data-split>Every child who walks through our doors is met with love</h2>
+      <p class="pull-quote" data-reveal>{{ copy.missionShort }}</p>
+      <p data-reveal>{{ copy.missionMore }}</p>
+      <div data-reveal style="display:flex; gap:12px; flex-wrap:wrap; padding-top:8px">
+        <a class="btn btn--navy" href="/about/">Our story {% icon "arrow", "i--arrow" %}</a>
+        <a class="btn btn--outline" href="/transparency/">How we use funds</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{#- programmes teaser -#}
+<section class="section mood-sand" aria-labelledby="programmes-title">
+  <div class="wrap">
+    {{ c.sectionHead("How we walk with them", "Three programmes, one promise: no child left unseen", "", false, false, { url: "/programmes/", label: "All programmes" }, "programmes-title") }}
+    {{ c.programmeCards() }}
+  </div>
+</section>
+
+{% call c.mediaBand("", "band", "navy", false, 0) %}
+  <p class="eyebrow">Our vision</p>
+  <p class="band-quote">&ldquo;A world where no child grows up unseen, unheard, or unloved.&rdquo;</p>
+  <p class="band-cite">Fidelstine vision statement</p>
+  <div class="media-band__actions"><button class="btn btn--primary btn--lg" type="button" data-donate-open>{% icon "heart" %}Stand with us</button></div>
+{% endcall %}
+
+{{ c.reel() }}
+
+{{ c.values() }}
+
+{{ c.videoLibrary("library", "See the difference your support makes", "Our work in motion", "mood-light") }}
+
+{{ c.campaignBand() }}
+
+{{ c.testimonials() }}
+
+<section class="section section--tight mood-white" aria-labelledby="moments-title">
+  <div class="wrap">
+    {{ c.sectionHead("Gallery", "Moments from the field", "", false, false, { url: "/gallery/", label: "Open the gallery" }, "moments-title") }}
+  </div>
+  {{ c.ribbon() }}
+</section>
+
+{{ c.donateSection() }}

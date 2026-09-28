@@ -1,0 +1,20 @@
+{
+  "_help": "What each section of the site wants from the media library. `npm run media:report` compares this with media.json. In preview builds, empty slots show a placeholder card explaining what to add.",
+  "slots": [
+    { "id": "hero-photos", "label": "Home hero slideshow", "page": "Home", "match": { "all": ["hero"], "type": "image" }, "min": 2, "ideal": 4, "hint": "Landscape photos with space for a headline. No text in the image." },
+    { "id": "hero-videos", "label": "Home hero background videos", "page": "Home", "match": { "all": ["hero-video"], "type": "video" }, "min": 1, "ideal": 3, "hint": "Silent landscape loops, 10-20 seconds, calm movement." },
+    { "id": "reel", "label": "Stories reel", "page": "Home, Programmes", "match": { "all": ["reel"], "type": "video" }, "min": 1, "ideal": 6, "hint": "Vertical 9:16 phone clips, 15-60 seconds." },
+    { "id": "library", "label": "Video library", "page": "Home, About", "match": { "all": ["library"], "type": "video" }, "min": 1, "ideal": 4, "hint": "Landscape films of 1-3 minutes with clear sound." },
+    { "id": "bands", "label": "Background video bands", "page": "All pages", "match": { "all": ["band"], "type": "video" }, "min": 2, "ideal": 6, "hint": "Silent landscape loops, 10-20 seconds." },
+    { "id": "gallery", "label": "Gallery", "page": "Gallery", "match": { "all": ["gallery"] }, "min": 12, "ideal": 40, "hint": "Any good photos or short clips, tagged by topic." },
+    { "id": "before-after", "label": "Before and after slider", "page": "Christmas Scheme, About", "match": { "pairs": true }, "min": 1, "ideal": 3, "hint": "Two photos of the same place from the same angle, named x.before.jpg and x.after.jpg." },
+    { "id": "testimonials", "label": "Video testimonials", "page": "Home, About", "match": { "all": ["testimonial"] }, "min": 1, "ideal": 3, "hint": "About one minute, quiet place, with consent." },
+    { "id": "team", "label": "Team and trustees photos", "page": "About", "match": { "all": ["team"], "type": "image" }, "min": 3, "ideal": 6, "hint": "Portrait photos, shoulders up, plain background.", "fallback": "initials" },
+    { "id": "about-day", "label": "A day at the home", "page": "About", "match": { "all": ["about-day"] }, "min": 4, "ideal": 4, "hint": "Four photos: morning, school, play, evening. Tag each with about-day.", "fallback": "gallery photos" },
+    { "id": "timeline", "label": "Our journey timeline", "page": "About", "match": { "all": ["timeline"], "type": "image" }, "min": 3, "ideal": 5, "hint": "Historic photos, one per milestone.", "fallback": "text only" },
+    { "id": "shelter", "label": "Shelter programme photos", "page": "Programmes", "match": { "all": ["shelter"] }, "min": 3, "ideal": 8, "hint": "Daily life at the home." },
+    { "id": "education", "label": "Education programme photos", "page": "Programmes", "match": { "all": ["education"] }, "min": 3, "ideal": 8, "hint": "Classes, homework, skills training." },
+    { "id": "crisis", "label": "Crisis response photos", "page": "Programmes", "match": { "all": ["crisis"] }, "min": 3, "ideal": 8, "hint": "Relief distributions and medical outreach." },
+    { "id": "christmas", "label": "Christmas Scheme photos", "page": "Christmas Scheme", "match": { "all": ["christmas"] }, "min": 3, "ideal": 8, "hint": "Packing, delivery and celebrations." }
+  ]
+}

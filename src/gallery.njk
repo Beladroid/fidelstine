@@ -1,0 +1,37 @@
+---
+layout: layouts/base.njk
+title: Gallery
+hasHero: true
+pageClass: gallery
+permalink: /gallery/
+description: Photos and films from Fidelstine's work with children and families in Delta State, Nigeria.
+---
+{%- import "macros/components.njk" as c with context -%}
+{%- set items = media.items | tagged("gallery") | newest -%}
+
+{{ c.pageHero("Moments from the field", "Gallery", "Photos and short films from the home, the classroom and relief outreach. Tap any picture to view it full screen.", "new-school-bags", false, "Gallery") }}
+
+<section class="section mood-light" style="padding-top:var(--space-5)">
+  <div class="wrap">
+    {%- if items | length %}
+    {{ c.gallery(items) }}
+    {%- else %}
+    {{ c.slotEmpty("gallery") }}
+    {%- endif %}
+  </div>
+</section>
+
+{{ c.reel("reel", "Short stories", "Watch") }}
+
+<section class="section mood-sand" aria-labelledby="flyers-title">
+  <div class="wrap">
+    {{ c.sectionHead("Share", "Campaign flyers", "Download and share these on WhatsApp, Facebook or Instagram to spread the word.", false, false, null, "flyers-title") }}
+    {{ c.flyers() }}
+  </div>
+</section>
+
+<section class="section section--tight mood-white">
+  <div class="wrap wrap--narrow" style="text-align:center">
+    <p class="muted" style="font-size:var(--step--1)">{% icon "shield" %} We protect the children in our care. We never publish full names or exact locations, and every identifiable photo is used with consent. <a class="text-link" href="/safeguarding/">Our safeguarding promise</a>.</p>
+  </div>
+</section>
