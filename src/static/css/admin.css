@@ -2,7 +2,8 @@
 .admin__head { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .admin__tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 .admin__filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; align-items: end; background: #fff; border: 1px solid var(--line); border-radius: var(--r-card); padding: 16px; margin-bottom: 1.25rem; }
-.admin__filters .field input, .admin__filters .field select { min-height: 42px; padding: 0.4em 0.8em; }
+.admin__filters .field { min-width: 0; }
+.admin__filters .field input, .admin__filters .field select { min-height: 42px; padding: 0.4em 0.8em; min-width: 0; }
 .admin__filter-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .admin__totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
 .admin__total { background: #fff; border: 1px solid var(--line); border-radius: var(--r-card); padding: 16px 18px; }
