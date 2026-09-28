@@ -143,7 +143,6 @@ export default function (eleventyConfig) {
       return path;
     }
   });
-  eleventyConfig.addFilter("titleCase", (s = "") => s.replace(/\b\w/g, (c) => c.toUpperCase()));
 
   // ---------- CSS bundle minification ----------
   eleventyConfig.addTransform("minify-css", function (content) {

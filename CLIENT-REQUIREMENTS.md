@@ -61,8 +61,13 @@ These were asked but not yet answered — needed to move from prototype to a rea
 - [ ] Real photos/videos of the charity's actual work (current images are stand-ins)
 - [ ] Real "About/Mission" imagery vs. the AI-style reference graphics currently used
 - [ ] Contact details: address, phone, email (currently placeholders in footer)
-- [ ] Whether donations should be accepted online, and via which processor (Stripe, PayPal, GoFundMe Charity, Give.net, JustGiving)
-- [ ] One-time donations only, or recurring/subscription giving too
+- [x] Online donations: **Flutterwave**, many currencies (decided 28 Sep). Built; needs the charity's Flutterwave account and KYC.
+- [x] One-time giving first; monthly giving later (decided 28 Sep)
+- [ ] Bank details for the direct-transfer panel (NGN and, if any, domiciliary account)
+- [ ] Confirm WhatsApp number (currently assumed +234 802 342 5558)
+- [ ] Exact Facebook page link
+- [ ] Real "what your gift buys" figures (e.g. ₦5,000 = ?)
+- [ ] Christmas Scheme target amount and closing date
 - [ ] Gift Aid support needed (UK tax reclaim on donations)?
 - [ ] Does staff need a login/admin panel to update content themselves (blog, gallery, etc.)?
 - [ ] Volunteer or event sign-up forms needed?
@@ -72,14 +77,13 @@ These were asked but not yet answered — needed to move from prototype to a rea
 - [ ] Budget range and target launch date
 - [ ] Who maintains the site after launch?
 
-## 9. Prototype Status
+## 9. Build Status
 
-Current prototype (`index.html`) includes, using real client material:
-- Real logo, mission, vision, motto, core values, color direction, social handles
-- Real hero/flyer photos in a rotating hero slideshow
-- Flyer graphics displayed in a dedicated "Current outreach flyers" section
+The single-page prototype has been replaced by the full site described in `PLAN.md` (see its "Implementation status" section).
 
-Everything else (programs detail, gallery photos, impact numbers, donation amounts, contact info) is clearly marked as **placeholder** or **mock content** and should not be treated as final.
+Real client material in use: logo, mission, vision, motto, core values, colours, social handles, contact details, campaign flyers.
+
+Still placeholder, shown with a dashed red outline on preview builds: programme descriptions, impact numbers, testimonials, timeline, team, gift-amount examples, Christmas Scheme details and spending breakdown. The photos and videos are stand-ins until real footage arrives (see `docs/MEDIA-BRIEF.md`).
 
 ## 10. Contact details (received 27 Sep)
 
