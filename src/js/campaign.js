@@ -1,5 +1,6 @@
 // Campaign countdown and live "raised so far" progress bar.
 import { $, $$, inView, reducedMotion } from "./util.js";
+import { fromNaira, onCurrencyChange } from "./currency.js";
 
 export default function initCampaign() {
   $$("[data-countdown]").forEach(countdown);
@@ -56,12 +57,17 @@ function progress(el) {
     bar.setAttribute("aria-valuenow", Math.round(pct));
     if (pctEl) pctEl.textContent = `${Math.round(pct)}%`;
     if (donorsEl) donorsEl.textContent = donors ? `${donors.toLocaleString("en")} gift${donors === 1 ? "" : "s"} so far` : "Be one of the first to give";
+    raisedEl.dataset.raisedNgn = raised;
     animateNumber(raisedEl, raised);
+  });
+  // show the total in the visitor's currency, and follow any switch
+  onCurrencyChange(() => {
+    if (raisedEl.dataset.raisedNgn !== undefined) raisedEl.textContent = fromNaira(Number(raisedEl.dataset.raisedNgn));
   });
 }
 
 function animateNumber(el, to) {
-  const fmt = (n) => "₦" + Math.round(n).toLocaleString("en");
+  const fmt = (n) => fromNaira(n);
   if (reducedMotion() || !to) {
     el.textContent = fmt(to);
     return;

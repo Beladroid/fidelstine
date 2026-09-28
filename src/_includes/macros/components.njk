@@ -82,7 +82,7 @@
     </div>
     <div class="quickgive__pills">
       {%- for a in nPresets %}
-      <a class="quick-pill" href="/donate/?amount={{ a }}&amp;currency=NGN" data-quick-amount="{{ a }}">{{ a | money("NGN") }}</a>
+      <a class="quick-pill" href="/donate/?amount={{ a }}&amp;currency=NGN" data-quick-amount="{{ a }}" data-money-preset="{{ loop.index0 }}">{{ a | money("NGN") }}</a>
       {%- endfor %}
       <a class="btn btn--primary btn--sm" href="/donate/">Other amount</a>
     </div>
@@ -232,11 +232,11 @@
     {%- if withHead %}
     <div class="section-head">
       <p class="eyebrow">What guides us</p>
-      <h2 id="values-title" class="reveal-words" data-split>Six values behind every decision</h2>
+      <h2 id="values-title" class="reveal-words" data-split>{{ copy.values | length | numberWord | capitalize }} values behind every decision</h2>
     </div>
     {%- endif %}
     <div data-rail>
-      <ul class="rail" role="list" style="--cols-desktop:3; --cols-tablet:2; --rail-item:78%" data-stagger>
+      <ul class="rail rail--values rail--span-last" role="list" style="--cols-desktop:3; --cols-tablet:2; --rail-item:78%" data-stagger>
         {%- for v in copy.values %}
         <li>
           <article class="value-card">
@@ -336,7 +336,7 @@
 {% macro progress(slug, light=false) -%}
 {%- set camp = money.campaigns[slug] -%}
 <div class="progress{% if light %} progress--light{% endif %}" data-campaign-progress="{{ slug }}" data-target="{{ camp.targetNGN }}"{% if camp.placeholder %} data-placeholder{% endif %}>
-  <div class="progress__meta"><span><span class="progress__raised" data-raised>₦0</span> raised</span><span>of {{ camp.targetNGN | money("NGN") }} goal</span></div>
+  <div class="progress__meta"><span><span class="progress__raised" data-raised>₦0</span> raised</span><span>of <span data-money-ngn="{{ camp.targetNGN }}">{{ camp.targetNGN | money("NGN") }}</span> goal</span></div>
   <div class="progress__bar" role="progressbar" aria-label="Amount raised" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="progress__fill"></span></div>
   <div class="progress__meta"><span data-donors>Be one of the first to give</span><span data-percent></span></div>
 </div>
@@ -617,7 +617,7 @@
         {%- for g in copy.giftImpact.NGN %}
         <li>
           <span class="impact-list__thumb">{% if pool[loop.index0 + 2] %}{{ pic(pool[loop.index0 + 2], "64px") }}{% endif %}</span>
-          <span><strong>{{ g.amount | money("NGN") }}</strong><span>{{ g.text }}</span></span>
+          <span><strong data-money-ngn="{{ g.amount }}">{{ g.amount | money("NGN") }}</strong><span>{{ g.text }}</span></span>
         </li>
         {%- endfor %}
       </ul>

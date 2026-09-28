@@ -253,3 +253,8 @@
 
 .campaign-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .campaign-actions .btn { flex: 1 1 190px; }
+
+/* an odd value left alone on the last desktop row sits in the middle column */
+@media (min-width: 901px) {
+  .rail--values > :last-child:nth-child(3n + 1) { grid-column: 2; }
+}

@@ -232,3 +232,11 @@ test("pages are served", async () => {
     assert.equal(r.status, 200, path);
   }
 });
+
+test("geo endpoint returns a supported currency or null", async () => {
+  const r = await fetch(`${BASE}/api/geo`);
+  assert.equal(r.status, 200);
+  assert.match(r.headers.get("cache-control"), /no-store/);
+  const { currency } = await r.json();
+  assert.ok(currency === null || ["NGN", "GBP", "USD", "EUR", "GHS", "KES", "ZAR", "CAD"].includes(currency));
+});

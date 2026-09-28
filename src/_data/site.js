@@ -33,6 +33,8 @@ export default {
     { display: "+234 703 981 2282", tel: "+2347039812282" },
   ],
   phonesInternational: [
+    // added 28 Sep from the client (Uju). ASSUMPTION: an extra UK line, not a replacement. Confirm.
+    { display: "+44 7378 255045", tel: "+447378255045" },
     { display: "+44 7398 277555", tel: "+447398277555" },
     { display: "+44 7474 371109", tel: "+447474371109" },
   ],
@@ -47,7 +49,7 @@ export default {
     },
     extension: {
       label: "Extension",
-      lines: "Nwanokwai Layout, Ashaba Okiti New Layout, off Issele Uku Road, Ubulu Okiti, Aniocha South LGA, Delta State",
+      lines: "Ogechukwu Nwanokwai Layout, Ashaba Okiti New Layout, off Issele Uku Road, Ubulu Okiti, Aniocha South LGA, Delta State",
     },
   },
   socials: [

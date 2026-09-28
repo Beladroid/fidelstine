@@ -417,6 +417,70 @@
         "video": "program-shelter",
         "seconds": 8
       }
+    },
+    {
+      "id": "uniforms-banner",
+      "type": "image",
+      "src": "photos/uniforms-banner.jpg",
+      "width": 1920,
+      "height": 714,
+      "orientation": "landscape",
+      "alt": "Fidelstine banner: children in new school uniforms beside the charity name and the words Together we can make a difference",
+      "caption": "Banner: Together we can make a difference.",
+      "tags": [
+        "flyer",
+        "education"
+      ],
+      "consent": "supplied by client (identifiable children: confirm consent)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "uniforms-flyer",
+      "type": "image",
+      "src": "photos/uniforms-flyer.jpg",
+      "width": 1920,
+      "height": 1804,
+      "orientation": "landscape",
+      "alt": "Fidelstine flyer: children in new gingham and navy school uniforms, with care, education, shelter, health and opportunity",
+      "caption": "Uniforms flyer: Giving hope, building brighter futures.",
+      "tags": [
+        "flyer",
+        "education"
+      ],
+      "consent": "supplied by client (identifiable children: confirm consent)",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "new-uniforms-blue",
+      "type": "image",
+      "src": "photos/new-uniforms-blue.jpg",
+      "width": 1920,
+      "height": 1440,
+      "orientation": "landscape",
+      "alt": "Piles of new bright blue and light blue school shirts folded on a table",
+      "caption": "Fresh uniforms waiting to be handed out.",
+      "tags": [
+        "gallery",
+        "education"
+      ],
+      "consent": "supplied by client",
+      "added": "2026-09-28"
+    },
+    {
+      "id": "new-uniforms-navy-and-gingham",
+      "type": "image",
+      "src": "photos/new-uniforms-navy-and-gingham.jpg",
+      "width": 1920,
+      "height": 1440,
+      "orientation": "landscape",
+      "alt": "Stacks of new navy school pinafores and purple gingham shirts folded on a table",
+      "caption": "New school uniforms, sewn and ready for the children.",
+      "tags": [
+        "gallery",
+        "education"
+      ],
+      "consent": "supplied by client",
+      "added": "2026-09-28"
     }
   ]
 }

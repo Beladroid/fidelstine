@@ -1,7 +1,9 @@
 // Entry point: core shell behaviour always, feature modules only when the page needs them.
 import { initCore } from "./core.js";
+import { initCurrency } from "./currency.js";
 
 initCore();
+initCurrency();
 
 const modules = [
   ["[data-hero]", () => import("./hero.js")],

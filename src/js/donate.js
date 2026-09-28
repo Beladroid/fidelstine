@@ -1,15 +1,15 @@
 // Donate forms: currency switching, amount pills, gift-impact text, validation, and handing the
 // donor to Flutterwave's secure checkout through /api/donations/init.
-import { $, $$, moneyConfig, formatMoney, postJSON, storage } from "./util.js";
+import { $, $$, moneyConfig, formatMoney, postJSON } from "./util.js";
+import { currencyReady, getCurrency, setCurrency, onCurrencyChange } from "./currency.js";
 
 const IMPACT = {
-  // mirrors content.json giftImpact (kept small and client-side)
+  // mirrors copy.json giftImpact (kept small and client-side)
   generic: "Every gift goes straight to shelter, food, schooling and care for children and vulnerable adults.",
 };
 
 export default function initDonate() {
   const cfg = moneyConfig();
-  const preferred = pickCurrency(cfg);
   const params = new URLSearchParams(location.search);
 
   $$("[data-donate-form]").forEach((form) => {
@@ -78,16 +78,10 @@ export default function initDonate() {
       }
     }
 
+    // the donor picked a currency: switch this form, the rest of the page, and remember it
     ui.currency.addEventListener("change", () => {
-      storage("fid-currency", ui.currency.value);
       renderPills(ui.currency.value);
-      // keep every form on the page in the same currency
-      $$("[data-donate-form] [data-currency]").forEach((sel) => {
-        if (sel !== ui.currency && sel.value !== ui.currency.value) {
-          sel.value = ui.currency.value;
-          sel.dispatchEvent(new Event("change"));
-        }
-      });
+      setCurrency(ui.currency.value, { remember: true });
     });
     ui.amounts.addEventListener("change", () => {
       update();
@@ -96,12 +90,24 @@ export default function initDonate() {
     });
     ui.customInput.addEventListener("input", update);
 
-    // initial state: URL (?amount=&currency=&campaign=), then saved preference, then time zone
-    const urlCurrency = params.get("currency");
-    const startCurrency = isPageForm && urlCurrency && cfg.currencies[urlCurrency] ? urlCurrency : preferred;
-    ui.currency.value = startCurrency;
+    // initial state: the visitor's currency (link, their own choice, their country, or time zone).
+    // The page form also honours ?amount= from quick-give links.
     const urlAmount = isPageForm ? Number(params.get("amount")) : NaN;
-    renderPills(startCurrency, urlAmount > 0 ? urlAmount : undefined);
+    const start = (code) => {
+      ui.currency.value = code;
+      renderPills(code, urlAmount > 0 ? urlAmount : undefined);
+    };
+    start(getCurrency() || ui.currency.value);
+    currencyReady.then((code) => {
+      if (ui.currency.value !== code) start(code);
+      // follow later switches made anywhere on the page
+      onCurrencyChange((next) => {
+        if (ui.currency.value !== next) {
+          ui.currency.value = next;
+          renderPills(next);
+        }
+      });
+    });
     const urlCampaign = params.get("campaign");
     if (isPageForm && urlCampaign && ui.campaign && cfg.campaigns[urlCampaign]) ui.campaign.value = urlCampaign;
 
@@ -165,20 +171,6 @@ export default function initDonate() {
   });
 }
 
-function pickCurrency(cfg) {
-  const saved = storage("fid-currency");
-  if (saved && cfg.currencies[saved]) return saved;
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-    const mapped = cfg.timezoneCurrency?.[tz];
-    if (mapped && cfg.currencies[mapped]) return mapped;
-    if (tz.startsWith("Europe/") && cfg.currencies.EUR) return "EUR";
-    if (tz.startsWith("Africa/Lagos")) return "NGN";
-    if (tz && !tz.startsWith("Africa/") && cfg.currencies.USD) return "USD";
-  } catch {}
-  return cfg.defaultCurrency || "NGN";
-}
-
 function readImpactMap(form) {
   // gift-impact lines rendered server-side for NGN are passed through data on the page
   const el = document.getElementById("gift-impact-data");
@@ -191,11 +183,17 @@ function readImpactMap(form) {
 }
 
 function impactText(map, currency, amount) {
-  if (map && currency === "NGN" && Array.isArray(map.NGN)) {
+  // the examples are written in naira; other currencies are compared by approximate value
+  const rate = moneyConfig().approxNgnRate?.[currency];
+  if (map && Array.isArray(map.NGN) && rate && amount > 0) {
+    const inNaira = amount * rate;
     const sorted = [...map.NGN].sort((a, b) => a.amount - b.amount);
     let best = null;
-    for (const row of sorted) if (amount >= row.amount) best = row;
-    if (best) return amount === best.amount ? best.text : `Could provide: ${best.text.charAt(0).toLowerCase()}${best.text.slice(1)}, and more.`;
+    for (const row of sorted) if (inNaira >= row.amount * 0.95) best = row;
+    if (best) {
+      const exact = currency === "NGN" && amount === best.amount;
+      return exact ? best.text : `Could provide: ${best.text.charAt(0).toLowerCase()}${best.text.slice(1)}, and more.`;
+    }
   }
   return (map && map.generic) || IMPACT.generic;
 }

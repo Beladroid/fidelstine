@@ -25,6 +25,7 @@ Use this as the source of truth when replacing prototype placeholders.
 - **Dignity** — We uphold the worth of every individual in our care, ensuring they are never defined by their past, but empowered by their potential.
 - **Integrity** — We operate with transparency and accountability in all we do, honoring the trust placed in us by donors, partners, and the communities we serve.
 - **Resilience** — We equip those we serve with the emotional strength, education, and life skills to rise above trauma and build independent, fulfilling lives.
+- **Training and Empowerment** — (added 28 Sep) Practical skills, vocational training and mentoring so young people and vulnerable adults can earn a living, lead and stand on their own.
 - **Community** — We believe healing happens in relationship, fostering family reunification, local partnerships, and a sense of belonging for every child.
 - **Advocacy** — We speak up for the rights of the vulnerable, working to influence policy and practice that protects those who cannot protect themselves.
 
@@ -88,7 +89,7 @@ Still placeholder, shown with a dashed red outline on preview builds: programme 
 ## 10. Contact details (received 27 Sep)
 
 - **Head office:** 1, Market Road, Idumu Uzu Quarters, by Skill Acquisition Center, Ubulu Okiti, Delta State, Nigeria
-- **Extension:** Nwanokwai Layout, Ashaba Okiti New Layout, off Issele Uku Road, Ubulu Okiti, Aniocha South LGA, Delta State
+- **Extension:** Ogechukwu Nwanokwai Layout, Ashaba Okiti New Layout, off Issele Uku Road, Ubulu Okiti, Aniocha South LGA, Delta State
 - **Phone (Nigeria):** +234 802 342 5558, +234 703 981 2282
-- **International correspondence:** +44 7398 277555, +44 7474 371109
+- **International correspondence:** +44 7378 255045 (added 28 Sep), +44 7398 277555, +44 7474 371109
 - Still needed: email address, UK address (if one should be shown)

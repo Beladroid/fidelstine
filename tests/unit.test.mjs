@@ -52,3 +52,16 @@ test("safeEqual", () => {
   assert.ok(!safeEqual("abc", "abcd"));
   assert.ok(!safeEqual(undefined, "abc"));
 });
+
+test("visitor country picks the right currency", async () => {
+  const { currencyForCountry } = await import("../lib/currencies.js");
+  assert.equal(currencyForCountry("NG"), "NGN");
+  assert.equal(currencyForCountry("gb"), "GBP");
+  assert.equal(currencyForCountry("US"), "USD");
+  assert.equal(currencyForCountry("DE"), "EUR");
+  assert.equal(currencyForCountry("GH"), "GHS");
+  assert.equal(currencyForCountry("IN"), "USD", "unsupported countries fall back to dollars");
+  assert.equal(currencyForCountry("XX"), null);
+  assert.equal(currencyForCountry(""), null);
+  assert.equal(currencyForCountry("<script>"), null);
+});

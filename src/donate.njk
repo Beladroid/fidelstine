@@ -26,7 +26,7 @@ description: Give securely to Fidelstine Charity Concerns and Orphanage in naira
         {%- for g in copy.giftImpact.NGN %}
         <li>
           <span class="impact-list__thumb">{% if pool[loop.index0] %}{{ c.pic(pool[loop.index0], "64px") }}{% endif %}</span>
-          <span><strong>{{ g.amount | money("NGN") }}</strong><span>{{ g.text }}</span></span>
+          <span><strong data-money-ngn="{{ g.amount }}">{{ g.amount | money("NGN") }}</strong><span>{{ g.text }}</span></span>
         </li>
         {%- endfor %}
       </ul>

@@ -131,6 +131,7 @@ export default function (eleventyConfig) {
     }
   });
   eleventyConfig.addFilter("json", (v) => JSON.stringify(v));
+  eleventyConfig.addFilter("numberWord", (n) => ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"][n] || String(n));
   eleventyConfig.addFilter("pad2", (n) => String(n).padStart(2, "0"));
   eleventyConfig.addFilter("findBy", (arr, key, val) => (arr || []).find((x) => x && x[key] === val));
   eleventyConfig.addFilter("limit", (arr, n) => (arr || []).slice(0, n));
