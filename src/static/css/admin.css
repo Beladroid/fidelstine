@@ -21,3 +21,10 @@
 .status--pending { background: #fdf1dd; color: #a86a12; }
 .status--failed, .status--abandoned { background: rgba(163, 50, 52, 0.1); color: var(--red); }
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8rem; }
+.stats-editor { display: grid; gap: 1rem; background: #fff; border: 1px solid var(--line); border-radius: var(--r-card); padding: 18px; }
+.stats-editor__rows { display: grid; gap: 10px; }
+.stats-editor__row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 130px; gap: 10px; align-items: end; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.stats-editor__row .field { min-width: 0; }
+.stats-editor__row input { min-height: 42px; padding: 0.4em 0.8em; min-width: 0; }
+.stats-editor__row select, .admin__filters .field select { min-height: 42px; padding: 0.4em 2.4em 0.4em 0.8em; min-width: 0; }
+@media (max-width: 600px) { .stats-editor__row { grid-template-columns: 1fr 1fr; } .stats-editor__row .field:first-child { grid-column: 1 / -1; } }

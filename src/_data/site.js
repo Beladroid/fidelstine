@@ -59,10 +59,24 @@ export default {
     { name: "X", handle: "@fidelstine", url: "https://x.com/fidelstine", icon: "x" },
   ],
 
-  // PLACEHOLDER: bank details for direct transfers. Leave empty to hide the panel.
-  bank: {
-    ngn: { bank: "", accountName: "", accountNumber: "" },
-    domiciliary: { bank: "", accountName: "", accountNumber: "", currency: "USD" },
+  // Online card payments through Flutterwave. Keep false until the live Flutterwave account is ready;
+  // while false, every donate form is replaced by the manual giving details below.
+  onlineGiving: false,
+
+  // Manual giving: shown instead of the online form while onlineGiving is false, and as an
+  // alternative on the Donate page afterwards. PLACEHOLDER: details to follow from the client.
+  manualGiving: {
+    gtbank: {
+      bank: "Guaranty Trust Bank (GTBank)",
+      accountName: "",
+      accountNumber: "",
+      currency: "Naira (NGN)",
+    },
+    paypal: {
+      email: "",
+      // optional PayPal.Me link, e.g. "https://paypal.me/yourname"
+      link: "",
+    },
   },
 
   // Registration details shown in the trust strip and footer once supplied

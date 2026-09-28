@@ -26,7 +26,8 @@ We never sell or rent your information.
 
 ## Who we share it with
 
-- **Flutterwave**, our payment provider, to process your payment.
+- **Flutterwave**, our online payment provider, to process card and online payments.
+- **PayPal and our bank (GTBank)**, when you give through them. They handle your payment under their own privacy policies.
 - **Cloudflare**, which hosts this website and its database.
 - **Our email provider**, to send receipts and replies.
 

@@ -10,7 +10,9 @@ Thank you for supporting Fidelstine Charity Concerns and Orphanage. This policy 
 
 ## How payments are processed
 
-Online donations are processed securely by Flutterwave. You can pay by card, bank transfer, USSD and, in some countries, mobile money. Flutterwave may show its own terms during checkout.
+Until online card payments open, gifts can be made by bank transfer to our GTBank account or through PayPal. The details are on the [Donate page](/donate/). Please tell us after giving so we can confirm your gift and thank you.
+
+When online payments open, they will be processed securely by Flutterwave. You can pay by card, bank transfer, USSD and, in some countries, mobile money. Flutterwave may show its own terms during checkout.
 
 ## Currencies
 

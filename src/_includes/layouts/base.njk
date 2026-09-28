@@ -81,7 +81,7 @@
 {% include "partials/lightbox.njk" %}
 <button class="btn btn--primary float-donate" type="button" data-donate-open data-float-donate>{% icon "heart" %}Donate</button>
 <div class="toast" role="status" aria-live="polite" data-toast></div>
-{%- if site.preview %}
+{%- if site.preview and pageClass != "admin" %}
 <div class="editor-note" data-editor-note>
   <button type="button" aria-label="Dismiss note" data-editor-note-close>&times;</button>
   Preview build. Items with a dashed red outline are placeholders waiting for real content from the charity.

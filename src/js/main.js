@@ -7,6 +7,7 @@ initCurrency();
 
 const modules = [
   ["[data-hero]", () => import("./hero.js")],
+  ["[data-stats]", () => import("./stats.js")],
   ["[data-bg-video], [data-inview], [data-hover-preview]", () => import("./video.js")],
   ["[data-rail], [data-carousel]", () => import("./carousel.js")],
   ["[data-reel]", () => import("./reel.js")],

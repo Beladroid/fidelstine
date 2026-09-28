@@ -46,23 +46,34 @@
     "placeholder": true,
     "items": [
       {
+        "key": "children",
         "value": 240,
         "suffix": "+",
         "label": "Children sheltered"
       },
       {
+        "key": "communities",
         "value": 18,
         "label": "Communities reached"
       },
       {
+        "key": "reunifications",
         "value": 95,
         "label": "Family reunifications"
       },
       {
+        "key": "trained",
+        "value": 150,
+        "suffix": "+",
+        "label": "Trained and empowered"
+      },
+      {
+        "key": "years",
         "value": 6,
         "label": "Years of service"
       }
-    ]
+    ],
+    "_note": "Starting figures. Staff can change them any time in the admin panel (Impact numbers tab) without a rebuild."
   },
   "trust": [
     {
@@ -80,7 +91,13 @@
     },
     {
       "icon": "lock",
-      "text": "Secure payments by Flutterwave"
+      "text": "Secure payments by Flutterwave",
+      "onlineOnly": true
+    },
+    {
+      "icon": "lock",
+      "text": "Give by GTBank transfer or PayPal",
+      "manualOnly": true
     }
   ],
   "programmes": [
@@ -302,20 +319,44 @@
   },
   "faqs": [
     {
-      "q": "Is my payment secure?",
-      "a": "Yes. Payments are handled by Flutterwave, a licensed payment company. Your card or bank details never touch our website."
+      "q": "How can I give right now?",
+      "a": "By bank transfer to our GTBank account in Nigeria, or through PayPal from anywhere in the world. The details are at the top of this page. Online card payments are coming soon.",
+      "manualOnly": true
     },
     {
       "q": "Which currencies can I give in?",
-      "a": "Naira, pounds, dollars, euros and several African currencies. Choose yours at the top of the form."
+      "a": "Naira by bank transfer. With PayPal you can send pounds, dollars, euros and most other currencies.",
+      "manualOnly": true
+    },
+    {
+      "q": "How will I know my gift arrived?",
+      "a": "Send us a WhatsApp message or use the contact form after you give. We will confirm your gift and thank you personally.",
+      "manualOnly": true
+    },
+    {
+      "q": "Can I give anonymously?",
+      "a": "Yes. Just don't include your name, or tell us you'd like to stay anonymous. We never publish donors' names without permission.",
+      "manualOnly": true
+    },
+    {
+      "q": "Is my payment secure?",
+      "a": "Yes. Payments are handled by Flutterwave, a licensed payment company. Your card or bank details never touch our website.",
+      "onlineOnly": true
+    },
+    {
+      "q": "Which currencies can I give in?",
+      "a": "Naira, pounds, dollars, euros and several African currencies. Choose yours at the top of the form.",
+      "onlineOnly": true
     },
     {
       "q": "Which payment methods are available?",
-      "a": "Card, bank transfer, USSD and, in some countries, mobile money. The options depend on your currency."
+      "a": "Card, bank transfer, USSD and, in some countries, mobile money. The options depend on your currency.",
+      "onlineOnly": true
     },
     {
       "q": "Will I get a receipt?",
-      "a": "Yes. Flutterwave emails a payment receipt, and we send a thank-you email confirming your gift."
+      "a": "Yes. Flutterwave emails a payment receipt, and we send a thank-you email confirming your gift.",
+      "onlineOnly": true
     },
     {
       "q": "Can I give monthly?",
@@ -323,7 +364,8 @@
     },
     {
       "q": "Can I give anonymously?",
-      "a": "Yes. Tick \"Give anonymously\" and your name will never be shown publicly."
+      "a": "Yes. Tick \"Give anonymously\" and your name will never be shown publicly.",
+      "onlineOnly": true
     }
   ]
 }

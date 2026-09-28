@@ -119,7 +119,7 @@ function donateSheet() {
     e.preventDefault();
     const slug = trigger.dataset.campaign || "general";
     if (campaignInput) campaignInput.value = slug;
-    if (campaignLabel) campaignLabel.textContent = campaigns[slug]?.title || "Where it's needed most";
+    if (campaignLabel && campaignInput) campaignLabel.textContent = campaigns[slug]?.title || "Where it's needed most";
     // wait for the menu to finish closing if the trigger was inside it
     const delay = trigger.closest("[data-menu]") ? 380 : 0;
     setTimeout(() => {
@@ -231,6 +231,7 @@ function counters() {
         if (!e.isIntersecting) return;
         io.unobserve(e.target);
         const el = e.target;
+        el.dataset.counted = "1";
         const target = Number(el.dataset.count);
         const suffix = el.dataset.suffix || "";
         if (reducedMotion()) return;
@@ -238,7 +239,9 @@ function counters() {
         const dur = 1400;
         const tick = (now) => {
           const p = Math.min((now - start) / dur, 1);
-          el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target).toLocaleString("en") + suffix;
+          // read the figure each frame: staff-edited numbers may arrive while counting
+          const to = Number(el.dataset.count) || target;
+          el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * to).toLocaleString("en") + (el.dataset.suffix ?? suffix);
           if (p < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);

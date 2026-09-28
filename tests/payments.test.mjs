@@ -240,3 +240,25 @@ test("geo endpoint returns a supported currency or null", async () => {
   const { currency } = await r.json();
   assert.ok(currency === null || ["NGN", "GBP", "USD", "EUR", "GHS", "KES", "ZAR", "CAD"].includes(currency));
 });
+
+test("impact numbers: public read, admin update, validation, cache cleared", async () => {
+  const before = await (await fetch(`${BASE}/api/stats`)).json();
+  assert.equal(before.items.length, 5);
+  assert.equal(before.custom, false);
+  const trained = before.items.find((i) => i.key === "trained");
+  assert.equal(trained.label, "Trained and empowered");
+
+  const put = (body) => fetch(`${BASE}/api/admin/stats`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  assert.equal((await put({ items: [{ key: "nope", value: 1, label: "x y", suffix: "" }] })).status, 422);
+  assert.equal((await put({ items: [{ key: "children", value: -3, label: "Children sheltered", suffix: "+" }] })).status, 422);
+  assert.equal((await put({ items: [{ key: "children", value: 12.5, label: "Children sheltered", suffix: "+" }] })).status, 422);
+  assert.equal((await put({ items: [{ key: "children", value: 10, label: "Children sheltered", suffix: "<b>" }] })).status, 422);
+
+  const ok = await put({ items: [{ key: "children", value: 312, label: "Children sheltered", suffix: "+" }, { key: "trained", value: 77, label: "Young people trained", suffix: "" }] });
+  assert.equal(ok.status, 200);
+  const after = await (await fetch(`${BASE}/api/stats`)).json();
+  assert.equal(after.custom, true);
+  assert.equal(after.items.find((i) => i.key === "children").value, 312);
+  assert.equal(after.items.find((i) => i.key === "trained").label, "Young people trained");
+  assert.equal(after.items.find((i) => i.key === "years").value, 6, "untouched figures keep their starting value");
+});

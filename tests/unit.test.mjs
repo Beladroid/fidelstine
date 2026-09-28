@@ -65,3 +65,15 @@ test("visitor country picks the right currency", async () => {
   assert.equal(currencyForCountry(""), null);
   assert.equal(currencyForCountry("<script>"), null);
 });
+
+test("impact numbers merge and validation", async () => {
+  const { mergeStats, validateStats } = await import("../lib/stats.js");
+  const defaults = [{ key: "a", value: 1, label: "Alpha", suffix: "+" }, { key: "b", value: 2, label: "Beta" }];
+  assert.deepEqual(mergeStats(defaults, null), [{ key: "a", value: 1, suffix: "+", label: "Alpha" }, { key: "b", value: 2, suffix: "", label: "Beta" }]);
+  const merged = mergeStats(defaults, { items: [{ key: "b", value: 9, label: "Bee", suffix: "" }] });
+  assert.equal(merged[1].value, 9);
+  assert.equal(merged[0].value, 1);
+  assert.throws(() => validateStats(defaults, { items: [{ key: "z", value: 1, label: "Zed" }] }), /Unknown/);
+  assert.throws(() => validateStats(defaults, { items: [{ key: "a", value: 1e9, label: "Alpha" }] }), /whole number/);
+  assert.deepEqual(validateStats(defaults, { items: [{ key: "a", value: "5", label: " Alpha ", suffix: "+" }] }).items[0], { key: "a", value: 5, suffix: "+", label: "Alpha" });
+});

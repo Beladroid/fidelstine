@@ -5,11 +5,15 @@
     <div class="donate-sheet__head">
       <div>
         <h2 id="donate-sheet-title">Give today</h2>
-        <p data-sheet-campaign>Where it's needed most</p>
+        <p data-sheet-campaign>{% if site.onlineGiving %}Where it's needed most{% else %}Bank transfer (GTBank) or PayPal{% endif %}</p>
       </div>
       <button class="icon-btn icon-btn--outline" type="button" data-sheet-close aria-label="Close">{% icon "close" %}</button>
     </div>
+    {%- if site.onlineGiving %}
     {{ c.donateForm("sheet", true) }}
     <p class="donate-sheet__more"><a class="text-link" href="/donate/">More options: choose a programme, add a message, or give by bank transfer</a></p>
+    {%- else %}
+    {{ c.manualGiving(true) }}
+    {%- endif %}
   </div>
 </dialog>

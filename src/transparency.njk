@@ -38,7 +38,7 @@ description: How Fidelstine Charity Concerns and Orphanage uses donations, with 
   <div class="wrap">
     {{ c.sectionHead("Our promise", "Accountable to you", "", false, false, null, "promise-title") }}
     <div class="pillars" data-stagger>
-      <article class="pillar">{% icon "lock" %}<h3>Secure giving</h3><p>Payments go through Flutterwave. Your card details never touch our website.</p></article>
+      <article class="pillar">{% icon "lock" %}<h3>Secure giving</h3><p>{% if site.onlineGiving %}Payments go through Flutterwave. Your card details never touch our website.{% else %}Gifts go straight to our GTBank account or through PayPal, and we confirm every one.{% endif %}</p></article>
       <article class="pillar">{% icon "check-circle" %}<h3>Every gift recorded</h3><p>Each donation is logged with a reference, so we can account for every gift.</p></article>
       <article class="pillar">{% icon "mail" %}<h3>Updates you can trust</h3><p>We report back on what your support made possible, with photos and stories.</p></article>
     </div>
