@@ -155,9 +155,12 @@
 .media-band__actions { margin-top: var(--space-6); display: flex; gap: var(--space-3); flex-wrap: wrap; }
 .media-band--center .media-band__actions { justify-content: center; }
 @media (max-width: 600px) {
-  .media-band { min-height: 82svh; align-items: flex-end; padding-bottom: var(--space-8); }
-  .media-band--navy .media-band__scrim, .media-band--dark .media-band__scrim { background: linear-gradient(180deg, rgba(9, 22, 35, 0.45) 0%, rgba(9, 22, 35, 0.35) 30%, rgba(9, 22, 35, 0.94) 72%); }
-  .media-band--red .media-band__scrim { background: linear-gradient(180deg, rgba(126, 36, 38, 0.35) 0%, rgba(126, 36, 38, 0.96) 70%); }
+  /* picture across the top, fading into the band colour, text below: sharp instead of over-zoomed */
+  .media-band { min-height: 0; align-items: flex-end; padding: 34svh 0 var(--space-8); }
+  .media-band__media { inset: 0 0 auto 0; height: 52svh; }
+  .media-band--red { background: var(--red-deep); }
+  .media-band--navy .media-band__scrim, .media-band--dark .media-band__scrim { background: linear-gradient(180deg, rgba(9, 22, 35, 0.3) 0, rgba(9, 22, 35, 0.15) 14svh, rgba(9, 22, 35, 0.85) 40svh, var(--navy-ink) 52svh); }
+  .media-band--red .media-band__scrim { background: linear-gradient(180deg, rgba(126, 36, 38, 0.3) 0, rgba(126, 36, 38, 0.2) 14svh, rgba(126, 36, 38, 0.9) 40svh, var(--red-deep) 52svh); }
 }
 
 /* ---------- campaign band ---------- */

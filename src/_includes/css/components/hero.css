@@ -81,8 +81,11 @@ html.intro .hero__actions { animation-delay: 1.7s; }
   .hero__actions .btn--ghost { border: 0; padding-inline: 0; min-height: 36px; backdrop-filter: none; text-decoration: underline; text-underline-offset: 4px; }
   .hero__controls { top: calc(var(--header-h) + 14px); right: var(--gutter); }
   .hero__quickgive, .scroll-cue, .hero__caption { display: none; }
+  /* Landscape footage zoomed to fill a whole tall screen looks soft, so on phones the picture fills
+     the top of the screen and fades into navy, with the words below it. Much less zoom = much sharper. */
+  .hero__media { bottom: auto; height: 60vh; height: 60svh; }
   .hero__scrim {
-    background: linear-gradient(180deg, rgba(9, 22, 35, 0.45) 0%, rgba(9, 22, 35, 0) 28%, rgba(9, 22, 35, 0.25) 50%, rgba(9, 22, 35, 0.96) 88%);
+    background: linear-gradient(180deg, rgba(9, 22, 35, 0.45) 0, rgba(9, 22, 35, 0) 10svh, rgba(9, 22, 35, 0.15) 22svh, rgba(9, 22, 35, 0.85) 48svh, var(--navy-ink) 60svh);
   }
 }
 
@@ -135,6 +138,11 @@ html.intro .hero__actions { animation-delay: 1.7s; }
 .page-hero--plain .page-hero__content { padding-top: calc(var(--header-h) + var(--space-7)); }
 @media (max-width: 600px) {
   .page-hero { min-height: 70svh; }
+  /* same idea as the home hero: picture in the top half, words below, far less zoom */
+  .page-hero__media { inset: 0 0 auto 0; height: 50svh; }
+  .page-hero__scrim { background: linear-gradient(180deg, rgba(9, 22, 35, 0.5) 0, rgba(9, 22, 35, 0.1) 16svh, rgba(9, 22, 35, 0.75) 38svh, var(--navy-ink) 50svh); }
+  .page-hero--warm { background: #5a161a; }
+  .page-hero--warm .page-hero__scrim { background: linear-gradient(180deg, rgba(90, 22, 26, 0.5) 0, rgba(90, 22, 26, 0.15) 16svh, rgba(90, 22, 26, 0.8) 38svh, #5a161a 50svh); }
   .page-hero--plain { min-height: 0; }
   .page-hero .page-hero__actions .btn { flex: 1 1 auto; }
 }
