@@ -82,11 +82,11 @@ The existing CSS in `index.html` (lines 15-510) is split into these files, not r
 1. Drop files into `media/incoming/`.
 2. Run `npm run media`. The script uses sharp and ffmpeg.
 3. For photos, it makes responsive AVIF and WebP versions and reads the orientation.
-4. For videos, it makes a 720p and a 480p H.264 MP4 with faststart, a poster frame and, for background loops, a muted 10-20 second loop.
+4. For videos, it makes one full-quality H.264 MP4 (up to 1080p) with faststart, a full-size poster frame and, for background loops, a muted 10-20 second loop. (Changed 28 Sep: phones get full quality too, not a 480p copy.)
 5. It uploads the results to R2 and adds entries to `media.json` with a blank caption, alt text and category to fill in.
 6. Any component that lists that category picks the new files up on the next build.
 
-Phones get the 480p video through `<source media="(max-width:600px)">`. That matters for Nigerian mobile data costs.
+All devices get the full-quality video. Visitors on expensive data can turn on Lite mode, which is switched on automatically when the phone's data saver is on.
 
 ### Media that arrives over time
 
@@ -387,7 +387,7 @@ These go beyond what was asked. Each is marked for launch or later so the client
 **Media:**
 - `npm run media` with a new photo and a vertical video makes both appear in the right gallery category and reel after a build.
 - Emptying a category hides its component cleanly, and the coverage report lists it as missing.
-- Phones receive the 480p video, confirmed in the network tab.
+- Phones receive the full-quality video, and Lite mode stops background videos.
 
 **Motion and accessibility:**
 - With reduced motion on, nothing animates and posters replace videos.

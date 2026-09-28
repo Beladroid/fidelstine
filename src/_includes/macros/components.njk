@@ -14,7 +14,6 @@
 
 {% macro bgVideo(item, cls="", attr="data-bg-video") -%}
 <video class="{{ cls }}" {{ attr }} muted loop playsinline preload="none" poster="{{ item.poster | mediaUrl }}" aria-hidden="true" tabindex="-1"{% if item.focus %} style="--focus: {{ item.focus }}"{% endif %}>
-  {%- if item.mobile %}<source src="{{ item.mobile | mediaUrl(item.host) }}" type="video/mp4" media="(max-width: 600px)">{% endif %}
   <source src="{{ item.src | mediaUrl(item.host) }}" type="video/mp4">
 </video>
 {%- endmacro %}
@@ -44,13 +43,19 @@
 
 {#- ---------- home hero ---------- -#}
 {% macro homeHero() -%}
-{%- set slides = media.items | tagged("hero") | ofType("image") -%}
+{%- set photos = media.items | tagged("hero") | ofType("image") -%}
 {%- set vids = media.items | tagged("hero-video") | ofType("video") -%}
+{#- open on the hero video's own first frame: it is full size and hands over seamlessly to the video -#}
+{%- if vids | length -%}
+{%- set slides = [{ type: "image", src: vids[0].poster, alt: vids[0].alt, caption: vids[0].caption, focus: vids[0].focus }].concat(photos) -%}
+{%- else -%}
+{%- set slides = photos -%}
+{%- endif -%}
 {%- set nPresets = money.currencies.NGN.presets -%}
 <section class="hero" data-hero aria-label="Welcome">
   <div class="hero__media">
     {%- for s in slides %}
-    <div class="hero__slide fill{% if loop.first %} is-active{% endif %}" data-hero-slide data-caption="{{ s.caption }}">{{ pic(s, "100vw", "", loop.first) }}</div>
+    <div class="hero__slide fill{% if loop.first %} is-active{% endif %}" data-hero-slide data-caption="{{ s.caption }}">{{ pic(s, "(orientation: portrait) 300vw, 100vw", "", loop.first) }}</div>
     {%- endfor %}
     {%- if vids | length %}
     <video class="hero__video" data-hero-video="a" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
@@ -105,7 +110,7 @@
 <section class="page-hero{% if warm %} page-hero--warm{% endif %}{% if plain or not m %} page-hero--plain mood-dark{% endif %}">
   {%- if m %}
   <div class="page-hero__media fill" data-parallax>
-    {%- if m.type == "video" %}{{ bgVideo(m) }}{% else %}{{ pic(m, "100vw", "", true) }}{% endif %}
+    {%- if m.type == "video" %}{{ bgVideo(m) }}{% else %}{{ pic(m, "(orientation: portrait) 300vw, 100vw", "", true) }}{% endif %}
   </div>
   <div class="page-hero__scrim" aria-hidden="true"></div>
   {%- endif %}
@@ -263,7 +268,6 @@
     <div class="vlib{% if items | length > 1 %} vlib--multi{% endif %}" data-vlib data-reveal>
       <div class="vlib__stage" data-vlib-stage>
         <video data-vlib-video controls playsinline preload="none" poster="{{ first.poster | mediaUrl }}">
-          {%- if first.mobile %}<source src="{{ first.mobile | mediaUrl(first.host) }}" type="video/mp4" media="(max-width: 600px)">{% endif %}
           <source src="{{ first.src | mediaUrl(first.host) }}" type="video/mp4">
         </video>
         <button class="vlib__cover" type="button" data-vlib-play aria-label="Play film: {{ first.caption or first.alt }}">

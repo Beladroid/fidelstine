@@ -127,6 +127,7 @@ Useful commands:
 | Command | What it does |
 |---|---|
 | `npm run build` | Build the site into `_site` |
+| `npm run deploy` | Build and upload to https://fidelstine.pages.dev (works in PowerShell and bash). If it says the request timed out, the upload hit a slow connection: run it again |
 | `npm test` | Unit tests and end-to-end payment tests against a mock Flutterwave |
 | `npm run media` | Add new photos and videos from `media/incoming` |
 | `npm run media:report` | Show which sections still need media |

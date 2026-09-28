@@ -12,12 +12,13 @@
  * Options
  *   --tags a,b     extra tags for every file in this run
  *   --r2           upload videos to Cloudflare R2 (needs R2_BUCKET and a logged-in wrangler)
- *   --backfill     create missing phone-size videos / dimensions for items already in media.json
+ *   --backfill     fill in missing sizes and durations for items already in media.json
  *   --dry-run      show what would happen without changing anything
  *
  * Photos: rotated upright, resized to at most 2000px, re-encoded as JPEG, and all metadata
  * (including GPS location) removed. That protects the home's location.
- * Videos: a 720p and a 480p H.264 MP4 with fast start, plus a poster frame. Short landscape
+ * Videos: one full-quality H.264 MP4 (up to 1080p, never upscaled) with fast start, plus a
+ * full-size poster frame. Every device gets the same full-quality file. Short landscape
  * clips become silent background loops, portrait clips become "reel" stories.
  */
 import fs from "node:fs/promises";
@@ -191,25 +192,22 @@ function scaleFilter(meta, longEdge) {
   return portrait ? `scale=-2:'min(${longEdge},ih)'` : `scale='min(${longEdge},iw)':-2`;
 }
 
-async function encodeVideo(input, meta, { mainOut, mobileOut, posterOut, silent, maxSeconds }) {
-  const audioArgs = silent || !meta.audio ? ["-an"] : ["-c:a", "aac", "-b:a", "128k"];
-  const mobileAudio = silent || !meta.audio ? ["-an"] : ["-c:a", "aac", "-b:a", "96k"];
+const MAX_EDGE = 1920; // 1080p: full quality for the web; 4K sources are brought down to this, smaller ones are never upscaled
+
+async function encodeVideo(input, meta, { mainOut, posterOut, silent, maxSeconds }) {
+  const audioArgs = silent || !meta.audio ? ["-an"] : ["-c:a", "aac", "-b:a", "160k"];
   const trim = maxSeconds && meta.duration > maxSeconds ? ["-t", String(maxSeconds)] : [];
   const common = ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-profile:v", "high", "-movflags", "+faststart"];
 
   if (mainOut) {
-    log(`    720p  -> ${path.basename(mainOut)}`);
-    await ffmpeg(["-i", input, ...trim, "-vf", scaleFilter(meta, 1280), ...common, "-preset", "slow", "-crf", "24", ...audioArgs, mainOut]);
-  }
-  if (mobileOut) {
-    log(`    480p  -> ${path.basename(mobileOut)}`);
-    await ffmpeg(["-i", input, ...trim, "-vf", scaleFilter(meta, 854), ...common, "-preset", "slow", "-crf", "28", ...mobileAudio, mobileOut]);
+    log(`    video  -> ${path.basename(mainOut)}`);
+    await ffmpeg(["-i", input, ...trim, "-vf", scaleFilter(meta, MAX_EDGE), ...common, "-preset", "slow", "-crf", "20", ...audioArgs, mainOut]);
   }
   if (posterOut) {
     const at = Math.min(1.5, Math.max(0, meta.duration * 0.1));
     const tmp = posterOut.replace(/\.jpg$/, ".tmp.png");
-    await ffmpeg(["-ss", String(at), "-i", input, "-frames:v", "1", "-vf", scaleFilter(meta, 1280), tmp]);
-    await sharp(tmp).jpeg({ quality: 80, mozjpeg: true }).toFile(posterOut);
+    await ffmpeg(["-ss", String(at), "-i", input, "-frames:v", "1", "-vf", scaleFilter(meta, MAX_EDGE), tmp]);
+    await sharp(tmp).jpeg({ quality: 88, mozjpeg: true }).toFile(posterOut);
     await fs.rm(tmp, { force: true });
     log(`    poster -> ${path.basename(posterOut)}`);
   }
@@ -231,7 +229,6 @@ async function processVideo(file, id, tags) {
 
   const outDir = USE_R2 ? DIR.r2out : DIR.videos;
   const mainName = `${id}.mp4`;
-  const mobileName = `${id}-480.mp4`;
   const posterName = `${id}.jpg`;
   log(`  ${meta.width}x${meta.height}, ${meta.duration}s, ${meta.audio ? "audio" : "no audio"}, tags: ${finalTags.join(", ")}`);
 
@@ -239,14 +236,12 @@ async function processVideo(file, id, tags) {
     await fs.mkdir(outDir, { recursive: true });
     await encodeVideo(file, meta, {
       mainOut: path.join(outDir, mainName),
-      mobileOut: path.join(outDir, mobileName),
       posterOut: path.join(DIR.posters, posterName),
       silent,
       maxSeconds: isLoop ? 20 : 0,
     });
     if (USE_R2) {
       await uploadToR2(path.join(outDir, mainName), `videos/${mainName}`, "video/mp4");
-      await uploadToR2(path.join(outDir, mobileName), `videos/${mobileName}`, "video/mp4");
     }
   }
 
@@ -254,7 +249,6 @@ async function processVideo(file, id, tags) {
     id,
     type: "video",
     src: `videos/${mainName}`,
-    mobile: `videos/${mobileName}`,
     poster: `posters/${posterName}`,
     host: USE_R2 ? "r2" : "local",
     width: meta.width,
@@ -296,17 +290,6 @@ async function backfill(lib) {
         audio: meta.audio,
         orientation: meta.height > meta.width ? "portrait" : "landscape",
       });
-      if (!item.mobile) {
-        const mobileName = path.basename(item.src).replace(/\.mp4$/, "-480.mp4");
-        log(`  ${item.id}: making phone version`);
-        if (!DRY) {
-          await encodeVideo(src, meta, {
-            mobileOut: path.join(DIR.videos, mobileName),
-            silent: !item.audio,
-          });
-        }
-        item.mobile = `videos/${mobileName}`;
-      }
       changed++;
     }
   }

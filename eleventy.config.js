@@ -27,9 +27,10 @@ export default function (eleventyConfig) {
     outputDir: "_site/img/",
     urlPath: "/img/",
     failOnError: false,
-    sharpJpegOptions: { mozjpeg: true, quality: 78 },
-    sharpWebpOptions: { quality: 76 },
-    sharpAvifOptions: { quality: 55 },
+    // high quality: photos are the heart of this site
+    sharpJpegOptions: { mozjpeg: true, quality: 86 },
+    sharpWebpOptions: { quality: 85 },
+    sharpAvifOptions: { quality: 68 },
     htmlOptions: {
       imgAttributes: { loading: "lazy", decoding: "async", sizes: "100vw" },
     },
@@ -87,7 +88,6 @@ export default function (eleventyConfig) {
         id: m.id,
         type: m.type,
         src: mediaUrl(m.src, m.type === "video" ? m.host : undefined),
-        mobile: m.mobile ? mediaUrl(m.mobile, m.host) : null,
         poster: m.poster ? mediaUrl(m.poster) : null,
         alt: m.alt || "",
         caption: m.caption || "",

@@ -1,5 +1,5 @@
 // Home hero: Ken Burns photo slideshow + crossfading background video playlist.
-import { $, $$, mq, motionAllowed, onLiteChange, readJSON } from "./util.js";
+import { $, $$, motionAllowed, onLiteChange, readJSON } from "./util.js";
 
 export default function initHero() {
   const hero = $("[data-hero]");
@@ -46,7 +46,7 @@ export default function initHero() {
   /* ---------- video playlist (two elements for crossfades) ---------- */
   let active = 0;
   let clip = 0;
-  const srcFor = (item) => (mq.phone.matches && item.mobile ? item.mobile : item.src);
+  const srcFor = (item) => item.src;
 
   function load(video, item) {
     video.src = srcFor(item);

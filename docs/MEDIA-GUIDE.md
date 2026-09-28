@@ -56,7 +56,8 @@ You can also edit tags directly in `media.json` at any time.
 ## What the script does to your files
 
 - **Photos** are turned upright, resized to at most 2000 pixels, saved as JPEG, and stripped of all hidden data, including GPS location. The build then makes AVIF and WebP versions at three sizes.
-- **Videos** get a 720p version, a 480p version for phones, and a poster frame. Phones automatically load the smaller file.
+- **Videos** are kept at full quality: up to 1080p, never enlarged, with a full-size poster frame. Every device gets the same file. Visitors who want to save data can switch on Lite mode, which stops background videos.
+- **Best results on phones** come from footage shot in 1080p or 4K. Upright 9:16 clips look sharpest in the phone hero and the stories reel, because landscape video has to be cropped heavily to fill a tall screen.
 - The originals move to `media/processed/`, which is not committed.
 
 ## Cropping

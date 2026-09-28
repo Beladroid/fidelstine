@@ -12,7 +12,8 @@ const env = process.env.SITE_ENV || "preview";
 export default {
   env,
   preview: env !== "production",
-  url: (process.env.SITE_URL || "https://fidelstine.org").replace(/\/$/, ""),
+  // the free Cloudflare address until the charity buys a domain; then set SITE_URL
+  url: (process.env.SITE_URL || "https://fidelstine.pages.dev").replace(/\/$/, ""),
   r2Base: process.env.MEDIA_R2_BASE || "",
   analyticsToken: process.env.CF_ANALYTICS_TOKEN || "",
   buildTime: Date.now().toString(36),

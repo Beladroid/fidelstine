@@ -26,7 +26,7 @@ export default function initLibrary() {
         video.pause();
         video.innerHTML = "";
         video.poster = it.poster || "";
-        video.src = mq.phone.matches && it.mobile ? it.mobile : it.src;
+        video.src = it.src;
         if (title) title.textContent = it.caption || it.alt || "";
         playNow();
         if (mq.phone.matches || !mq.desktop.matches) stage.scrollIntoView({ behavior: "smooth", block: "center" });

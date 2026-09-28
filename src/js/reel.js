@@ -1,5 +1,5 @@
 // Stories reel: tap a card to open a full-screen, Instagram-style player with progress bars.
-import { $, $$, mq, openDialog, closeDialog, readJSON } from "./util.js";
+import { $, $$, openDialog, closeDialog, readJSON } from "./util.js";
 
 export default function initReels() {
   const player = $("[data-story-player]");
@@ -23,7 +23,7 @@ export default function initReels() {
     if (i >= items.length) return closeDialog(player);
     index = i;
     const it = items[index];
-    video.src = mq.phone.matches && it.mobile ? it.mobile : it.src;
+    video.src = it.src;
     video.poster = it.poster || "";
     video.muted = muted;
     caption.textContent = it.caption || it.alt || "";

@@ -107,8 +107,7 @@
       "height": 720,
       "duration": 10,
       "audio": false,
-      "orientation": "landscape",
-      "mobile": "videos/hero-video-480.mp4"
+      "orientation": "landscape"
     },
     {
       "id": "program-shelter",
@@ -129,8 +128,7 @@
       "height": 720,
       "duration": 10,
       "audio": false,
-      "orientation": "landscape",
-      "mobile": "videos/program-shelter-480.mp4"
+      "orientation": "landscape"
     },
     {
       "id": "program-education",
@@ -151,8 +149,7 @@
       "height": 720,
       "duration": 20,
       "audio": false,
-      "orientation": "landscape",
-      "mobile": "videos/program-education-480.mp4"
+      "orientation": "landscape"
     },
     {
       "id": "program-crisis",
@@ -174,8 +171,7 @@
       "height": 720,
       "duration": 10,
       "audio": false,
-      "orientation": "landscape",
-      "mobile": "videos/program-crisis-480.mp4"
+      "orientation": "landscape"
     },
     {
       "id": "story-video",
@@ -196,8 +192,7 @@
       "height": 720,
       "duration": 41,
       "audio": true,
-      "orientation": "landscape",
-      "mobile": "videos/story-video-480.mp4"
+      "orientation": "landscape"
     },
     {
       "id": "new-clothes",

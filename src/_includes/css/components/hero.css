@@ -72,6 +72,8 @@ html.intro .hero__actions { animation-delay: 1.7s; }
 
 /* phone: full-height, one clear action, headline pinned low above the tab bar */
 @media (max-width: 600px) {
+  /* no Ken Burns zoom on phones: the picture is already cropped hard to fill a tall screen */
+  .hero__slide img, .hero__slide.is-active img { transform: none; }
   .hero__content { padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + var(--space-6)); }
   .hero__title { font-size: clamp(2.2rem, 9.6vw, 2.8rem); }
   .hero__motto { font-size: 1.02rem; }

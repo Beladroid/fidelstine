@@ -1,6 +1,6 @@
 // Gallery filters + a full-screen lightbox for photos and videos:
 // swipe, keyboard, double-tap zoom with panning, swipe down to close.
-import { $, $$, mq, openDialog, closeDialog, readJSON, reducedMotion } from "./util.js";
+import { $, $$, openDialog, closeDialog, readJSON, reducedMotion } from "./util.js";
 
 export default function initLightbox() {
   const lb = $("[data-lightbox]");
@@ -29,7 +29,7 @@ export default function initLightbox() {
       el.autoplay = true;
       el.preload = "auto";
       el.poster = it.poster || "";
-      el.src = mq.phone.matches && it.mobile ? it.mobile : it.src;
+      el.src = it.src;
       el.muted = !it.audio;
       if (!it.audio) el.loop = true;
     } else {
