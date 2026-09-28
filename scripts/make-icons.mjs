@@ -21,6 +21,11 @@ async function roundIcon(size, file, padding = 0) {
     .toFile(path.join(out, file));
 }
 
+// small crest images for the header, menu, footer and story rings (the source JPEG is ~200 KB)
+for (const size of [128, 256]) {
+  await sharp(mark).resize(size, size, { fit: "cover" }).webp({ quality: 82 }).toFile(path.join(out, `crest-${size}.webp`));
+}
+
 await roundIcon(32, "favicon-32.png");
 await roundIcon(192, "icon-192.png");
 await roundIcon(512, "icon-512.png");

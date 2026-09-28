@@ -9,7 +9,7 @@
 {#- ---------- primitives ---------- -#}
 {% macro pic(item, sizes="100vw", cls="", eager=false, usePoster=false) -%}
 {%- set file = item.poster if (usePoster or item.type == "video") else item.src -%}
-<img class="{{ cls }}" src="/media/{{ file }}" alt="{{ item.alt }}" sizes="{{ sizes }}"{% if item.width and item.type == 'image' %} width="{{ item.width }}" height="{{ item.height }}"{% endif %}{% if item.focus %} style="--focus: {{ item.focus }}"{% endif %}{% if eager %} loading="eager" fetchpriority="high"{% endif %}>
+<img class="{{ cls }}" src="/media/{{ file }}" alt="{{ item.alt }}" sizes="{{ sizes }}"{% if item.focus %} style="--focus: {{ item.focus }}"{% endif %}{% if eager %} loading="eager" fetchpriority="high"{% endif %}>
 {%- endmacro %}
 
 {% macro bgVideo(item, cls="", attr="data-bg-video") -%}
@@ -35,7 +35,7 @@
 <div class="section-head{% if center %} section-head--center{% endif %}{% if link %} section-head--split{% endif %}">
   <div>
     {%- if eyebrow %}<p class="eyebrow{% if center %} eyebrow--center{% endif %}">{{ eyebrow }}</p>{% endif %}
-    <h2{% if id %} id="{{ id }}"{% endif %} class="split" data-split>{{ title }}</h2>
+    <h2{% if id %} id="{{ id }}"{% endif %} class="reveal-words" data-split>{{ title }}</h2>
     {%- if lead %}<p class="lead"{% if placeholder %} data-placeholder{% endif %}>{{ lead }}</p>{% endif %}
   </div>
   {%- if link %}<a class="link-arrow" href="{{ link.url }}">{{ link.label }} {% icon "arrow" %}</a>{% endif %}
@@ -62,7 +62,7 @@
 
   <div class="hero__content wrap">
     <p class="eyebrow hero__eyebrow">Nigeria &amp; beyond</p>
-    <h1 class="hero__title split" data-split data-split-now>Restoring dignity to the abandoned, hope to the forgotten.</h1>
+    <h1 class="hero__title reveal-words" data-split data-split-now>Restoring dignity to the abandoned, hope to the forgotten.</h1>
     <p class="hero__motto">&ldquo;{{ site.motto }}&rdquo;</p>
     <div class="hero__actions">
       <a class="btn btn--primary btn--lg" href="/donate/" data-magnetic>{% icon "heart" %}Support a child today</a>
@@ -112,7 +112,7 @@
   <div class="page-hero__content wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ crumb or title }}</span></nav>
     {%- if eyebrow %}<p class="eyebrow">{{ eyebrow }}</p>{% endif %}
-    <h1 class="split" data-split data-split-now>{{ title }}</h1>
+    <h1 class="reveal-words" data-split data-split-now>{{ title }}</h1>
     {%- if lead %}<p class="lead">{{ lead }}</p>{% endif %}
     {%- if caller %}<div class="page-hero__actions">{{ caller() }}</div>{% endif %}
   </div>
@@ -189,7 +189,7 @@
 <section class="section mood-light" aria-labelledby="reel-{{ tag }}">
   <div class="wrap">
     <div class="section-head section-head--split">
-      <div><p class="eyebrow">{{ eyebrow }}</p><h2 id="reel-{{ tag }}" class="split" data-split>{{ title }}</h2></div>
+      <div><p class="eyebrow">{{ eyebrow }}</p><h2 id="reel-{{ tag }}" class="reveal-words" data-split>{{ title }}</h2></div>
       {%- if items | length > 1 %}<p class="muted">Tap a story to watch full screen.</p>{% endif %}
     </div>
     {%- if items | length %}
@@ -200,7 +200,7 @@
           <button class="reel__card" type="button" data-reel-open="{{ loop.index0 }}" aria-label="Play story: {{ r.caption or r.alt }}">
             {{ pic(r, "230px") }}
             {{ bgVideo(r, "", "data-inview") }}
-            <span class="reel__ring"><img src="/brand/logo-mark.jpg" alt="" width="34" height="34" eleventy:ignore></span>
+            <span class="reel__ring"><img src="/brand/crest-128.webp" srcset="/brand/crest-256.webp 2x" alt="" width="34" height="34" eleventy:ignore></span>
             {%- if r.duration %}<span class="reel__dur">{{ r.duration | duration }}</span>{% endif %}
             <span class="reel__label">{{ r.caption or r.alt }}</span>
           </button>
@@ -227,7 +227,7 @@
     {%- if withHead %}
     <div class="section-head">
       <p class="eyebrow">What guides us</p>
-      <h2 id="values-title" class="split" data-split>Six values behind every decision</h2>
+      <h2 id="values-title" class="reveal-words" data-split>Six values behind every decision</h2>
     </div>
     {%- endif %}
     <div data-rail>
@@ -256,7 +256,7 @@
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">{{ eyebrow }}</p>
-      <h2 id="vlib-title" class="split" data-split>{{ title }}</h2>
+      <h2 id="vlib-title" class="reveal-words" data-split>{{ title }}</h2>
     </div>
     {%- if items | length %}
     {%- set first = items[0] %}
@@ -296,7 +296,7 @@
 {%- if pairs | length or site.preview %}
 <section class="section {{ mood }}" aria-labelledby="ba-title">
   <div class="wrap wrap--narrow">
-    <div class="section-head section-head--center"><p class="eyebrow eyebrow--center">{{ eyebrow }}</p><h2 id="ba-title" class="split" data-split>{{ title }}</h2></div>
+    <div class="section-head section-head--center"><p class="eyebrow eyebrow--center">{{ eyebrow }}</p><h2 id="ba-title" class="reveal-words" data-split>{{ title }}</h2></div>
     {%- if pairs | length %}
     {%- for p in pairs %}
     <figure data-reveal>
@@ -346,16 +346,16 @@
   <div class="wrap campaign">
     <div data-reveal>
       <p class="eyebrow">Seasonal campaign</p>
-      <h2 id="xmas-title" class="split" data-split>{{ copy.christmas.headline }}</h2>
+      <h2 id="xmas-title" class="reveal-words" data-split>{{ copy.christmas.headline }}</h2>
       <p class="lead" style="margin-top:var(--space-4)"{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{{ copy.christmas.intro }}</p>
       <div class="need-tags">{% for n in copy.christmas.needs %}<span>{{ n }}</span>{% endfor %}</div>
     </div>
     <div class="campaign-card glass" data-reveal="right">
       {{ countdown(camp.endsAt) }}
       {{ progress("christmas-scheme") }}
-      <div style="display:flex; gap:10px; flex-wrap:wrap">
-        <button class="btn btn--light btn--lg" style="flex:1" type="button" data-donate-open data-campaign="christmas-scheme">{% icon "gift" %}Give to the scheme</button>
-        <a class="btn btn--ghost btn--lg" style="flex:1" href="/christmas-scheme/">Learn more</a>
+      <div class="campaign-actions">
+        <button class="btn btn--light btn--lg" type="button" data-donate-open data-campaign="christmas-scheme">{% icon "gift" %}Give to the scheme</button>
+        <a class="btn btn--ghost btn--lg" href="/christmas-scheme/">Learn more</a>
       </div>
     </div>
   </div>
@@ -366,7 +366,7 @@
 {% macro testimonials(mood="mood-sand") -%}
 <section class="section {{ mood }}" aria-labelledby="stories-title">
   <div class="wrap">
-    <div class="section-head"><p class="eyebrow">In their words</p><h2 id="stories-title" class="split" data-split>Lives changed, told by the people who lived them</h2></div>
+    <div class="section-head"><p class="eyebrow">In their words</p><h2 id="stories-title" class="reveal-words" data-split>Lives changed, told by the people who lived them</h2></div>
     <div class="carousel" data-carousel data-autoplay="9000"{% if copy.testimonials.placeholder %} data-placeholder{% endif %}>
       <ul class="carousel__track" role="list" data-carousel-track>
         {%- for t in copy.testimonials.items %}
@@ -607,7 +607,7 @@
   <div class="wrap donate-layout">
     <div class="donate-intro" data-reveal>
       <p class="eyebrow">Give today</p>
-      <h2 id="donate-title" class="split" data-split>{{ title }}</h2>
+      <h2 id="donate-title" class="reveal-words" data-split>{{ title }}</h2>
       <p class="lead">Your gift pays for shelter, food, school and care. Give in naira, pounds, dollars and more.</p>
       <ul class="impact-list" role="list"{% if copy.giftImpact.placeholder %} data-placeholder{% endif %}>
         {%- for g in copy.giftImpact.NGN %}
@@ -639,7 +639,7 @@
   <div class="wrap">
     <div class="cta-panel" data-reveal="scale">
       {%- if m %}<div class="cta-panel__media fill">{{ pic(m) }}</div>{% endif %}
-      <h2 class="split" data-split>{{ title }}</h2>
+      <h2 class="reveal-words" data-split>{{ title }}</h2>
       <p>{{ text }}</p>
       <div class="cta-panel__actions">
         <button class="btn btn--primary btn--lg" type="button" data-donate-open data-magnetic>{% icon "heart" %}Give now</button>

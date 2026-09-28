@@ -255,9 +255,9 @@ strong { font-weight: 600; }
 .js [data-stagger].is-in > *:nth-child(n + 7) { transition-delay: 460ms; }
 
 /* headline word reveal: JS wraps each word in .w > span */
-.split .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; margin-bottom: -0.08em; }
-.split .w > span { display: inline-block; transform: translateY(105%); transition: transform 0.9s var(--ease-out); transition-delay: calc(var(--i) * 45ms + var(--delay, 0ms)); }
-.split.is-in .w > span { transform: none; }
+.reveal-words .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.reveal-words .w > span { display: inline-block; transform: translateY(105%); transition: transform 0.9s var(--ease-out); transition-delay: calc(var(--i) * 45ms + var(--delay, 0ms)); }
+.reveal-words.is-in .w > span { transform: none; }
 
 /* parallax via scroll-driven animations where supported (desktop & tablet only) */
 @supports (animation-timeline: view()) {
@@ -321,5 +321,5 @@ html.intro .intro-curtain img { width: 96px; height: 96px; border-radius: 50%; a
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
-  .js [data-reveal], .js [data-stagger] > *, .split .w > span { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .js [data-reveal], .js [data-stagger] > *, .reveal-words .w > span { opacity: 1 !important; transform: none !important; clip-path: none !important; }
 }

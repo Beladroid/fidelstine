@@ -19,7 +19,7 @@ description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care 
   <div class="wrap campaign">
     <div data-reveal>
       <p class="eyebrow">This year's goal</p>
-      <h2 id="goal-title" class="split" data-split>Every family deserves a Christmas</h2>
+      <h2 id="goal-title" class="reveal-words" data-split>Every family deserves a Christmas</h2>
       <p class="lead" style="margin-top:1rem"{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{{ copy.christmas.intro }}</p>
     </div>
     <div class="campaign-card glass" data-reveal="right">
@@ -37,7 +37,7 @@ description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care 
     </div>
     <div class="split__body">
       <p class="eyebrow">What families receive</p>
-      <h2 id="receive-title" class="split" data-split>A Christmas package, with dignity</h2>
+      <h2 id="receive-title" class="reveal-words" data-split>A Christmas package, with dignity</h2>
       <ul class="checklist" role="list" data-stagger{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{% for x in copy.christmas.receives %}<li>{{ x }}</li>{% endfor %}</ul>
     </div>
   </div>

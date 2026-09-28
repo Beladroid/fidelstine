@@ -395,3 +395,26 @@ These go beyond what was asked. Each is marked for launch or later so the client
 
 **Performance:**
 - Lighthouse mobile scores 90 or more on Home, Gallery and Donate under throttled 4G.
+
+---
+
+## Implementation status (28 September 2026)
+
+**Built and tested:** phases 0 to 8 of the build order, except the steps that need the client's accounts.
+
+| Area | Status |
+|---|---|
+| Eleventy site, 11 public pages, legal drafts, 404, admin | Done |
+| Phone, tablet and desktop layouts | Done, checked with screenshots at 375, 768 and 1440 px |
+| Media pipeline, coverage report, phone-size videos | Done. 21 items in the library |
+| Flutterwave backend, webhook, D1 schema, admin API | Done. 18 automated tests pass against a mock Flutterwave |
+| Cloudflare account, D1 database, domain, R2, Access | Waiting on the client's accounts. Steps are in `docs/DEPLOY.md` |
+| Flutterwave KYC and live keys | Waiting on the charity |
+
+**Deviations from the plan, and why:**
+
+- **No GSAP or PhotoSwipe.** Scroll effects use native CSS scroll-driven animations and small scripts. The lightbox is custom so photos and videos share one viewer. This keeps pages lighter on Nigerian mobile data.
+- **Shared server code is in `lib/`, not `functions/_lib/`.** Both the build and the functions import from it, for example the currency list.
+- **The phone has no separate sticky Donate bar.** The bottom tab bar's raised Give button covers the same need. Tablets get a floating Donate pill instead.
+- **Fonts still load from Google Fonts.** Self-hosting them is a small follow-up.
+- **`content.json` became `copy.json`**, because `content` is a reserved name in Eleventy.

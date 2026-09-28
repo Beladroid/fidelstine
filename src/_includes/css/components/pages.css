@@ -204,3 +204,7 @@
 /* ---------- 404 ---------- */
 .not-found { min-height: 70vh; display: grid; place-items: center; text-align: center; padding-block: var(--space-9); }
 .not-found__code { font-family: var(--font-serif); font-size: clamp(5rem, 3rem + 10vw, 10rem); line-height: 1; color: var(--pink); }
+
+/* white cards sitting inside dark or warm sections keep dark text */
+.mood-dark .donate-card h2, .mood-dark .donate-card h3, .mood-warm .donate-card h2, .mood-warm .donate-card h3,
+.mood-dark .aside-card h3, .mood-dark .testimonial h3 { color: var(--navy-deep); }

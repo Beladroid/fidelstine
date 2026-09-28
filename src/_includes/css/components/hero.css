@@ -86,7 +86,8 @@ html.intro .hero__actions { animation-delay: 1.7s; }
 
 /* tablet portrait: 78% height, white quick-give card overlapping the bottom edge */
 @media (min-width: 601px) and (max-width: 900px) {
-  .hero { min-height: 80vh; min-height: 80svh; overflow: visible; margin-bottom: 70px; }
+  .hero { min-height: 80vh; min-height: 80svh; overflow: visible; z-index: 2; }
+  #after-hero + .section { padding-top: calc(var(--section-y) * 0.6 + 80px); }
   .hero__media, .hero__scrim { overflow: hidden; }
   .hero__content { padding-bottom: 130px; }
   .hero__controls { right: var(--gutter); bottom: 120px; }
