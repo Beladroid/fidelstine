@@ -214,7 +214,7 @@
 .manual-giving__title { font-family: var(--font-serif); font-weight: 500; font-size: var(--step-3); line-height: 1.15; color: var(--navy-deep); }
 .mood-dark .manual-giving__title { color: var(--navy-deep); }
 .pay-options { display: grid; gap: var(--space-4); }
-@media (min-width: 601px) { .donate-page .pay-options, .section--tight .pay-options { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 901px) { .section--tight .pay-options { grid-template-columns: 1fr 1fr; } }
 .pay-option {
   display: grid; gap: var(--space-4); align-content: start; padding: var(--space-5);
   border: 1px solid var(--line); border-radius: var(--r-lg); background: linear-gradient(180deg, #fff, var(--cream));
@@ -224,7 +224,10 @@
 .pay-option__head span { font-size: var(--step--1); color: var(--muted); }
 .pay-option__icon { flex: 0 0 48px; width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: #de4a1c; color: #fff; }
 .pay-option__icon .i { width: 24px; height: 24px; }
-.pay-option__icon--paypal { background: #003087; }
+.pay-option__icon--paypal { background: #fff; border: 1px solid var(--line); }
+.pay-option__icon--paypal img { width: 30px; height: 30px; }
+.pay-option__brand { display: flex; align-items: center; min-height: 28px; }
+.pay-option__brand img { height: 26px; width: auto; }
 .pay-option__details { display: grid; gap: 10px; margin: 0; }
 .pay-option__details > div { display: grid; gap: 2px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); }
 .pay-option__details > div:last-child { border-bottom: 0; padding-bottom: 0; }
@@ -236,13 +239,14 @@
 .bank-account dt { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .bank-account__yours { font-size: 10px; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; background: var(--red); color: #fff; }
 .manual-giving--compact .pay-option__number { font-size: 1.35rem; }
-.pay-option__email { font-weight: 600; font-size: var(--step-1); overflow-wrap: anywhere; }
+.pay-option__email { font-weight: 600; font-size: var(--step-1); overflow-wrap: anywhere; flex-wrap: wrap; }
 .pay-option__note { font-size: var(--step--2); color: var(--muted); }
 .copy-btn { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; border: 1px solid var(--line-strong); background: #fff; border-radius: var(--r-pill); padding: 5px 12px; font-size: 0.75rem; font-weight: 600; color: var(--navy-deep); font-family: var(--font-sans); letter-spacing: 0; }
 .copy-btn:hover { border-color: var(--navy-deep); }
 .copy-btn .i { width: 14px; height: 14px; }
-.btn--paypal { --btn-bg: #0070ba; }
-.btn--paypal:hover { --btn-bg: #003087; box-shadow: 0 10px 24px rgba(0, 48, 135, 0.3); }
+.btn--paypal { --btn-bg: #ffc439; --btn-fg: #003087; --btn-border: #ffc439; gap: 8px; }
+.btn--paypal:hover { --btn-bg: #f2ba36; --btn-border: #f2ba36; box-shadow: 0 10px 24px rgba(0, 48, 135, 0.18); }
+.btn--paypal img { height: 20px; width: auto; }
 .manual-giving__after { display: flex; gap: 10px; align-items: flex-start; font-size: var(--step--1); color: var(--ink-soft); background: rgba(232, 180, 188, 0.2); border-radius: var(--r-md); padding: 12px 14px; }
 .manual-giving__after .i { width: 18px; height: 18px; color: var(--red); margin-top: 2px; flex-shrink: 0; }
 .manual-giving--compact .pay-option { padding: var(--space-4); }
