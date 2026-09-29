@@ -24,6 +24,4 @@ export default async function initStats() {
     if (num.dataset.counted) num.textContent = Number(item.value).toLocaleString("en") + (item.suffix || "");
     if (label && item.label) label.textContent = item.label;
   }
-  // figures set by staff are real, so the preview "placeholder" outline no longer applies
-  if (data.custom) root.removeAttribute("data-placeholder");
 }

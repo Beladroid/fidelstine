@@ -25,13 +25,10 @@
         <div>
           <p class="footer-motto">{{ site.motto }}</p>
           <p class="footer-about">Restoring dignity to the abandoned and hope to the forgotten, across Nigeria and beyond.</p>
-          {%- if site.registration %}<p class="footer-about">{{ site.registration }}</p>{% endif %}
+          <p class="footer-about" data-live="registration"{% if not site.registration %} hidden{% endif %}>{% if site.registration %}Registered charity: {{ site.registration }}{% endif %}</p>
         </div>
-        <div class="socials">
-          {%- for s in site.socials %}
-          {%- if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name }}: {{ s.handle }}">{% icon s.icon %}</a>
-          {%- elif site.preview %}<a href="#" aria-label="{{ s.name }} link still needed" data-placeholder>{% icon s.icon %}</a>{% endif %}
-          {%- endfor %}
+        <div class="socials" data-live="social-icons">
+          {%- for s in site.socials %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name }}: {{ s.handle }}">{% icon s.icon %}</a>{% endif %}{% endfor -%}
         </div>
       </div>
 
@@ -55,16 +52,16 @@
           </div>
           <div class="c-row">
             <span class="c-ico">{% icon "phone" %}</span>
-            <div><span class="c-label">Phone (Nigeria)</span>{% for p in site.phonesNigeria %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</div>
+            <div><span class="c-label">Phone (Nigeria)</span><span class="live-group" data-live="phones-ng">{% for p in site.phonesNigeria %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</span></div>
           </div>
           <div class="c-row">
             <span class="c-ico">{% icon "globe" %}</span>
-            <div><span class="c-label">International</span>{% for p in site.phonesInternational %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</div>
+            <div><span class="c-label">International</span><span class="live-group" data-live="phones-intl">{% for p in site.phonesInternational %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</span></div>
           </div>
           <div class="c-row">
             <span class="c-ico">{% icon "mail" %}</span>
-            <div><span class="c-label">Email</span>
-              {%- if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% else %}<a href="/contact/"{% if site.preview %} data-placeholder{% endif %}>Use our contact form</a>{% endif %}</div>
+            <div><span class="c-label">Email</span><span class="live-group" data-live="email" data-variant="footer">
+              {%- if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% else %}<a href="/contact/">Use our contact form</a>{% endif %}</span></div>
           </div>
         </div>
       </details>

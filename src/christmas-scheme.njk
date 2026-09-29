@@ -10,7 +10,7 @@ description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care 
 {%- set camp = money.campaigns["christmas-scheme"] -%}
 {%- set photos = media.items | tagged("christmas") | exclude("flyer") | newest -%}
 
-{% call c.pageHero(copy.christmas.headline, "Christmas Scheme", "Food, clothing, medical care and gifts for children and families this Christmas. Every gift is counted towards this year's goal.", "program-crisis", true, "Christmas Scheme") %}
+{% call c.pageHero(copy.christmas.headline, "Christmas Scheme", "Food, clothing, medical care and gifts for children and families this Christmas. Every gift is counted towards this year's goal.", "program-crisis", true, "Christmas Scheme", false, 'data-live-campaign="headline"') %}
   <button class="btn btn--light btn--lg" type="button" data-donate-open data-campaign="christmas-scheme">{% icon "gift" %}Give to the scheme</button>
   <a class="btn btn--ghost btn--lg" href="#join">How to join</a>
 {% endcall %}
@@ -20,7 +20,7 @@ description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care 
     <div data-reveal>
       <p class="eyebrow">This year's goal</p>
       <h2 id="goal-title" class="reveal-words" data-split>Every family deserves a Christmas</h2>
-      <p class="lead" style="margin-top:1rem"{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{{ copy.christmas.intro }}</p>
+      <p class="lead" style="margin-top:1rem">{{ copy.christmas.intro }}</p>
     </div>
     <div class="campaign-card glass" data-reveal="right">
       {{ c.countdown(camp.endsAt) }}
@@ -38,7 +38,7 @@ description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care 
     <div class="split__body">
       <p class="eyebrow">What families receive</p>
       <h2 id="receive-title" class="reveal-words" data-split>A Christmas package, with dignity</h2>
-      <ul class="checklist" role="list" data-stagger{% if copy.christmas.placeholder %} data-placeholder{% endif %}>{% for x in copy.christmas.receives %}<li>{{ x }}</li>{% endfor %}</ul>
+      <ul class="checklist" role="list" data-stagger>{% for x in copy.christmas.receives %}<li>{{ x }}</li>{% endfor %}</ul>
     </div>
   </div>
 </section>

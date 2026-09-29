@@ -80,7 +80,7 @@
   .footer-col__title { padding-bottom: 0; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
 
-  .editor-note { right: 16px; max-width: none; }
+  .notice { right: 16px; max-width: none; }
 }
 
 @media (max-width: 380px) {

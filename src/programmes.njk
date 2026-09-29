@@ -33,7 +33,7 @@ description: Safe shelter and family care, education and vocational training, an
     <div class="wrap">
       <div class="programme__intro">
         <div class="stack" style="--stack:1.2rem">
-          <p class="lead"{% if p.placeholder %} data-placeholder{% endif %}>{{ p.body }}</p>
+          <p class="lead">{{ p.body }}</p>
           <h3>What this programme provides</h3>
           <ul class="checklist" role="list" data-stagger>{% for x in p.provides %}<li>{{ x }}</li>{% endfor %}</ul>
         </div>
@@ -50,8 +50,6 @@ description: Safe shelter and family care, education and vocational training, an
         <p class="eyebrow">In pictures</p>
         {{ c.photoRow(photos) }}
       </div>
-      {%- elif site.preview %}
-      <div style="margin-top:var(--space-7)">{{ c.slotEmpty(p.id) }}</div>
       {%- endif %}
     </div>
   </section>

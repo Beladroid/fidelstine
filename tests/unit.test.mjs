@@ -77,3 +77,39 @@ test("impact numbers merge and validation", async () => {
   assert.throws(() => validateStats(defaults, { items: [{ key: "a", value: 1e9, label: "Alpha" }] }), /whole number/);
   assert.deepEqual(validateStats(defaults, { items: [{ key: "a", value: "5", label: " Alpha ", suffix: "+" }] }).items[0], { key: "a", value: 5, suffix: "+", label: "Alpha" });
 });
+
+test("content sections validate and normalise", async () => {
+  const { validateSection, contentDefaults, SECTIONS, render } = await import("../lib/content.js");
+  const fs = await import("node:fs");
+  const copy = JSON.parse(fs.readFileSync("src/_data/copy.json", "utf8"));
+  const defaults = contentDefaults(copy);
+  // every starting value passes its own validation
+  for (const s of SECTIONS) assert.doesNotThrow(() => validateSection(s.key, defaults[s.key]), s.key);
+
+  assert.throws(() => validateSection("spending", { note: "", items: [{ label: "Care", percent: 60 }, { label: "School", percent: 30 }] }), /add up to 90/);
+  assert.throws(() => validateSection("giftImpact", { NGN: [{ amount: 500, text: "Pens" }, { amount: 400, text: "Food" }, { amount: 900, text: "More" }] }), /order/);
+  assert.throws(() => validateSection("documents", { items: [{ title: "Report", url: "javascript:alert(1)" }] }), /https/);
+  assert.throws(() => validateSection("contact", { ...defaults.contact, whatsapp: "12" }), /phone number/);
+  assert.throws(() => validateSection("announcement", { enabled: true, text: "" }), /message/);
+  assert.throws(() => validateSection("nope", {}), /Unknown section/);
+
+  const c = validateSection("contact", { ...defaults.contact, phonesNigeria: "+234 802 342 5558\n\n +234 703 981 2282 ", email: "INFO@Fidelstine.org" });
+  assert.deepEqual(c.phonesNigeria, ["+234 802 342 5558", "+234 703 981 2282"]);
+  assert.equal(c.email, "info@fidelstine.org");
+
+  // rendered markup is escaped
+  const html = render.testimonials([{ quote: "<script>x</script>", name: "A <b>", role: "" }]);
+  assert.ok(!html.includes("<script>") && html.includes("&lt;script&gt;"));
+});
+
+test("manual gifts validate", async () => {
+  const { validateGift } = await import("../lib/gifts.js");
+  const now = new Date("2026-10-01T10:00:00Z");
+  const g = validateGift({ amount: "25000", currency: "ngn", method: "GTBank transfer", date: "2026-09-30", campaign: "christmas-scheme", name: "" }, now);
+  assert.equal(g.amount, 25000);
+  assert.equal(g.currency, "NGN");
+  assert.equal(g.name, "Anonymous");
+  assert.throws(() => validateGift({ ...g, date: "2026-12-01" }, now), /future/);
+  assert.throws(() => validateGift({ ...g, method: "Bitcoin" }, now), /received/);
+  assert.throws(() => validateGift({ ...g, amount: 0 }, now), /amount/);
+});

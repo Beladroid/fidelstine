@@ -262,3 +262,57 @@ test("impact numbers: public read, admin update, validation, cache cleared", asy
   assert.equal(after.items.find((i) => i.key === "trained").label, "Young people trained");
   assert.equal(after.items.find((i) => i.key === "years").value, 6, "untouched figures keep their starting value");
 });
+
+test("site content: admin edits appear on the served pages", async () => {
+  const put = (key, body) => fetch(`${BASE}/api/admin/content/${key}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const list = await (await fetch(`${BASE}/api/admin/content`)).json();
+  const byKey = Object.fromEntries(list.sections.map((s) => [s.key, s]));
+  assert.equal(byKey.testimonials.custom, false);
+
+  assert.equal((await put("spending", { note: "", items: [{ label: "Care", percent: 50 }, { label: "School", percent: 20 }] })).status, 422);
+
+  const quote = "A brand new story from the admin panel.";
+  assert.equal((await put("testimonials", { items: [{ quote, name: "Test Person", role: "Volunteer" }] })).status, 200);
+  assert.equal((await put("campaign", { headline: "Christmas for every family", targetNGN: 7500000, endsAt: "2026-12-20" })).status, 200);
+  assert.equal((await put("contact", { ...byKey.contact.value, whatsapp: "+234 811 111 1111", email: "hello@fidelstine.org" })).status, 200);
+  assert.equal((await put("announcement", { enabled: true, text: "Packing day is on Saturday.", linkUrl: "/contact/", linkLabel: "Join us" })).status, 200);
+
+  const about = await (await fetch(`${BASE}/about/`)).text();
+  assert.ok(about.includes(quote), "new testimonial is on the About page");
+  assert.ok(about.includes("Packing day is on Saturday."), "announcement shows");
+  assert.ok(about.includes("wa.me/2348111111111"), "WhatsApp links use the new number");
+  assert.ok(about.includes("mailto:hello@fidelstine.org"), "footer email updated");
+
+  const xmas = await (await fetch(`${BASE}/christmas-scheme/`)).text();
+  assert.ok(xmas.includes("Christmas for every family"));
+  assert.ok(xmas.includes('data-target="7500000"'));
+  assert.ok(xmas.includes('data-countdown="2026-12-20T23:59:59+01:00"'));
+  const camp = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
+  assert.equal(camp.targetNGN, 7500000);
+
+  // back to the starting text
+  assert.equal((await fetch(`${BASE}/api/admin/content/announcement`, { method: "DELETE" })).status, 200);
+  const again = await (await fetch(`${BASE}/about/`)).text();
+  assert.ok(!again.includes("Packing day is on Saturday."));
+});
+
+test("recorded gifts count towards the campaign and can be removed", async () => {
+  const before = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
+  const today = new Date().toISOString().slice(0, 10);
+  const r = await post("/api/admin/gifts", { amount: 20000, currency: "NGN", method: "GTBank transfer", date: today, campaign: "christmas-scheme", name: "Bank Donor", reference: "GTB-123" });
+  assert.equal(r.status, 201);
+  const { txRef } = await r.json();
+  assert.match(txRef, /^MAN-/);
+  const after = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
+  assert.equal(after.raisedNGN - before.raisedNGN, 20000);
+
+  const list = await (await fetch(`${BASE}/api/admin/donations?q=${txRef}`)).json();
+  const row = list.items[0];
+  assert.equal(row.payment_type, "GTBank transfer");
+  assert.match(row.notes, /GTB-123/);
+
+  // online payments can't be removed, manual entries can
+  const online = (await (await fetch(`${BASE}/api/admin/donations?status=successful`)).json()).items.find((d) => !d.tx_ref.startsWith("MAN-"));
+  if (online) assert.equal((await fetch(`${BASE}/api/admin/gifts/${online.id}`, { method: "DELETE" })).status, 403);
+  assert.equal((await fetch(`${BASE}/api/admin/gifts/${row.id}`, { method: "DELETE" })).status, 200);
+});

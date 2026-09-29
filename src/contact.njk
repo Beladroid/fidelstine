@@ -9,7 +9,7 @@ description: Contact Fidelstine Charity Concerns and Orphanage in Ubulu Okiti, D
 {%- import "macros/components.njk" as c with context -%}
 
 {% call c.pageHero("We would love to hear from you", "Contact", "Questions about giving, volunteering, partnering or visiting. Call, send a WhatsApp message or write to us below.", "welcome-at-school", false, "Contact") %}
-  <a class="btn btn--primary btn--lg" href="tel:{{ site.phonesNigeria[0].tel }}">{% icon "phone" %}Call us</a>
+  <a class="btn btn--primary btn--lg" href="tel:{{ site.phonesNigeria[0].tel }}" data-live-call>{% icon "phone" %}Call us</a>
   {%- if site.whatsapp %}<a class="btn btn--lg whatsapp-btn" href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>{% endif %}
 {% endcall %}
 
@@ -20,10 +20,10 @@ description: Contact Fidelstine Charity Concerns and Orphanage in Ubulu Okiti, D
       <div class="contact-cards" data-stagger>
         <div class="contact-card"><span class="c-ico">{% icon "pin" %}</span><div><h3>{{ site.addresses.head.label }}</h3><address>{{ site.addresses.head.lines }}</address><a href="{{ site.addresses.head.map }}" target="_blank" rel="noopener">Get directions</a></div></div>
         <div class="contact-card"><span class="c-ico">{% icon "pin" %}</span><div><h3>{{ site.addresses.extension.label }}</h3><address>{{ site.addresses.extension.lines }}</address></div></div>
-        <div class="contact-card"><span class="c-ico">{% icon "phone" %}</span><div><h3>Nigeria</h3>{% for p in site.phonesNigeria %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</div></div>
-        <div class="contact-card"><span class="c-ico">{% icon "globe" %}</span><div><h3>International</h3>{% for p in site.phonesInternational %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</div></div>
-        <div class="contact-card"><span class="c-ico">{% icon "mail" %}</span><div><h3>Email</h3>{% if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% else %}<p{% if site.preview %} data-placeholder{% endif %}>Please use the form. Our email address will be listed here soon.</p>{% endif %}</div></div>
-        <div class="contact-card"><span class="c-ico">{% icon "instagram" %}</span><div><h3>Social</h3>{% for s in site.socials %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.name }}: {{ s.handle }}</a>{% else %}<p>{{ s.name }}: {{ s.handle }}</p>{% endif %}{% endfor %}</div></div>
+        <div class="contact-card"><span class="c-ico">{% icon "phone" %}</span><div><h3>Nigeria</h3><span class="live-group" data-live="phones-ng">{% for p in site.phonesNigeria %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</span></div></div>
+        <div class="contact-card"><span class="c-ico">{% icon "globe" %}</span><div><h3>International</h3><span class="live-group" data-live="phones-intl">{% for p in site.phonesInternational %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</span></div></div>
+        <div class="contact-card"><span class="c-ico">{% icon "mail" %}</span><div><h3>Email</h3><span class="live-group" data-live="email" data-variant="contact">{% if site.email %}<a href="mailto:{{ site.email }}">{{ site.email }}</a>{% else %}<p>Please use the form and we will reply by email.</p>{% endif %}</span></div></div>
+        <div class="contact-card"><span class="c-ico">{% icon "instagram" %}</span><div><h3>Social</h3><span class="live-group" data-live="social-lines">{% for s in site.socials %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.name }}: {{ s.handle }}</a>{% endif %}{% endfor %}</span></div></div>
       </div>
       <div class="map-embed" data-reveal>
         <div class="map-embed__load">

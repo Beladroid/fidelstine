@@ -398,6 +398,13 @@ These go beyond what was asked. Each is marked for launch or later so the client
 
 ---
 
+## Update, 29 September 2026: staff-editable content
+
+- The admin panel can now change, without a rebuild: the Christmas Scheme (headline, goal, closing date), exchange rates, the "what your gift does" examples, testimonials, team, spending breakdown, report links, contact details, FAQs and a site-wide announcement. It can also record gifts received by bank transfer, PayPal or cash, which count towards totals and the progress bar.
+- How: saved values sit in D1 `settings`; `functions/_middleware.js` rewrites pages as they are served with HTMLRewriter, so the content is in the HTML (good for search engines, no flash). `_routes.json` keeps images, CSS and JS away from the function so they stay free and fast.
+- Preview placeholder marks, "waiting for media" cards and draft banners are gone. Temporary text reads naturally; `docs/CONTENT-TODO.md` lists what still needs the charity's real content.
+- Bank and PayPal details stay in code on purpose (see HANDOVER).
+
 ## Implementation status (28 September 2026)
 
 **Built and tested:** phases 0 to 8 of the build order, except the steps that need the client's accounts.

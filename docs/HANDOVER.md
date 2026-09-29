@@ -16,7 +16,7 @@ A quick reference for whoever maintains the Fidelstine website.
 | Page layouts | `src/*.njk` |
 | Look and feel | `src/_includes/css/` |
 
-Anything marked `"placeholder": true` in `copy.json` shows a dashed red outline on preview builds. Remove the flag once real content is in.
+Some text is temporary until the charity sends the real version. `docs/CONTENT-TODO.md` lists it. Most of it can be replaced from the admin panel without touching the code.
 
 ## Reading donations
 
@@ -33,9 +33,31 @@ Status meanings:
 
 Flutterwave's dashboard remains the source of truth for settlements and refunds.
 
-## Changing a campaign
+## What staff can change in the admin panel
 
-Edit `lib/campaigns.js`: title, `targetNGN` and `endsAt`. The countdown and progress bar update on the next deploy. Other currencies count towards the naira target using the approximate rates in `lib/currencies.js`. Update those rates now and then.
+Open `/admin/`. Changes show on the live site straight away, with no rebuild. Every change records who made it and when, and each section has a "Go back to the starting text" link.
+
+| Tab | What it changes |
+|---|---|
+| Record a gift | Adds a gift received by GTBank transfer, PayPal or cash. It counts in the totals, the CSV export and the Christmas Scheme progress bar. A gift entered by mistake can be removed from the Donations list (online payments cannot). |
+| Site content > Christmas Scheme | Headline, goal and closing date |
+| Site content > Exchange rates | Naira value of £, $, € and the other currencies, used for the "≈" amounts and for adding up foreign gifts. Check them every few weeks. |
+| Site content > What your gift does | The three example gifts ("₦5,000: books and school supplies…") |
+| Site content > Testimonials, Team and trustees | Add, edit, reorder and remove |
+| Site content > Where the money goes | Spending percentages (must add up to 100) and the note above them |
+| Site content > Reports and documents | Links to annual reports and certificates |
+| Site content > Contact details | Email, WhatsApp, phone numbers, social links, registration number |
+| Site content > Questions and answers | The Donate page FAQs |
+| Site content > Announcement | A short notice on every page, e.g. a packing day |
+| Impact numbers | The five figures on the home page |
+
+How it works: the build renders the starting text from `src/_data/copy.json`; saved changes live in the D1 `settings` table, and `functions/_middleware.js` swaps them into each page as it is served (`lib/content.js`, `lib/live.js`).
+
+**Not in the admin panel on purpose:** the GTBank account and PayPal details (`src/_data/site.js`, `manualGiving`). If an admin login were ever stolen, changing them could send donations to a thief, so they can only change through the code.
+
+## Changing a campaign's other settings
+
+Campaign titles and the other programmes' settings are in `lib/campaigns.js` and change on the next deploy.
 
 ## Keys and passwords
 

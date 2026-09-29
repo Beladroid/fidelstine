@@ -12,9 +12,6 @@ hasHero: true
 </section>
 <section class="section mood-light">
   <div class="wrap">
-    {%- if draft %}
-    <div class="draft-banner" role="note">{% icon "info" %}<span>Draft for review. This text was prepared as a starting point and must be checked by Fidelstine's trustees, and ideally a lawyer, before the site goes live.</span></div>
-    {%- endif %}
     <div class="prose">
       {{ content | safe }}
       <p class="muted" style="margin-top:2.5em; font-size:var(--step--1)">Last updated: {{ updated }}</p>

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/css/*",
+    "/js/*",
+    "/img/*",
+    "/brand/*",
+    "/media/photos/*",
+    "/media/posters/*",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/site.webmanifest",
+    "/_headers"
+  ]
+}

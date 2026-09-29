@@ -23,7 +23,7 @@
     </div>
 
     <div class="menu-panel__quick">
-      <a class="quick-action" href="tel:{{ site.phonesNigeria[0].tel }}">{% icon "phone" %}Call</a>
+      <a class="quick-action" href="tel:{{ site.phonesNigeria[0].tel }}" data-live-call>{% icon "phone" %}Call</a>
       {%- if site.whatsapp %}
       <a class="quick-action" href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>
       {%- endif %}
@@ -31,10 +31,8 @@
     </div>
 
     <div class="menu-panel__meta">
-      <div class="socials">
-        {%- for s in site.socials %}{% if s.url %}
-        <a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name }}: {{ s.handle }}">{% icon s.icon %}</a>
-        {%- endif %}{% endfor %}
+      <div class="socials" data-live="social-icons">
+        {%- for s in site.socials %}{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name }}: {{ s.handle }}">{% icon s.icon %}</a>{% endif %}{% endfor -%}
       </div>
       <button class="switch" type="button" data-lite-toggle aria-pressed="false">
         <span class="switch__track" aria-hidden="true"></span>Lite mode

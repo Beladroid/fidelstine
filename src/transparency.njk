@@ -15,8 +15,8 @@ description: How Fidelstine Charity Concerns and Orphanage uses donations, with 
     <div class="split__body">
       <p class="eyebrow">Spending</p>
       <h2 id="spend-title" class="reveal-words" data-split>How donations are used</h2>
-      <p>Figures shown are an illustration until the first annual accounts are published.</p>
-      <div class="spend" style="margin-top:var(--space-6)"{% if copy.spending.placeholder %} data-placeholder{% endif %}>
+      <p data-live="spending-note"{% if not copy.spending.note %} hidden{% endif %}>{{ copy.spending.note }}</p>
+      <div class="spend" style="margin-top:var(--space-6)" data-live="spending">
         {%- for s in copy.spending.items %}
         <div class="spend__row"><div class="spend__head"><span>{{ s.label }}</span><span>{{ s.percent }}%</span></div><div class="spend__bar"><i style="--w: {{ s.percent }}%"></i></div></div>
         {%- endfor %}
@@ -25,9 +25,12 @@ description: How Fidelstine Charity Concerns and Orphanage uses donations, with 
     <div class="aside-card" data-reveal="right">
       <p class="eyebrow">Reports</p>
       <h3>Annual reports and accounts</h3>
-      <ul class="docs" role="list">
-        <li><span>{% icon "file" %}Annual report {{ "" | year }}: coming soon</span></li>
-        <li><span>{% icon "file" %}Registration certificate: coming soon</span></li>
+      <ul class="docs" role="list" data-live="documents">
+        {%- for d in copy.documents.items %}
+        <li><a href="{{ d.url }}" target="_blank" rel="noopener">{% icon "file" %}{{ d.title }}</a></li>
+        {%- else %}
+        <li><span>{% icon "file" %}Our annual report and registration certificate are available on request.</span></li>
+        {%- endfor %}
       </ul>
       <p class="muted" style="font-size:var(--step--1)">Want more detail? <a class="text-link" href="/contact/">Ask us</a>. We are happy to share.</p>
     </div>

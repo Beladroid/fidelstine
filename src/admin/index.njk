@@ -17,9 +17,11 @@ eleventyExcludeFromCollections: true
       </div>
       <div class="admin__tabs" role="tablist">
         <button class="chip is-active" role="tab" aria-selected="true" data-tab="donations">Donations</button>
+        <button class="chip" role="tab" aria-selected="false" data-tab="gift">Record a gift</button>
+        <button class="chip" role="tab" aria-selected="false" data-tab="content">Site content</button>
+        <button class="chip" role="tab" aria-selected="false" data-tab="stats">Impact numbers</button>
         <button class="chip" role="tab" aria-selected="false" data-tab="newsletter">Subscribers</button>
         <button class="chip" role="tab" aria-selected="false" data-tab="messages">Messages</button>
-        <button class="chip" role="tab" aria-selected="false" data-tab="stats">Impact numbers</button>
       </div>
     </div>
 
@@ -51,6 +53,40 @@ eleventyExcludeFromCollections: true
         </table>
       </div>
       <div class="admin__pager"><button class="btn btn--outline btn--sm" type="button" data-admin-more hidden>Load more</button></div>
+    </div>
+
+    <div data-panel="gift" hidden>
+      <form class="stats-editor gift-form" data-gift-form novalidate>
+        <p class="muted">Record a gift that arrived by bank transfer, PayPal or cash, so it counts in the totals, the export and the Christmas Scheme progress bar.</p>
+        <div class="gift-form__grid">
+          <div class="field"><label for="g-amount">Amount received</label><input id="g-amount" name="amount" type="number" min="0" step="any" inputmode="decimal" required></div>
+          <div class="field"><label for="g-currency">Currency</label>
+            <select id="g-currency" name="currency">{% for code, cur in money.currencies %}<option value="{{ code }}">{{ code }} {{ cur.symbol }}</option>{% endfor %}</select></div>
+          <div class="field"><label for="g-method">Received by</label>
+            <select id="g-method" name="method"><option>GTBank transfer</option><option>PayPal</option><option>Cash</option><option>Other</option></select></div>
+          <div class="field"><label for="g-date">Date received</label><input id="g-date" name="date" type="date" required></div>
+          <div class="field"><label for="g-campaign">For</label>
+            <select id="g-campaign" name="campaign">{% for slug, camp in money.campaigns %}<option value="{{ slug }}">{{ camp.title }}</option>{% endfor %}</select></div>
+          <div class="field"><label for="g-name">Donor name <span class="hint">optional</span></label><input id="g-name" name="name" maxlength="120" autocomplete="off"></div>
+          <div class="field"><label for="g-email">Donor email <span class="hint">optional</span></label><input id="g-email" name="email" type="email" maxlength="160" autocomplete="off"></div>
+          <div class="field"><label for="g-reference">Bank or PayPal reference <span class="hint">optional</span></label><input id="g-reference" name="reference" maxlength="80" autocomplete="off"></div>
+          <div class="field gift-form__wide"><label for="g-note">Note <span class="hint">optional</span></label><input id="g-note" name="note" maxlength="300" autocomplete="off"></div>
+        </div>
+        <label class="check"><input type="checkbox" name="anonymous" value="1">The donor asked to stay anonymous</label>
+        <div class="admin__filter-actions">
+          <button class="btn btn--primary" type="submit">Record gift</button>
+          <span class="form-status" data-gift-status role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+
+    <div data-panel="content" hidden>
+      <div class="content-admin">
+        <nav class="content-admin__nav" aria-label="Site content sections" data-content-nav><p class="muted">Loading…</p></nav>
+        <form class="stats-editor content-admin__editor" data-content-form novalidate>
+          <p class="muted">Choose a section to edit.</p>
+        </form>
+      </div>
     </div>
 
     <div data-panel="newsletter" hidden>

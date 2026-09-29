@@ -81,12 +81,10 @@
 {% include "partials/lightbox.njk" %}
 <button class="btn btn--primary float-donate" type="button" data-donate-open data-float-donate>{% icon "heart" %}Donate</button>
 <div class="toast" role="status" aria-live="polite" data-toast></div>
-{%- if site.preview and pageClass != "admin" %}
-<div class="editor-note" data-editor-note>
-  <button type="button" aria-label="Dismiss note" data-editor-note-close>&times;</button>
-  Preview build. Items with a dashed red outline are placeholders waiting for real content from the charity.
+{%- set notice = copy.announcement %}
+<div class="notice" role="status" data-live="announcement"{% if not notice.enabled %} hidden{% endif %}>
+  {%- if notice.enabled %}<p class="notice__text">{{ notice.text }}{% if notice.linkUrl %} <a class="text-link" href="{{ notice.linkUrl }}">{{ notice.linkLabel }}</a>{% endif %}</p><button class="notice__close" type="button" data-notice-close aria-label="Close">{% icon "close" %}</button>{% endif -%}
 </div>
-{%- endif %}
 <script type="application/json" id="money-config">{{ money | json | safe }}</script>
 <script type="application/json" id="gift-impact-data">{{ copy.giftImpact | json | safe }}</script>
 <script type="module" src="/js/main.js?v={{ site.buildTime }}"></script>

@@ -47,7 +47,7 @@ export async function onRequestGet(context) {
     const { results } = await db
       .prepare(
         `SELECT created_at, verified_at, tx_ref, flw_transaction_id, status, amount, currency, amount_settled, app_fee, campaign,
-                donor_name, donor_email, donor_phone, donor_country, anonymous, newsletter, payment_type, message
+                donor_name, donor_email, donor_phone, donor_country, anonymous, newsletter, payment_type, message, notes
          FROM donations ${clause} ORDER BY id DESC LIMIT 20000`
       )
       .bind(...args)
@@ -68,7 +68,7 @@ export async function onRequestGet(context) {
   const { results: items } = await db
     .prepare(
       `SELECT id, created_at, tx_ref, status, amount, currency, amount_settled, campaign, donor_name, donor_email,
-              anonymous, payment_type, message
+              anonymous, payment_type, message, notes
        FROM donations ${pageClause} ORDER BY id DESC LIMIT ${PAGE + 1}`
     )
     .bind(...pageArgs)

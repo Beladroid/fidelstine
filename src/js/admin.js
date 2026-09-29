@@ -74,7 +74,32 @@ export default function initAdmin() {
     if (d.amount_settled) amount.appendChild(el("small", `Settled: ${d.amount_settled}`));
     const status = el("td");
     status.appendChild(el("span", d.status, `status status--${d.status}`));
-    tr.append(date, donor, amount, el("td", d.campaign), el("td", d.payment_type || "-"), status, el("td", d.tx_ref, "mono"));
+    const ref = el("td", d.tx_ref, "mono");
+    if (d.tx_ref.startsWith("MAN-")) {
+      // recorded by staff: show the note and allow removal of mistakes (two clicks, no pop-up)
+      if (d.notes) ref.appendChild(el("small", d.notes));
+      const rm = el("button", "Remove", "remove-btn");
+      rm.type = "button";
+      rm.addEventListener("click", async () => {
+        if (!rm.dataset.armed) {
+          rm.dataset.armed = "1";
+          rm.textContent = "Click again to remove";
+          return;
+        }
+        rm.disabled = true;
+        try {
+          const res = await fetch(`/api/admin/gifts/${d.id}`, { method: "DELETE", credentials: "same-origin" });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || `Could not remove (${res.status}).`);
+          loadDonations();
+        } catch (e) {
+          showError(e.message);
+          rm.disabled = false;
+        }
+      });
+      ref.appendChild(rm);
+    }
+    tr.append(date, donor, amount, el("td", d.campaign), el("td", d.payment_type || "-"), status, ref);
     return tr;
   }
 
@@ -130,6 +155,7 @@ export default function initAdmin() {
       const fmt = (s) => new Date(s).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
       if (name === "newsletter") loadSimple("newsletter", $("[data-admin-newsletter]", root), [(i) => fmt(i.created_at), (i) => i.email, (i) => i.source || ""]);
       if (name === "stats") loadStatsEditor();
+      if (name === "content") loadContent();
       if (name === "messages") loadSimple("messages", $("[data-admin-messages]", root), [(i) => fmt(i.created_at), (i) => `${i.name} <${i.email}>${i.phone ? " " + i.phone : ""}`, (i) => i.subject || "", (i) => i.message]);
     })
   );
@@ -224,6 +250,280 @@ export default function initAdmin() {
     } finally {
       btn.removeAttribute("aria-busy");
     }
+  });
+
+  /* ---------- record a gift (bank transfer, PayPal, cash) ---------- */
+  const giftForm = $("[data-gift-form]", root);
+  const giftStatus = $("[data-gift-status]", root);
+  const today = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+  giftForm.date.value = today();
+  giftForm.date.max = today();
+
+  giftForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = giftForm;
+    const body = {
+      amount: Number(f.amount.value),
+      currency: f.currency.value,
+      method: f.method.value,
+      date: f.date.value,
+      campaign: f.campaign.value,
+      name: f.name.value.trim(),
+      email: f.email.value.trim(),
+      reference: f.reference.value.trim(),
+      note: f.note.value.trim(),
+      anonymous: f.anonymous.checked,
+    };
+    if (!(body.amount > 0)) {
+      giftStatus.textContent = "Enter the amount received.";
+      giftStatus.dataset.state = "error";
+      f.amount.focus();
+      return;
+    }
+    const btn = $("button[type=submit]", f);
+    btn.setAttribute("aria-busy", "true");
+    try {
+      const res = await fetch("/api/admin/gifts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Could not record the gift (${res.status}).`);
+      giftStatus.textContent = `Recorded ${formatMoney(body.amount, body.currency)}. It now counts in the totals and on the site.`;
+      giftStatus.dataset.state = "ok";
+      ["amount", "name", "email", "reference", "note"].forEach((n) => (f[n].value = ""));
+      f.anonymous.checked = false;
+      loadDonations();
+    } catch (err) {
+      giftStatus.textContent = err.message;
+      giftStatus.dataset.state = "error";
+    } finally {
+      btn.removeAttribute("aria-busy");
+    }
+  });
+
+  /* ---------- site content: one editor for every section, built from its field list ---------- */
+  const contentNav = $("[data-content-nav]", root);
+  const contentForm = $("[data-content-form]", root);
+  let sections = [];
+  let active = null;
+  let readValue = null;
+  let uidN = 0;
+  const uid = () => `cf-${++uidN}`;
+  const when = (s) => new Date(s).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
+
+  async function loadContent() {
+    try {
+      const data = await get("/api/admin/content");
+      sections = data.sections;
+      openSection(active || sections[0].key);
+    } catch (e) {
+      contentNav.innerHTML = "";
+      contentNav.appendChild(el("p", e.message, "form-error"));
+    }
+  }
+
+  function renderNav() {
+    contentNav.innerHTML = "";
+    sections.forEach((s) => {
+      const b = el("button", s.title);
+      b.type = "button";
+      if (s.key === active) b.setAttribute("aria-current", "true");
+      if (s.custom) b.appendChild(el("small", "Changed"));
+      b.addEventListener("click", () => openSection(s.key));
+      contentNav.appendChild(b);
+    });
+  }
+
+  function makeField(f, value) {
+    const wrap = el("div", null, "field");
+    if (f.type === "list") return makeList(f, value);
+    if (f.type === "bool") {
+      const lab = el("label", null, "check");
+      const box = el("input");
+      box.type = "checkbox";
+      box.checked = !!value;
+      lab.append(box, document.createTextNode(f.label));
+      wrap.appendChild(lab);
+      return { wrap, read: () => box.checked };
+    }
+    const id = uid();
+    let input;
+    if (f.type === "textarea" || f.type === "lines") {
+      input = el("textarea");
+      input.rows = f.type === "lines" ? 3 : 4;
+      input.value = f.type === "lines" ? (value || []).join("\n") : value ?? "";
+      wrap.classList.add("field--wide");
+    } else if (f.type === "select") {
+      input = el("select");
+      f.options.forEach(([v, label]) => {
+        const o = el("option", label);
+        o.value = v;
+        if (v === value) o.selected = true;
+        input.appendChild(o);
+      });
+    } else {
+      input = el("input");
+      input.type = { number: "number", email: "email", url: "url", phone: "tel", date: "date" }[f.type] || "text";
+      if (f.type === "number") {
+        input.step = f.int ? "1" : "any";
+        input.inputMode = f.int ? "numeric" : "decimal";
+      }
+      input.value = value ?? "";
+    }
+    if (f.max && (f.type === "text" || f.type === "textarea")) input.maxLength = f.max;
+    input.id = id;
+    const lab = el("label", f.label);
+    lab.htmlFor = id;
+    wrap.append(lab, input);
+    if (f.help) wrap.appendChild(el("p", f.help, "hint-line"));
+    return {
+      wrap,
+      read() {
+        if (f.type === "number") return input.value === "" ? null : Number(input.value);
+        if (f.type === "lines") return input.value.split("\n").map((l) => l.trim()).filter(Boolean);
+        return input.value.trim();
+      },
+    };
+  }
+
+  function makeList(f, value) {
+    const wrap = el("div", null, "content-list");
+    const box = el("div", null, "content-list");
+    const add = el("button", `+ ${f.addLabel || "Add"}`, "btn btn--outline btn--sm");
+    add.type = "button";
+    let items = (value || []).map((v) => ({ ...v }));
+    let readers = [];
+    const sync = () => (items = readers.map((r) => r()));
+    const tool = (label, text, disabled, fn) => {
+      const b = el("button", text);
+      b.type = "button";
+      b.setAttribute("aria-label", label);
+      b.disabled = disabled;
+      b.addEventListener("click", () => {
+        sync();
+        fn();
+        draw();
+      });
+      return b;
+    };
+    function draw() {
+      box.innerHTML = "";
+      readers = [];
+      items.forEach((item, i) => {
+        const card = el("div", null, "content-list__item");
+        const head = el("div", null, "content-list__head");
+        head.appendChild(el("span", `${f.itemLabel || "Item"} ${i + 1}`));
+        if (!f.fixed) {
+          const tools = el("div", null, "content-list__tools");
+          tools.append(
+            tool("Move up", "↑", i === 0, () => items.splice(i - 1, 0, items.splice(i, 1)[0])),
+            tool("Move down", "↓", i === items.length - 1, () => items.splice(i + 1, 0, items.splice(i, 1)[0])),
+            tool("Remove", "✕", items.length <= f.min, () => items.splice(i, 1))
+          );
+          head.appendChild(tools);
+        }
+        const grid = el("div", null, "content-list__fields");
+        const subs = f.item.map((sub) => {
+          const c = makeField(sub, item[sub.name]);
+          grid.appendChild(c.wrap);
+          return [sub.name, c.read];
+        });
+        readers.push(() => Object.fromEntries(subs.map(([n, r]) => [n, r()])));
+        card.append(head, grid);
+        box.appendChild(card);
+      });
+      if (!items.length) box.appendChild(el("p", "None yet.", "muted"));
+      add.hidden = !!f.fixed || items.length >= f.max;
+    }
+    add.addEventListener("click", () => {
+      sync();
+      items.push(Object.fromEntries(f.item.map((s) => [s.name, s.type === "select" ? s.options[0][0] : ""])));
+      draw();
+      box.lastElementChild?.querySelector("input, textarea")?.focus();
+    });
+    draw();
+    wrap.append(box, add);
+    return { wrap, read: () => readers.map((r) => r()) };
+  }
+
+  function openSection(key) {
+    active = key;
+    renderNav();
+    const s = sections.find((x) => x.key === key);
+    contentForm.innerHTML = "";
+    const head = el("div", null, "stack");
+    head.append(el("h2", s.title), el("p", s.help, "muted"));
+    const meta = el("p", null, "content-admin__meta");
+    if (s.custom) {
+      meta.textContent = `Last changed ${when(s.updatedAt)}${s.updatedBy ? ` by ${s.updatedBy}` : ""}. `;
+      const reset = el("button", "Go back to the starting text", "content-admin__reset");
+      reset.type = "button";
+      reset.addEventListener("click", async () => {
+        if (!reset.dataset.armed) {
+          reset.dataset.armed = "1";
+          reset.textContent = "Click again to undo all changes in this section";
+          return;
+        }
+        await save("DELETE");
+      });
+      meta.appendChild(reset);
+    } else meta.textContent = "Showing the starting text. Nothing has been changed yet.";
+    head.appendChild(meta);
+
+    const fields = el("div", null, "content-fields");
+    const readers = s.fields.map((f) => {
+      const c = makeField(f, s.value[f.name]);
+      fields.appendChild(c.wrap);
+      return [f.name, c.read];
+    });
+    readValue = () => Object.fromEntries(readers.map(([n, r]) => [n, r()]));
+
+    const actions = el("div", null, "admin__filter-actions");
+    const btn = el("button", "Save changes", "btn btn--primary");
+    btn.type = "submit";
+    const status = el("span", null, "form-status");
+    status.setAttribute("role", "status");
+    status.dataset.contentStatus = "";
+    actions.append(btn, status);
+    contentForm.append(head, fields, actions);
+  }
+
+  async function save(method) {
+    const status = $("[data-content-status]", contentForm);
+    const btn = $("button[type=submit]", contentForm);
+    btn.setAttribute("aria-busy", "true");
+    try {
+      const res = await fetch(`/api/admin/content/${active}`, {
+        method,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        credentials: "same-origin",
+        body: method === "PUT" ? JSON.stringify(readValue()) : undefined,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Could not save (${res.status}).`);
+      const s = sections.find((x) => x.key === active);
+      Object.assign(s, { value: data.value, custom: data.custom, updatedAt: data.updatedAt, updatedBy: data.updatedBy });
+      openSection(active);
+      const done = $("[data-content-status]", contentForm);
+      done.textContent = method === "PUT" ? "Saved. The site shows the change now." : "Back to the starting text.";
+      done.dataset.state = "ok";
+    } catch (e) {
+      status.textContent = e.message;
+      status.dataset.state = "error";
+    } finally {
+      btn.removeAttribute("aria-busy");
+    }
+  }
+
+  contentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (active) save("PUT");
   });
 
   loadDonations();

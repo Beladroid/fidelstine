@@ -280,13 +280,17 @@ function pointerEffects() {
 
 /* ---------- small things ---------- */
 function small() {
-  const note = $("[data-editor-note]");
-  if (note) {
-    if (sessionStorage.getItem("fid-note") === "hidden") note.remove();
-    $("[data-editor-note-close]", note)?.addEventListener("click", () => {
-      note.remove();
+  // announcement from the admin panel: closing it hides it for the rest of the visit
+  const notice = $("[data-live=announcement]");
+  if (notice && !notice.hidden) {
+    const id = "fid-notice:" + notice.textContent.trim().slice(0, 80);
+    try {
+      if (sessionStorage.getItem(id)) notice.hidden = true;
+    } catch {}
+    $("[data-notice-close]", notice)?.addEventListener("click", () => {
+      notice.hidden = true;
       try {
-        sessionStorage.setItem("fid-note", "hidden");
+        sessionStorage.setItem(id, "1");
       } catch {}
     });
   }

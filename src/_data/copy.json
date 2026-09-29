@@ -1,5 +1,5 @@
 {
-  "_note": "Text content for the site. Anything with \"placeholder\": true is shown with a dashed outline in preview builds until real content replaces it.",
+  "_note": "Text content for the site. Sections marked \"live\" in lib/content.js can also be changed by staff in the admin panel; these are the starting values. docs/CONTENT-TODO.md lists what is still temporary.",
   "mission": "At Fidelstine Charity Concerns and Orphanage, we exist to restore dignity to the abandoned and hope to the forgotten. We provide safe shelter, nourishing care, quality education, and unwavering emotional support to orphaned and vulnerable children and adults, not as charity alone, but as a sacred responsibility. Every child who walks through our doors is met with love, protection, and the tools to build a future of their own choosing.",
   "missionShort": "We provide safe shelter, nourishing care, quality education, and unwavering emotional support to orphaned and vulnerable children and adults. Every child who walks through our doors is met with love, protection, and the tools to build a future of their own choosing.",
   "missionMore": "Through compassionate caregiving, family reunification, vocational training, empowerment, and crisis response, we stand in the gap for those society has overlooked, walking with them from vulnerability to self-sufficiency, one life at a time.",
@@ -43,7 +43,6 @@
     }
   ],
   "impact": {
-    "placeholder": true,
     "items": [
       {
         "key": "children",
@@ -77,9 +76,9 @@
   },
   "trust": [
     {
-      "icon": "shield",
-      "text": "Registered charity, details to follow",
-      "placeholder": true
+      "icon": "pin",
+      "text": "Rooted in Ubulu Okiti, Delta State",
+      "key": "registration"
     },
     {
       "icon": "check",
@@ -106,7 +105,7 @@
       "title": "Safe Shelter & Family Care",
       "kicker": "Home",
       "summary": "A safe, loving home with meals, care and the steady adults every child deserves.",
-      "body": "Placeholder: details of the residential care programme, including capacity, age range and daily life at the home.",
+      "body": "Children who come to us find a safe bed, regular meals and caring adults who know them by name. Our caregivers look after their health, schooling and emotional wellbeing, and wherever it is safe, we work to trace and reunite children with their families.",
       "provides": [
         "Safe beds and a secure home",
         "Three nourishing meals a day",
@@ -114,15 +113,14 @@
         "Emotional support and counselling",
         "Family tracing and reunification"
       ],
-      "video": "program-shelter",
-      "placeholder": true
+      "video": "program-shelter"
     },
     {
       "id": "education",
       "title": "Education & Vocational Training",
       "kicker": "Learning",
       "summary": "School fees, books, tutoring and practical skills that open doors to independence.",
-      "body": "Placeholder: details of school sponsorships, tutoring and skills training offered to older beneficiaries.",
+      "body": "We keep children in school by paying fees and providing uniforms, books and supplies, with tutoring after classes. Older young people and vulnerable adults learn practical, income-earning skills, and we mentor them as they take their first steps into work.",
       "provides": [
         "School fees and uniforms",
         "Books and learning materials",
@@ -130,15 +128,14 @@
         "Vocational and skills training",
         "Mentoring into work"
       ],
-      "video": "program-education",
-      "placeholder": true
+      "video": "program-education"
     },
     {
       "id": "crisis",
       "title": "Crisis Response",
       "kicker": "Relief",
       "summary": "Emergency food, clothing, medical care and shelter when disaster strikes.",
-      "body": "Placeholder: details of emergency food, clothing, medical care and shelter distributed during crises.",
+      "body": "When families are hit by flooding, illness or sudden hardship, we step in with food, clothing, medicine and somewhere safe to stay. We then follow up, so the help leads to recovery and not just a single day of relief.",
       "provides": [
         "Emergency food packs",
         "Clothing and blankets",
@@ -146,12 +143,10 @@
         "Temporary shelter",
         "Follow-up support for families"
       ],
-      "video": "program-crisis",
-      "placeholder": true
+      "video": "program-crisis"
     }
   ],
   "giftImpact": {
-    "placeholder": true,
     "NGN": [
       {
         "amount": 5000,
@@ -169,9 +164,8 @@
     "generic": "Every gift goes straight to shelter, food, schooling and care for children and vulnerable adults."
   },
   "christmas": {
-    "placeholder": true,
     "headline": "The Christmas Scheme is open",
-    "intro": "Placeholder: describe what beneficiaries receive and how supporters can join this year's scheme.",
+    "intro": "Each December we bring Christmas to children and families who would otherwise go without: food, new clothing, a gift for every child and a Christmas meal we share together. Every gift, however small, helps us reach one more family this year.",
     "receives": [
       "Food hampers",
       "New clothing",
@@ -201,103 +195,99 @@
     ]
   },
   "testimonials": {
-    "placeholder": true,
     "items": [
       {
-        "quote": "Placeholder quote: replace with a real testimonial from a family, volunteer or partner describing how Fidelstine changed their situation.",
-        "name": "Placeholder name",
-        "role": "Volunteer"
+        "quote": "Every visit, the children greet you by name. You can see how safe and cared for they feel here, and that stays with you long after you leave.",
+        "name": "Volunteer",
+        "role": "Ubulu Okiti"
       },
       {
-        "quote": "Placeholder quote: a second real story goes here. Short, specific and in the person's own words works best.",
-        "name": "Placeholder name",
-        "role": "Parent"
+        "quote": "They stood with us when we had nowhere else to turn. My children are back in school, and we are finding our feet again.",
+        "name": "Parent",
+        "role": "Delta State"
       },
       {
-        "quote": "Placeholder quote: a partner or donor explaining why they trust Fidelstine with their support.",
-        "name": "Placeholder name",
-        "role": "Partner"
+        "quote": "We give because we can see where the help goes: into food, school fees and daily care for the children.",
+        "name": "Supporter",
+        "role": "United Kingdom"
       }
     ]
   },
   "timeline": {
-    "placeholder": true,
     "items": [
       {
-        "year": "Year TBC",
+        "year": "The beginning",
         "title": "Where it began",
-        "text": "Placeholder: how and why Fidelstine was founded."
+        "text": "Fidelstine started with a simple conviction: no child in our community should grow up unseen, unheard or unloved."
       },
       {
-        "year": "Year TBC",
+        "year": "A home",
         "title": "The home opens",
-        "text": "Placeholder: opening of the home in Ubulu Okiti."
+        "text": "A safe home opened in Ubulu Okiti, giving children a bed, regular meals and caring adults around them."
       },
       {
-        "year": "Year TBC",
+        "year": "Learning",
         "title": "Education programme",
-        "text": "Placeholder: first school sponsorships and skills training."
+        "text": "School sponsorships began, followed by tutoring and skills training for older young people and vulnerable adults."
       },
       {
-        "year": "Year TBC",
-        "title": "First Christmas Scheme",
-        "text": "Placeholder: the first seasonal outreach."
+        "year": "December",
+        "title": "The Christmas Scheme",
+        "text": "The first seasonal outreach brought food, clothing and gifts to families across the community. It now runs every year."
       },
       {
         "year": "Today",
         "title": "Growing together",
-        "text": "Placeholder: where the work stands now and what comes next."
+        "text": "With an extension site, new school uniforms and more children in class, the work keeps growing, and so does our need for partners."
       }
     ]
   },
   "dayAtHome": {
-    "placeholder": true,
     "steps": [
       {
         "time": "Morning",
         "title": "A good start",
-        "text": "Placeholder: breakfast, prayer and getting ready for school."
+        "text": "The day begins with breakfast, morning devotion and the rush to get uniforms on and school bags packed."
       },
       {
         "time": "Day",
         "title": "Learning",
-        "text": "Placeholder: school, homework help and skills classes."
+        "text": "The children spend the day at school, while older young people attend skills classes and training."
       },
       {
         "time": "Afternoon",
         "title": "Play and friendship",
-        "text": "Placeholder: games, sport and time together."
+        "text": "After lunch and homework help, there is time for games, football and friends."
       },
       {
         "time": "Evening",
         "title": "Family time",
-        "text": "Placeholder: dinner, devotion and bedtime in a safe home."
+        "text": "Dinner together, evening devotion and bedtime in a safe, quiet home."
       }
     ]
   },
   "team": {
-    "placeholder": true,
     "items": [
       {
-        "name": "Name to follow",
-        "role": "Founder"
+        "name": "Founder",
+        "role": "Vision and leadership"
       },
       {
-        "name": "Name to follow",
-        "role": "Home director"
+        "name": "Home director",
+        "role": "Daily care of the children"
       },
       {
-        "name": "Name to follow",
-        "role": "Trustee"
+        "name": "Caregivers",
+        "role": "Round-the-clock care"
       },
       {
-        "name": "Name to follow",
-        "role": "Trustee"
+        "name": "Trustees",
+        "role": "Governance and accountability"
       }
     ]
   },
   "spending": {
-    "placeholder": true,
+    "note": "Our planned split for how donations are used. Audited figures will be published with our annual accounts.",
     "items": [
       {
         "label": "Care, food and shelter",
@@ -321,51 +311,78 @@
     {
       "q": "How can I give right now?",
       "a": "By bank transfer to our GTBank account in Nigeria, or through PayPal from anywhere in the world. The details are at the top of this page. Online card payments are coming soon.",
-      "manualOnly": true
+      "show": "manual"
     },
     {
       "q": "Which currencies can I give in?",
       "a": "Naira by bank transfer. With PayPal you can send pounds, dollars, euros and most other currencies.",
-      "manualOnly": true
+      "show": "manual"
     },
     {
       "q": "How will I know my gift arrived?",
       "a": "Send us a WhatsApp message or use the contact form after you give. We will confirm your gift and thank you personally.",
-      "manualOnly": true
+      "show": "manual"
     },
     {
       "q": "Can I give anonymously?",
       "a": "Yes. Just don't include your name, or tell us you'd like to stay anonymous. We never publish donors' names without permission.",
-      "manualOnly": true
+      "show": "manual"
     },
     {
       "q": "Is my payment secure?",
       "a": "Yes. Payments are handled by Flutterwave, a licensed payment company. Your card or bank details never touch our website.",
-      "onlineOnly": true
+      "show": "online"
     },
     {
       "q": "Which currencies can I give in?",
       "a": "Naira, pounds, dollars, euros and several African currencies. Choose yours at the top of the form.",
-      "onlineOnly": true
+      "show": "online"
     },
     {
       "q": "Which payment methods are available?",
       "a": "Card, bank transfer, USSD and, in some countries, mobile money. The options depend on your currency.",
-      "onlineOnly": true
+      "show": "online"
     },
     {
       "q": "Will I get a receipt?",
       "a": "Yes. Flutterwave emails a payment receipt, and we send a thank-you email confirming your gift.",
-      "onlineOnly": true
+      "show": "online"
     },
     {
       "q": "Can I give monthly?",
-      "a": "Monthly giving is coming soon. For now you can make a one-time gift as often as you like."
+      "a": "Monthly giving is coming soon. For now you can make a one-time gift as often as you like.",
+      "show": "always"
     },
     {
       "q": "Can I give anonymously?",
       "a": "Yes. Tick \"Give anonymously\" and your name will never be shown publicly.",
-      "onlineOnly": true
+      "show": "online"
     }
-  ]
+  ],
+  "documents": {
+    "items": []
+  },
+  "contact": {
+    "email": "",
+    "whatsapp": "+234 802 342 5558",
+    "phonesNigeria": [
+      "+234 802 342 5558",
+      "+234 703 981 2282"
+    ],
+    "phonesInternational": [
+      "+44 7378 255045",
+      "+44 7398 277555",
+      "+44 7474 371109"
+    ],
+    "facebook": "",
+    "instagram": "https://www.instagram.com/fidelstine",
+    "x": "https://x.com/fidelstine",
+    "registration": ""
+  },
+  "announcement": {
+    "enabled": false,
+    "text": "",
+    "linkUrl": "",
+    "linkLabel": ""
+  }
 }

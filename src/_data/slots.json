@@ -1,5 +1,5 @@
 {
-  "_help": "What each section of the site wants from the media library. `npm run media:report` compares this with media.json. In preview builds, empty slots show a placeholder card explaining what to add.",
+  "_help": "What each section of the site wants from the media library. `npm run media:report` compares this with media.json. Empty slots simply hide their section.",
   "slots": [
     { "id": "hero-photos", "label": "Home hero slideshow", "page": "Home", "match": { "all": ["hero"], "type": "image" }, "min": 2, "ideal": 4, "hint": "Landscape photos with space for a headline. No text in the image." },
     { "id": "hero-videos", "label": "Home hero background videos", "page": "Home", "match": { "all": ["hero-video"], "type": "video" }, "min": 1, "ideal": 3, "hint": "Silent landscape loops, 10-20 seconds, calm movement." },
