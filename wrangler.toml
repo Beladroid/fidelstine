@@ -14,3 +14,14 @@ database_name = "fidelstine"
 # Replace with the id printed by:  npx wrangler d1 create fidelstine
 database_id = "c7578596-8c6c-4ec8-b49c-5adebd1bb802"
 migrations_dir = "migrations"
+
+# Preview deployments (e.g. https://flutterwave-test.fidelstine.pages.dev) use their own database,
+# so Flutterwave test payments never mix with real donations.
+[env.preview.vars]
+SITE_ENV = "preview"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "fidelstine-test"
+database_id = "636b3372-1a14-447e-a5db-4a5c8088d64d"
+migrations_dir = "migrations"

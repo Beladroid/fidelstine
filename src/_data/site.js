@@ -52,7 +52,8 @@ export default {
 
   // Online card payments through Flutterwave. Keep false until the live Flutterwave account is ready;
   // while false, every donate form is replaced by the manual giving details below.
-  onlineGiving: false,
+  // Set ONLINE_GIVING=1 when building to switch it on (the Flutterwave test copy is built that way).
+  onlineGiving: process.env.ONLINE_GIVING === "1",
 
   // Manual giving: shown instead of the online form while onlineGiving is false, and as an
   // alternative on the Donate page afterwards. Kept in code on purpose (not in the console), so a

@@ -73,6 +73,22 @@ How it works: the build renders the starting text from `src/_data/copy.json`; sa
 
 Campaign titles and the other programmes' settings are in `lib/campaigns.js` and change on the next deploy.
 
+## Card payments (Flutterwave)
+
+**Test mode now.** A separate copy of the site with card payments switched on runs at https://flutterwave-test.fidelstine.pages.dev (deploy it with `npm run deploy:test`). It is a Cloudflare *preview* deployment, so it uses:
+- the **preview** secrets: `FLW_SECRET_KEY` (the TEST secret key), `FLW_SECRET_HASH`, `ADMIN_PASSWORD`, `ADMIN_PATH`, `RATE_SALT`;
+- its own database, `fidelstine-test` (see `[env.preview]` in `wrangler.toml`), so test gifts never mix with real ones.
+
+The public site is built without card payments (`ONLINE_GIVING` not set) and keeps showing GTBank and PayPal.
+
+In the Flutterwave dashboard (Test mode) > Settings > Webhooks: URL `https://flutterwave-test.fidelstine.pages.dev/api/webhooks/flutterwave` and the same secret hash as `FLW_SECRET_HASH`.
+
+**Going live** (once the live account is approved):
+1. Put the LIVE secret key and a new secret hash on the **production** environment: `npx wrangler pages secret put FLW_SECRET_KEY --project-name fidelstine` (and `FLW_SECRET_HASH`).
+2. In Flutterwave (Live mode) set the webhook URL to `https://fidelstine.pages.dev/api/webhooks/flutterwave` (or the real domain) with that hash.
+3. Deploy the public site with card payments on: `ONLINE_GIVING=1` when building (PowerShell: `$env:ONLINE_GIVING="1"; npm run deploy`).
+4. Make one small real gift and refund it from the Flutterwave dashboard.
+
 ## Keys and passwords
 
 - Flutterwave keys and the webhook hash live in Cloudflare Pages > Settings > Variables and Secrets. Never put them in the code.
