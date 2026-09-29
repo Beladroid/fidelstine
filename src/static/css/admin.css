@@ -68,3 +68,11 @@
   .content-admin { grid-template-columns: 1fr; }
   .content-admin__nav { position: static; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
+
+/* sign in */
+.admin-login { max-width: 420px; margin: 2rem auto; }
+.admin-login .field input { min-height: 44px; padding: 0.4em 0.8em; width: 100%; }
+/* donations reported by donors, waiting for staff */
+.admin-alert { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 16px; margin: 0 0 1rem; border-radius: var(--r-card); background: #fdf1dd; color: #7a4d0c; font-weight: 600; }
+.admin-alert button { border: 0; background: #a86a12; color: #fff; border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+.confirm-btn { margin: 6px 6px 0 0; padding: 3px 10px; border: 1px solid #2d7a4f; border-radius: 999px; background: #2d7a4f; color: #fff; font-size: 0.75rem; font-weight: 600; cursor: pointer; }

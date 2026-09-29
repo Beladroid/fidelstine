@@ -20,7 +20,7 @@ Some text is temporary until the charity sends the real version. `docs/CONTENT-T
 
 ## Reading donations
 
-Go to `/admin/` on the live site. Sign in with the one-time code sent to your email. You can filter by status, currency, campaign and date, search by name or reference, and export a CSV for the accounts.
+Go to `/admin/` on the live site. Sign in with your name and the staff password (the `ADMIN_PASSWORD` secret in Cloudflare Pages). Your name is recorded against every change. Sessions last 12 hours; changing the password signs everyone out. Cloudflare Access (one-time email codes) can be added later as well. You can filter by status, currency, campaign and date, search by name or reference, and export a CSV for the accounts.
 
 Status meanings:
 
@@ -39,7 +39,8 @@ Open `/admin/`. Changes show on the live site straight away, with no rebuild. Ev
 
 | Tab | What it changes |
 |---|---|
-| Record a gift | Adds a gift received by GTBank transfer, PayPal or cash. It counts in the totals, the CSV export and the Christmas Scheme progress bar. A gift entered by mistake can be removed from the Donations list (online payments cannot). |
+| Record a donation | Adds a donation received by GTBank transfer, PayPal or cash. It counts in the totals, the CSV export and the Christmas Scheme progress bar, and the donor gets a thank-you email if an address is given. A donation entered by mistake can be removed from the Donations list (online payments cannot). |
+| Donations: reports from donors | Donors can say "I've sent my gift" under the bank and PayPal details. These arrive as **pending** and do not count until a staff member checks the bank or PayPal and clicks **Confirm received**, which also sends the thank-you email. A yellow banner shows how many are waiting. |
 | Site content > Christmas Scheme | Headline, goal and closing date |
 | Site content > Exchange rates | Naira value of £, $, € and the other currencies, used for the "≈" amounts and for adding up foreign gifts. Check them every few weeks. |
 | Site content > What your gift does | The three example gifts ("₦5,000: books and school supplies…") |
@@ -63,7 +64,9 @@ Campaign titles and the other programmes' settings are in `lib/campaigns.js` and
 
 - Flutterwave keys and the webhook hash live in Cloudflare Pages > Settings > Variables and Secrets. Never put them in the code.
 - To rotate the Flutterwave key: generate a new one in Flutterwave, paste it into `FLW_SECRET_KEY`, and redeploy.
-- To change who can open the admin page: edit the Access policy and `ADMIN_EMAILS`.
+- To change the staff password: `npx wrangler pages secret put ADMIN_PASSWORD --project-name fidelstine`, then redeploy. Everyone is signed out.
+- If Cloudflare Access is added: edit the Access policy and `ADMIN_EMAILS` to change who can open the admin page.
+- Thank-you emails need `RESEND_API_KEY` and `MAIL_FROM` (a verified domain address, so after the domain is bought). Until then they are skipped and nothing else is affected.
 
 ## Renewals
 

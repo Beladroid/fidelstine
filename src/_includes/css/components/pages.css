@@ -241,3 +241,24 @@
 .manual-giving__after { display: flex; gap: 10px; align-items: flex-start; font-size: var(--step--1); color: var(--ink-soft); background: rgba(232, 180, 188, 0.2); border-radius: var(--r-md); padding: 12px 14px; }
 .manual-giving__after .i { width: 18px; height: 18px; color: var(--red); margin-top: 2px; flex-shrink: 0; }
 .manual-giving--compact .pay-option { padding: var(--space-4); }
+
+/* ---------- share buttons ---------- */
+.share-row--start { justify-content: flex-start; }
+.share-row button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: var(--r-pill); border: 1.5px solid var(--line-strong); background: none; font: inherit; font-weight: 600; font-size: var(--step--1); color: inherit; cursor: pointer; }
+.share-row button:hover { border-color: var(--navy-deep); }
+.share-row .share-native { background: var(--navy-deep); border-color: var(--navy-deep); color: #fff; }
+.share-row .i { width: 18px; height: 18px; }
+
+/* ---------- "I've sent my gift" ---------- */
+.report { border: 1.5px solid var(--line-strong); border-radius: var(--r-md); background: #fff; }
+.report summary { list-style: none; display: flex; align-items: center; gap: 10px; padding: 14px 16px; cursor: pointer; font-size: var(--step--1); color: var(--ink-soft); }
+.report summary::-webkit-details-marker { display: none; }
+.report summary strong { color: var(--navy-deep); }
+.report summary .i { width: 20px; height: 20px; color: #2d7a4f; flex-shrink: 0; }
+.report summary::after { content: "+"; margin-left: auto; font-size: 1.3rem; color: var(--red); transition: transform var(--dur-2); }
+.report[open] summary::after { transform: rotate(45deg); }
+.report__form, .report__done { display: grid; gap: var(--space-4); padding: 0 16px 16px; }
+.report__amount-row { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px; }
+.report__thanks { font-size: var(--step-0); color: var(--navy-deep); }
+.report__done .share-row { justify-content: flex-start; }
+.manual-giving--compact .report .field-grid--2 { grid-template-columns: 1fr; }

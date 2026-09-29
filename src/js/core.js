@@ -119,6 +119,7 @@ function donateSheet() {
     e.preventDefault();
     const slug = trigger.dataset.campaign || "general";
     if (campaignInput) campaignInput.value = slug;
+    $$("[data-report-campaign]", dlg).forEach((i) => (i.value = slug));
     if (campaignLabel && campaignInput) campaignLabel.textContent = campaigns[slug]?.title || "Where it's needed most";
     // wait for the menu to finish closing if the trigger was inside it
     const delay = trigger.closest("[data-menu]") ? 380 : 0;
@@ -295,7 +296,15 @@ function small() {
     });
   }
 
-  // copy-to-clipboard buttons (bank details)
+  // native share sheet on phones that have one (WhatsApp, Instagram, SMS…)
+  if (navigator.share) {
+    $$("[data-share-native]").forEach((b) => {
+      b.hidden = false;
+      b.addEventListener("click", () => navigator.share({ title: document.title, text: b.dataset.shareText, url: b.dataset.shareUrl }).catch(() => {}));
+    });
+  }
+
+  // copy-to-clipboard buttons (bank details, share links)
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest("[data-copy]");
     if (!btn) return;

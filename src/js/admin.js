@@ -1,5 +1,6 @@
-// Staff dashboard: donations with filters, totals and CSV export; newsletter sign-ups; messages.
-// Protected by Cloudflare Access in front of /admin and /api/admin. All values are written with
+// Staff dashboard: donations with filters, totals and CSV export; recording and confirming donations
+// made by bank transfer or PayPal; site content; newsletter sign-ups; messages.
+// Sign-in is by Cloudflare Access or the staff password (lib/access.js). All values are written with
 // textContent, so nothing from the database is ever interpreted as HTML.
 import { $, $$, formatMoney } from "./util.js";
 
@@ -12,6 +13,10 @@ export default function initAdmin() {
   const more = $("[data-admin-more]", root);
   const errorBox = $("[data-admin-error]", root);
   const userEl = $("[data-admin-user]", root);
+  const app = $("[data-admin-app]", root);
+  const loginForm = $("[data-admin-login]", root);
+  const logoutBtn = $("[data-admin-logout]", root);
+  const reportsEl = $("[data-admin-reports]", root);
   let cursor = null;
 
   const el = (tag, text, cls) => {
@@ -21,7 +26,7 @@ export default function initAdmin() {
     return e;
   };
   const showError = (msg) => {
-    errorBox.textContent = msg;
+    errorBox.textContent = msg || "";
     errorBox.hidden = !msg;
   };
   const query = () => {
@@ -32,7 +37,15 @@ export default function initAdmin() {
 
   async function get(url) {
     const res = await fetch(url, { headers: { Accept: "application/json" }, credentials: "same-origin" });
-    if (res.status === 401 || res.status === 403) throw new Error("You are not signed in as an admin. Sign in through Cloudflare Access, then reload.");
+    if (res.status === 401 || res.status === 403) {
+      const data = await res.json().catch(() => ({}));
+      if (data.login) {
+        showLogin();
+        throw new Error("");
+      }
+      throw new Error("You are not signed in as an admin. Sign in, then reload this page.");
+    }
+    if (res.status === 503) throw new Error("Staff sign-in has not been set up on this site yet.");
     if (!res.ok) throw new Error(`Could not load data (${res.status}).`);
     return res.json();
   }
@@ -44,7 +57,21 @@ export default function initAdmin() {
     csv.href = `/api/admin/donations?${new URLSearchParams([...p, ["format", "csv"]])}`;
     try {
       const data = await get(`/api/admin/donations?${p}`);
-      if (data.user) userEl.textContent = `Signed in as ${data.user}`;
+      if (data.user) userEl.textContent = `Signed in as ${data.user}.`;
+      logoutBtn.hidden = !data.user;
+      reportsEl.hidden = !data.awaiting;
+      if (data.awaiting) {
+        reportsEl.textContent = `${data.awaiting} donation${data.awaiting === 1 ? "" : "s"} reported by donors ${data.awaiting === 1 ? "is" : "are"} waiting for you to check against the bank or PayPal. `;
+        const show = el("button", "Show them");
+        show.type = "button";
+        show.addEventListener("click", () => {
+          filters.status.value = "pending";
+          filters.q.value = "REP-";
+          cursor = null;
+          loadDonations();
+        });
+        reportsEl.appendChild(show);
+      }
       if (!append) rows.innerHTML = "";
       renderTotals(data.totals || []);
       if (!data.items.length && !append) {
@@ -75,9 +102,32 @@ export default function initAdmin() {
     const status = el("td");
     status.appendChild(el("span", d.status, `status status--${d.status}`));
     const ref = el("td", d.tx_ref, "mono");
-    if (d.tx_ref.startsWith("MAN-")) {
-      // recorded by staff: show the note and allow removal of mistakes (two clicks, no pop-up)
+    if (d.tx_ref.startsWith("MAN-") || d.tx_ref.startsWith("REP-")) {
+      // recorded by staff (MAN-) or reported by the donor (REP-): show the notes, allow confirming a
+      // report once the money is seen in the bank or PayPal, and removal of mistakes (two clicks, no pop-up)
       if (d.notes) ref.appendChild(el("small", d.notes));
+      if (d.status === "pending") {
+        const ok = el("button", "Confirm received", "confirm-btn");
+        ok.type = "button";
+        ok.addEventListener("click", async () => {
+          ok.disabled = true;
+          try {
+            const res = await fetch(`/api/admin/gifts/${d.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              credentials: "same-origin",
+              body: JSON.stringify({ status: "successful" }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || `Could not confirm (${res.status}).`);
+            loadDonations();
+          } catch (e) {
+            showError(e.message);
+            ok.disabled = false;
+          }
+        });
+        ref.appendChild(ok);
+      }
       const rm = el("button", "Remove", "remove-btn");
       rm.type = "button";
       rm.addEventListener("click", async () => {
@@ -276,6 +326,7 @@ export default function initAdmin() {
       reference: f.reference.value.trim(),
       note: f.note.value.trim(),
       anonymous: f.anonymous.checked,
+      thank: f.thank.checked,
     };
     if (!(body.amount > 0)) {
       giftStatus.textContent = "Enter the amount received.";
@@ -293,8 +344,8 @@ export default function initAdmin() {
         body: JSON.stringify(body),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Could not record the gift (${res.status}).`);
-      giftStatus.textContent = `Recorded ${formatMoney(body.amount, body.currency)}. It now counts in the totals and on the site.`;
+      if (!res.ok) throw new Error(data.error || `Could not record the donation (${res.status}).`);
+      giftStatus.textContent = `Recorded ${formatMoney(body.amount, body.currency)}. It now counts in the totals and on the site.${data.emailed ? " A thank-you email is on its way." : ""}`;
       giftStatus.dataset.state = "ok";
       ["amount", "name", "email", "reference", "note"].forEach((n) => (f[n].value = ""));
       f.anonymous.checked = false;
@@ -524,6 +575,35 @@ export default function initAdmin() {
   contentForm.addEventListener("submit", (e) => {
     e.preventDefault();
     if (active) save("PUT");
+  });
+
+  /* ---------- sign in / out (staff password) ---------- */
+  function showLogin() {
+    app.hidden = true;
+    loginForm.hidden = false;
+    loginForm.name.focus();
+  }
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const status = $("[data-login-status]", loginForm);
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ name: loginForm.name.value.trim(), password: loginForm.password.value }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Could not sign in (${res.status}).`);
+      location.reload();
+    } catch (err) {
+      status.textContent = err.message;
+      status.dataset.state = "error";
+    }
+  });
+  logoutBtn.addEventListener("click", async () => {
+    await fetch("/api/admin/login", { method: "DELETE", credentials: "same-origin" }).catch(() => {});
+    location.reload();
   });
 
   loadDonations();

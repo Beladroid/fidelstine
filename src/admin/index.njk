@@ -9,15 +9,25 @@ eleventyExcludeFromCollections: true
 <link rel="stylesheet" href="/css/admin.css?v={{ site.buildTime }}">
 <section class="section mood-light admin" data-admin>
   <div class="wrap">
+    <form class="stats-editor admin-login" data-admin-login hidden novalidate>
+      <p class="eyebrow">Staff only</p>
+      <h1 style="font-size:var(--step-3)">Sign in</h1>
+      <div class="field"><label for="login-name">Your name</label><input id="login-name" name="name" autocomplete="name" maxlength="40" required></div>
+      <div class="field"><label for="login-password">Staff password</label><input id="login-password" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn--primary" type="submit">Sign in</button>
+      <p class="form-status" data-login-status role="status" aria-live="polite"></p>
+    </form>
+
+    <div data-admin-app>
     <div class="admin__head">
       <div>
         <p class="eyebrow">Staff only</p>
         <h1 style="font-size:var(--step-4)">Staff dashboard</h1>
-        <p class="muted" data-admin-user>Checking your sign-in…</p>
+        <p class="muted"><span data-admin-user>Checking your sign-in…</span> <button class="content-admin__reset" type="button" data-admin-logout hidden>Sign out</button></p>
       </div>
       <div class="admin__tabs" role="tablist">
         <button class="chip is-active" role="tab" aria-selected="true" data-tab="donations">Donations</button>
-        <button class="chip" role="tab" aria-selected="false" data-tab="gift">Record a gift</button>
+        <button class="chip" role="tab" aria-selected="false" data-tab="gift">Record a donation</button>
         <button class="chip" role="tab" aria-selected="false" data-tab="content">Site content</button>
         <button class="chip" role="tab" aria-selected="false" data-tab="stats">Impact numbers</button>
         <button class="chip" role="tab" aria-selected="false" data-tab="newsletter">Subscribers</button>
@@ -44,6 +54,7 @@ eleventyExcludeFromCollections: true
         </div>
       </form>
 
+      <p class="admin-alert" data-admin-reports hidden></p>
       <div class="admin__totals" data-admin-totals></div>
 
       <div class="admin__table-wrap">
@@ -57,7 +68,7 @@ eleventyExcludeFromCollections: true
 
     <div data-panel="gift" hidden>
       <form class="stats-editor gift-form" data-gift-form novalidate>
-        <p class="muted">Record a gift that arrived by bank transfer, PayPal or cash, so it counts in the totals, the export and the Christmas Scheme progress bar.</p>
+        <p class="muted">Record a donation that arrived by bank transfer, PayPal or cash, so it counts in the totals, the export and the Christmas Scheme progress bar. If you add the donor's email, they get a thank-you email.</p>
         <div class="gift-form__grid">
           <div class="field"><label for="g-amount">Amount received</label><input id="g-amount" name="amount" type="number" min="0" step="any" inputmode="decimal" required></div>
           <div class="field"><label for="g-currency">Currency</label>
@@ -73,8 +84,9 @@ eleventyExcludeFromCollections: true
           <div class="field gift-form__wide"><label for="g-note">Note <span class="hint">optional</span></label><input id="g-note" name="note" maxlength="300" autocomplete="off"></div>
         </div>
         <label class="check"><input type="checkbox" name="anonymous" value="1">The donor asked to stay anonymous</label>
+        <label class="check"><input type="checkbox" name="thank" value="1" checked>Send a thank-you email (if there is an email address)</label>
         <div class="admin__filter-actions">
-          <button class="btn btn--primary" type="submit">Record gift</button>
+          <button class="btn btn--primary" type="submit">Record donation</button>
           <span class="form-status" data-gift-status role="status" aria-live="polite"></span>
         </div>
       </form>
@@ -107,6 +119,7 @@ eleventyExcludeFromCollections: true
 
     <div data-panel="messages" hidden>
       <div class="admin__table-wrap"><table class="admin__table"><thead><tr><th>Date</th><th>From</th><th>About</th><th>Message</th></tr></thead><tbody data-admin-messages></tbody></table></div>
+    </div>
     </div>
   </div>
 </section>

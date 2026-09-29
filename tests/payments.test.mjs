@@ -316,3 +316,23 @@ test("recorded gifts count towards the campaign and can be removed", async () =>
   if (online) assert.equal((await fetch(`${BASE}/api/admin/gifts/${online.id}`, { method: "DELETE" })).status, 403);
   assert.equal((await fetch(`${BASE}/api/admin/gifts/${row.id}`, { method: "DELETE" })).status, 200);
 });
+
+test("a donor's report waits for staff, then counts once confirmed", async () => {
+  const before = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
+  const today = new Date().toISOString().slice(0, 10);
+  const r = await post("/api/donations/report", { name: "Kind Donor", email: "kind@example.com", method: "GTBank transfer", date: today, amount: 12000, currency: "NGN", campaign: "christmas-scheme", reference: "TRF-9" });
+  assert.equal(r.status, 201);
+  assert.equal((await post("/api/donations/report", { name: "", method: "GTBank transfer", date: today, amount: 5, currency: "NGN" })).status, 422);
+
+  const list = await (await fetch(`${BASE}/api/admin/donations?status=pending&q=REP-`)).json();
+  assert.ok(list.awaiting >= 1);
+  const row = list.items.find((d) => d.donor_name === "Kind Donor");
+  assert.equal(row.status, "pending");
+  const mid = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
+  assert.equal(mid.raisedNGN, before.raisedNGN, "a report alone doesn't count");
+
+  const c = await fetch(`${BASE}/api/admin/gifts/${row.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "successful" }) });
+  assert.equal(c.status, 200);
+  const after = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
+  assert.equal(after.raisedNGN - before.raisedNGN, 12000);
+});

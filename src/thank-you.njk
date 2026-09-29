@@ -6,6 +6,7 @@ permalink: /donate/thank-you/
 noindex: true
 description: Thank you for supporting Fidelstine Charity Concerns and Orphanage.
 ---
+{%- import "macros/components.njk" as c with context -%}
 <section class="section mood-light" style="min-height:70vh">
   <div class="wrap">
     <div class="ty" data-thankyou data-state="verifying" aria-live="polite">
@@ -26,11 +27,7 @@ description: Thank you for supporting Fidelstine Charity Concerns and Orphanage.
           <dt>Reference</dt><dd data-ty-ref style="font-size:.85em"></dd>
         </dl>
         <p class="muted">Help us reach more children: share with someone who cares.</p>
-        <div class="share-row">
-          <a href="https://wa.me/?text={{ ('I just gave to Fidelstine Charity Concerns and Orphanage. Join me: ' + site.url + '/donate/') | urlencode }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u={{ (site.url + '/donate/') | urlencode }}" target="_blank" rel="noopener">{% icon "facebook" %}Facebook</a>
-          <a href="https://x.com/intent/post?text={{ ('I just supported @fidelstine. Join me: ' + site.url + '/donate/') | urlencode }}" target="_blank" rel="noopener">{% icon "x" %}X</a>
-        </div>
+        {{ c.shareRow("I just gave to Fidelstine Charity Concerns and Orphanage. Join me:") }}
         <div class="ty__actions"><a class="btn btn--navy" href="/">Back to home</a><a class="btn btn--outline" href="/gallery/">See the work</a></div>
       </div>
 

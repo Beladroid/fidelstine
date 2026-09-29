@@ -78,7 +78,10 @@ export async function onRequestGet(context) {
     .bind(...args)
     .all();
 
+  // donations donors told us about, still waiting for staff to check them
+  const awaiting = await db.prepare("SELECT COUNT(*) AS n FROM donations WHERE status = 'pending' AND tx_ref LIKE 'REP-%'").first();
+
   const more = items.length > PAGE;
   const page = more ? items.slice(0, PAGE) : items;
-  return json({ user: auth.email, items: page, totals, nextCursor: more ? page[page.length - 1].id : null });
+  return json({ user: auth.email, items: page, totals, awaiting: awaiting?.n || 0, nextCursor: more ? page[page.length - 1].id : null });
 }

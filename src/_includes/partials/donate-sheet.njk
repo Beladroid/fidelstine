@@ -13,7 +13,7 @@
     {{ c.donateForm("sheet", true) }}
     <p class="donate-sheet__more"><a class="text-link" href="/donate/">More options: choose a programme, add a message, or give by bank transfer</a></p>
     {%- else %}
-    {{ c.manualGiving(true) }}
+    {{ c.manualGiving(true, "h3", "", "sheet") }}
     {%- endif %}
   </div>
 </dialog>

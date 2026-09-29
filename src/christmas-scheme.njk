@@ -68,8 +68,9 @@ description: Join the Fidelstine Christmas Scheme. Food, clothing, medical care 
 
 <section class="section mood-white" aria-labelledby="share-title">
   <div class="wrap">
-    {{ c.sectionHead("Spread the word", "Share the scheme flyer", "", false, false, null, "share-title") }}
-    {{ c.flyers() }}
+    {{ c.sectionHead("Spread the word", "Share the scheme", "One message on WhatsApp can bring a whole family's Christmas closer.", false, false, null, "share-title") }}
+    {{ c.shareRow("Help give a family a Christmas to remember with the Fidelstine Christmas Scheme:", "/christmas-scheme/", false) }}
+    <div style="margin-top:var(--space-6)">{{ c.flyers() }}</div>
   </div>
 </section>
 

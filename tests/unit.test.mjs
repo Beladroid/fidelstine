@@ -113,3 +113,25 @@ test("manual gifts validate", async () => {
   assert.throws(() => validateGift({ ...g, method: "Bitcoin" }, now), /received/);
   assert.throws(() => validateGift({ ...g, amount: 0 }, now), /amount/);
 });
+
+test("admin password sessions are signed and expire", async () => {
+  const { createSession, readSession, SESSION_SECONDS } = await import("../lib/access.js");
+  const env = { ADMIN_PASSWORD: "correct horse battery" };
+  const now = Date.UTC(2026, 8, 29, 9);
+  const v = await createSession(env, "Uju Nwanokwai", now);
+  assert.equal(await readSession(env, v, now + 1000), "Uju Nwanokwai");
+  assert.equal(await readSession(env, v, now + (SESSION_SECONDS + 5) * 1000), null, "expired");
+  assert.equal(await readSession({ ADMIN_PASSWORD: "changed" }, v, now), null, "a new password signs everyone out");
+  const [exp, , sig] = v.split(".");
+  assert.equal(await readSession(env, `${exp}.${btoa("Someone else")}.${sig}`, now), null, "name can't be swapped");
+});
+
+test("donor reports need a name and a recent date", async () => {
+  const { validateGift } = await import("../lib/gifts.js");
+  const now = new Date("2026-10-01T10:00:00Z");
+  const ok = validateGift({ amount: 50, currency: "GBP", method: "PayPal", date: "2026-09-30", campaign: "nope", name: "Ada" }, now, true);
+  assert.equal(ok.campaign, "general");
+  assert.throws(() => validateGift({ ...ok, name: "" }, now, true), /name/);
+  assert.throws(() => validateGift({ ...ok, method: "Cash" }, now, true), /how you sent/);
+  assert.throws(() => validateGift({ ...ok, date: "2026-05-01" }, now, true), /90 days/);
+});

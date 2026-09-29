@@ -18,6 +18,7 @@ const modules = [
   ["[data-donate-form]", () => import("./donate.js")],
   ["[data-countdown], [data-campaign-progress]", () => import("./campaign.js")],
   ["[data-thankyou]", () => import("./thankyou.js")],
+  ["[data-report-form]", () => import("./report.js")],
   ["[data-newsletter-form], [data-contact-form]", () => import("./forms.js")],
   ["[data-admin]", () => import("./admin.js")],
 ];

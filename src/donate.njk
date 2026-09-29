@@ -20,7 +20,7 @@ description: Give to Fidelstine Charity Concerns and Orphanage by bank transfer 
       <p class="donate-card__sub">Choose an amount and where it should go.</p>
       {{ c.donateForm("page", false, "general") }}
       {%- else %}
-      {{ c.manualGiving(false, "h2", "give-title") }}
+      {{ c.manualGiving(false, "h2", "give-title", "page") }}
       {%- endif %}
     </div>
 
@@ -46,7 +46,7 @@ description: Give to Fidelstine Charity Concerns and Orphanage by bank transfer 
 {%- if site.onlineGiving %}
 <section class="section section--tight mood-white" aria-labelledby="manual-title">
   <div class="wrap">
-    {{ c.manualGiving(false, "h2", "manual-title") }}
+    {{ c.manualGiving(false, "h2", "manual-title", "alt") }}
   </div>
 </section>
 {%- endif %}
