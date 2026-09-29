@@ -35,6 +35,14 @@ export async function onRequestGet(context) {
     where.push("created_at < date(?, '+1 day')");
     args.push(p.get("to"));
   }
+  if (p.get("method")) {
+    where.push("COALESCE(payment_type, 'Card') = ?");
+    args.push(p.get("method").slice(0, 30));
+  }
+  // "reports": gifts donors told us about; "offline": all bank/PayPal/cash entries
+  if (p.get("kind") === "reports") where.push("tx_ref LIKE 'REP-%'");
+  if (p.get("kind") === "offline") where.push("(tx_ref LIKE 'REP-%' OR tx_ref LIKE 'MAN-%')");
+  if (p.get("kind") === "online") where.push("tx_ref NOT LIKE 'REP-%' AND tx_ref NOT LIKE 'MAN-%'");
   if (p.get("q")) {
     const q = `%${p.get("q").slice(0, 80).replace(/[%_]/g, "")}%`;
     where.push("(donor_name LIKE ? OR donor_email LIKE ? OR tx_ref LIKE ?)");
@@ -67,8 +75,8 @@ export async function onRequestGet(context) {
   const pageArgs = cursor ? [...args, cursor] : args;
   const { results: items } = await db
     .prepare(
-      `SELECT id, created_at, tx_ref, status, amount, currency, amount_settled, campaign, donor_name, donor_email,
-              anonymous, payment_type, message, notes
+      `SELECT id, created_at, verified_at, receipt_sent_at, tx_ref, status, amount, currency, amount_settled, campaign, donor_name, donor_email,
+              donor_phone, donor_country, anonymous, payment_type, message, notes
        FROM donations ${pageClause} ORDER BY id DESC LIMIT ${PAGE + 1}`
     )
     .bind(...pageArgs)

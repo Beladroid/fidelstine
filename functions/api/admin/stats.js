@@ -3,6 +3,7 @@
 import { json, readJson, handle } from "../../../lib/http.js";
 import { requireAdmin } from "../../../lib/access.js";
 import { mergeStats, validateStats, readSavedStats, STATS_KEY } from "../../../lib/stats.js";
+import { logActivity } from "../../../lib/staff.js";
 import copy from "../../../src/_data/copy.json";
 
 const defaults = copy.impact.items;
@@ -28,6 +29,7 @@ export const onRequestPut = handle(async (context) => {
   if (typeof caches !== "undefined") {
     await caches.default.delete(new Request(new URL("/api/stats", context.request.url).toString()));
   }
+  await logActivity(context, auth.email, "updated the impact numbers");
   const saved = await readSavedStats(context.env.DB);
   return json({ ok: true, items: mergeStats(defaults, saved), updatedAt: saved?.updatedAt || null });
 });

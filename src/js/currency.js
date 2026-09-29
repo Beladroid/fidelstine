@@ -86,6 +86,13 @@ function apply(code) {
   $$("[data-money-ngn]").forEach((el) => {
     el.textContent = fromNaira(Number(el.dataset.moneyNgn), code);
   });
+  // point visitors to the GTBank account in their own currency
+  $$("[data-bank-account]").forEach((el) => {
+    const mine = el.dataset.bankAccount === code;
+    el.classList.toggle("is-yours", mine);
+    const tag = el.querySelector(".bank-account__yours");
+    if (tag) tag.hidden = !mine;
+  });
   document.documentElement.dataset.currency = code;
 }
 

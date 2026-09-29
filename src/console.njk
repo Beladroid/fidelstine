@@ -1,0 +1,40 @@
+---
+permalink: /console-app/index.html
+eleventyExcludeFromCollections: true
+---
+{#- The staff console. Served only at the private address in the ADMIN_PATH secret
+    (functions/_middleware.js); /console-app/ itself always returns "not found". -#}
+{%- set consoleConfig = {
+  site: { name: site.name, shortName: site.shortName, url: site.url, onlineGiving: site.onlineGiving, whatsapp: site.whatsapp },
+  money: { currencies: money.currencies, campaigns: money.campaigns, approxNgnRate: money.approxNgnRate },
+  build: site.buildTime
+} -%}
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0e2338">
+<title>Fidelstine Console</title>
+<link rel="icon" href="/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
+<link rel="preload" href="/fonts/work-sans-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/console.css?v={{ site.buildTime }}">
+<script>
+  try {
+    var t = localStorage.getItem("fc-theme");
+    if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.dataset.theme = "dark";
+  } catch (e) {}
+</script>
+</head>
+<body>
+{% include "partials/console-icons.njk" %}
+<div id="app"><div class="boot"><div class="boot__mark"><img src="/brand/crest-128.webp" srcset="/brand/crest-256.webp 2x" alt="Fidelstine" width="72" height="72" eleventy:ignore></div></div></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<script type="application/json" id="console-config">{{ consoleConfig | json | safe }}</script>
+<script type="module" src="/js/console/app.js?v={{ site.buildTime }}"></script>
+</body>
+</html>

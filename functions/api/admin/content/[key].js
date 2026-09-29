@@ -3,6 +3,7 @@
 import { json, readJson, handle, HttpError } from "../../../../lib/http.js";
 import { requireAdmin } from "../../../../lib/access.js";
 import { CONTENT_PREFIX, sectionByKey, validateSection, contentDefaults, readSavedContent, clearContentCache } from "../../../../lib/content.js";
+import { logActivity } from "../../../../lib/staff.js";
 import copy from "../../../../src/_data/copy.json";
 
 const defaults = contentDefaults(copy);
@@ -30,6 +31,7 @@ export const onRequestPut = handle(async (context) => {
     .bind(CONTENT_PREFIX + key, JSON.stringify(value), auth.email)
     .run();
   await clearContentCache(context);
+  await logActivity(context, auth.email, "updated site content", sectionByKey(key).title);
   return json(await current(context, key));
 });
 
@@ -39,5 +41,6 @@ export const onRequestDelete = handle(async (context) => {
   const key = section(context);
   await context.env.DB.prepare("DELETE FROM settings WHERE key = ?").bind(CONTENT_PREFIX + key).run();
   await clearContentCache(context);
+  await logActivity(context, auth.email, "reset site content", sectionByKey(key).title);
   return json(await current(context, key));
 });

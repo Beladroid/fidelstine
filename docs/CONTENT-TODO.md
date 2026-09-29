@@ -9,7 +9,7 @@ The site no longer shows placeholder marks, so this list is the only record of w
 | Item | Where it shows | Temporary version | How to change |
 |---|---|---|---|
 | Testimonials | Home, About | Three general quotes attributed to roles ("Volunteer, Ubulu Okiti"), not real people. **Replace with real quotes, with consent.** | Admin > Site content > Testimonials |
-| GTBank account name and number | Every donate form | "Sent to you on request" with a WhatsApp button | Code: `src/_data/site.js` > `manualGiving.gtbank` |
+| GTBank account name | Every donate form | Account numbers are shown (NGN, GBP, USD, EUR); the account name row is hidden until confirmed. International donors are asked to message for SWIFT details | Code: `src/_data/site.js` > `manualGiving.gtbank.accountName` (and add the SWIFT code once the client confirms it) |
 | Team and trustees | About | Roles only (Founder, Home director, Caregivers, Trustees) | Admin > Team and trustees |
 | Spending breakdown | Transparency | A planned split (55 / 25 / 12 / 8 %), labelled as planned | Admin > Where the money goes |
 | Christmas Scheme goal and date | Home, Christmas page, Donate | ₦5,000,000, closing 24 December 2026 | Admin > Christmas Scheme |

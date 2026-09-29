@@ -114,16 +114,32 @@ test("manual gifts validate", async () => {
   assert.throws(() => validateGift({ ...g, amount: 0 }, now), /amount/);
 });
 
-test("admin password sessions are signed and expire", async () => {
+test("staff passwords hash and verify", async () => {
+  const { hashPassword, verifyPassword, checkNewPassword } = await import("../lib/staff.js");
+  const hash = await hashPassword("a long enough password");
+  assert.match(hash, /^pbkdf2\$10000\$/);
+  assert.equal(await verifyPassword("a long enough password", hash), true);
+  assert.equal(await verifyPassword("a long enough passworD", hash), false);
+  assert.notEqual(await hashPassword("a long enough password"), hash, "each hash has its own salt");
+  assert.throws(() => checkNewPassword("short"), /10 characters/);
+});
+
+test("console sessions are signed, expire, and end when the password changes", async () => {
   const { createSession, readSession, SESSION_SECONDS } = await import("../lib/access.js");
-  const env = { ADMIN_PASSWORD: "correct horse battery" };
+  const { hashPassword } = await import("../lib/staff.js");
+  const rows = { 1: { id: 1, name: "Uju", email: "uju@example.com", role: "owner", password_hash: await hashPassword("first password 123"), disabled: 0 } };
+  const db = { prepare: () => ({ bind: (id) => ({ first: async () => (rows[id] && !rows[id].disabled ? rows[id] : null) }) }) };
+  const context = { env: { ADMIN_PASSWORD: "setup key", DB: db } };
   const now = Date.UTC(2026, 8, 29, 9);
-  const v = await createSession(env, "Uju Nwanokwai", now);
-  assert.equal(await readSession(env, v, now + 1000), "Uju Nwanokwai");
-  assert.equal(await readSession(env, v, now + (SESSION_SECONDS + 5) * 1000), null, "expired");
-  assert.equal(await readSession({ ADMIN_PASSWORD: "changed" }, v, now), null, "a new password signs everyone out");
+  const v = await createSession(context.env, rows[1], now);
+  assert.equal((await readSession(context, v, now + 1000)).name, "Uju");
+  assert.equal(await readSession(context, v, now + (SESSION_SECONDS + 5) * 1000), null, "expired");
   const [exp, , sig] = v.split(".");
-  assert.equal(await readSession(env, `${exp}.${btoa("Someone else")}.${sig}`, now), null, "name can't be swapped");
+  assert.equal(await readSession(context, `${exp}.2.${sig}`, now), null, "id can't be swapped");
+  rows[1].password_hash = await hashPassword("second password 456");
+  assert.equal(await readSession(context, v, now + 1000), null, "a new password signs that person out");
+  rows[1].disabled = 1;
+  assert.equal(await readSession(context, await createSession(context.env, rows[1], now), now), null, "switched-off accounts can't sign in");
 });
 
 test("donor reports need a name and a recent date", async () => {

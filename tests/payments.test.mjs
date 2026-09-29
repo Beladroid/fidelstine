@@ -62,6 +62,8 @@ before(async () => {
     "--binding", `FLW_API_BASE=http://127.0.0.1:${MOCK_PORT}/v3`,
     "--binding", "ADMIN_DEV_BYPASS=1",
     "--binding", "RATE_SALT=test",
+    "--binding", "ADMIN_PASSWORD=test-setup-key",
+    "--binding", "ADMIN_PATH=test-console",
   ];
   dev = spawn("npx", args, { shell: true, stdio: ["ignore", "pipe", "pipe"], env: { ...process.env, CI: "1", WRANGLER_SEND_METRICS: "false" } });
   let log = "";
@@ -209,7 +211,7 @@ test("admin API lists donations, totals and CSV", async () => {
   const r = await fetch(`${BASE}/api/admin/donations?status=successful`);
   assert.equal(r.status, 200);
   const data = await r.json();
-  assert.equal(data.user, "dev@localhost");
+  assert.equal(data.user, "Developer", "the signed-in person's name, used for 'changed by'");
   assert.ok(data.items.length >= 3);
   const ngn = data.totals.find((t) => t.currency === "NGN");
   assert.ok(ngn && ngn.total >= 2250000);
@@ -335,4 +337,73 @@ test("a donor's report waits for staff, then counts once confirmed", async () =>
   assert.equal(c.status, 200);
   const after = await (await fetch(`${BASE}/api/campaign/christmas-scheme`)).json();
   assert.equal(after.raisedNGN - before.raisedNGN, 12000);
+});
+
+test("the console lives only at its private address", async () => {
+  const page = await fetch(`${BASE}/test-console/`);
+  assert.equal(page.status, 200);
+  assert.match(await page.text(), /Fidelstine Console/);
+  assert.match(page.headers.get("x-robots-tag") || "", /noindex/);
+  assert.equal((await fetch(`${BASE}/console-app/`)).status, 404, "the build folder is never served directly");
+  assert.equal((await fetch(`${BASE}/admin/`)).status, 404, "the old address is gone");
+});
+
+test("first owner account: setup key required, then email + password sign-in", async () => {
+  const setup = (body) => post("/api/admin/setup", body);
+  const person = { name: "Uju Test", email: "uju@example.com", password: "a proper long password" };
+  assert.equal((await setup({ ...person, setupKey: "wrong" })).status, 401);
+  assert.equal((await setup({ ...person, password: "short", setupKey: "test-setup-key" })).status, 422);
+  const ok = await setup({ ...person, setupKey: "test-setup-key" });
+  assert.equal(ok.status, 201);
+  assert.match(ok.headers.get("set-cookie") || "", /fid_admin=.+HttpOnly/);
+  assert.equal((await setup({ ...person, email: "second@example.com", setupKey: "test-setup-key" })).status, 409, "only works once");
+
+  assert.equal((await post("/api/admin/login", { email: "uju@example.com", password: "not it at all" })).status, 401);
+  const login = await post("/api/admin/login", { email: "UJU@example.com", password: "a proper long password" });
+  assert.equal(login.status, 200);
+  assert.equal((await login.json()).user.role, "owner");
+});
+
+test("photos: upload, serve, show in the gallery, protect while used", async () => {
+  // 1x1 PNG
+  const png = Uint8Array.from(atob("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="), (c) => c.charCodeAt(0));
+  const form = new FormData();
+  form.append("large", new Blob([png], { type: "image/png" }), "l.png");
+  form.append("small", new Blob([png], { type: "image/png" }), "s.png");
+  form.append("width", "1");
+  form.append("height", "1");
+  form.append("kind", "gallery");
+  form.append("caption", "Packing Christmas hampers");
+  form.append("inGallery", "1");
+  const up = await fetch(`${BASE}/api/admin/images`, { method: "POST", body: form });
+  assert.equal(up.status, 201);
+  const { item } = await up.json();
+  assert.match(item.id, /^[a-z0-9]{16}$/);
+
+  const img = await fetch(`${BASE}${item.small}`);
+  assert.equal(img.status, 200);
+  assert.equal(img.headers.get("content-type"), "image/png");
+  assert.match(img.headers.get("cache-control"), /immutable/);
+
+  const gallery = await (await fetch(`${BASE}/gallery/`)).text();
+  assert.ok(gallery.includes("Packing Christmas hampers"), "new photo appears on the Gallery page");
+
+  // use it as a team photo, then try to delete it
+  const content = await (await fetch(`${BASE}/api/admin/content`)).json();
+  const team = content.sections.find((s) => s.key === "team").value;
+  team.items[0].photo = item.id;
+  assert.equal((await fetch(`${BASE}/api/admin/content/team`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(team) })).status, 200);
+  const about = await (await fetch(`${BASE}/about/`)).text();
+  assert.ok(about.includes(`/api/images/${item.id}/s`), "team photo shows on the About page");
+  assert.equal((await fetch(`${BASE}/api/admin/images/${item.id}`, { method: "DELETE" })).status, 409);
+  assert.equal((await fetch(`${BASE}/api/admin/images/${item.id}?force=1`, { method: "DELETE" })).status, 200);
+  assert.equal((await fetch(`${BASE}/api/admin/content/team`, { method: "DELETE" })).status, 200);
+});
+
+test("overview and activity for the console", async () => {
+  const o = await (await fetch(`${BASE}/api/admin/overview`)).json();
+  assert.ok(Array.isArray(o.series) && Array.isArray(o.byCampaign));
+  assert.equal(o.campaign.slug, "christmas-scheme");
+  const a = await (await fetch(`${BASE}/api/admin/activity`)).json();
+  assert.ok(a.items.some((x) => x.action === "uploaded a photo"));
 });

@@ -231,6 +231,11 @@
 .pay-option__details dt { font-size: var(--step--2); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .pay-option__details dd { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-weight: 600; color: var(--navy-deep); word-break: break-word; }
 .pay-option__number { font-family: var(--font-serif); font-size: 1.6rem; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.bank-account { border-radius: 10px; transition: background var(--dur-2); }
+.bank-account.is-yours { background: rgba(232, 180, 188, 0.22); padding: 10px 12px !important; margin-inline: -12px; }
+.bank-account dt { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bank-account__yours { font-size: 10px; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; background: var(--red); color: #fff; }
+.manual-giving--compact .pay-option__number { font-size: 1.35rem; }
 .pay-option__email { font-weight: 600; font-size: var(--step-1); overflow-wrap: anywhere; }
 .pay-option__note { font-size: var(--step--2); color: var(--muted); }
 .copy-btn { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; border: 1px solid var(--line-strong); background: #fff; border-radius: var(--r-pill); padding: 5px 12px; font-size: 0.75rem; font-weight: 600; color: var(--navy-deep); font-family: var(--font-sans); letter-spacing: 0; }

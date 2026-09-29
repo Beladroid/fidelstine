@@ -1,13 +1,13 @@
 // GET /api/admin/newsletter[?format=csv]  Staff only.
-import { json } from "../../../lib/http.js";
-import { requireAdmin } from "../../../lib/access.js";
-import { toCsv } from "../../../lib/csv.js";
+import { json } from "../../../../lib/http.js";
+import { requireAdmin } from "../../../../lib/access.js";
+import { toCsv } from "../../../../lib/csv.js";
 
 export async function onRequestGet(context) {
   const auth = await requireAdmin(context);
   if (auth.response) return auth.response;
   const { results } = await context.env.DB.prepare(
-    "SELECT email, source, created_at FROM newsletter WHERE unsubscribed_at IS NULL ORDER BY id DESC LIMIT 20000"
+    "SELECT id, email, source, created_at FROM newsletter WHERE unsubscribed_at IS NULL ORDER BY id DESC LIMIT 20000"
   ).all();
   if (new URL(context.request.url).searchParams.get("format") === "csv") {
     return new Response(toCsv(results), {

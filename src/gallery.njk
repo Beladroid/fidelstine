@@ -11,12 +11,13 @@ description: Photos and films from Fidelstine's work with children and families 
 
 {{ c.pageHero("Moments from the field", "Gallery", "Photos and short films from the home, the classroom and relief outreach. Tap any picture to view it full screen.", "new-school-bags", false, "Gallery") }}
 
+{#- photos uploaded in the staff console appear here (filled in as the page is served) -#}
+<section class="section mood-light gallery-latest" style="padding-top:var(--space-5)" aria-labelledby="latest-title" data-live="gallery-latest" hidden></section>
+
 <section class="section mood-light" style="padding-top:var(--space-5)">
   <div class="wrap">
     {%- if items | length %}
     {{ c.gallery(items) }}
-    {%- else %}
-    {{ c.slotEmpty("gallery") }}
     {%- endif %}
   </div>
 </section>

@@ -4,7 +4,7 @@ eleventyExcludeFromCollections: true
 ---
 User-agent: *
 {% if site.preview %}Disallow: /
-{% else %}Disallow: /admin/
+{% else %}Disallow: /api/
 Disallow: /donate/thank-you/
 Sitemap: {{ site.url }}/sitemap.xml
 {% endif %}

@@ -5,11 +5,12 @@
 import { json, error, handle, readJson, siteOrigin } from "../../../../lib/http.js";
 import { requireAdmin } from "../../../../lib/access.js";
 import { isOffline, thankDonor } from "../../../../lib/gifts.js";
+import { logActivity } from "../../../../lib/staff.js";
 
 async function offlineRow(context) {
   const id = Number(context.params.id);
   if (!Number.isInteger(id) || id <= 0) return { response: error("Unknown donation.", 404) };
-  const row = await context.env.DB.prepare("SELECT id, tx_ref, campaign, status, notes FROM donations WHERE id = ?").bind(id).first();
+  const row = await context.env.DB.prepare("SELECT id, tx_ref, campaign, status, notes, donor_name FROM donations WHERE id = ?").bind(id).first();
   if (!row) return { response: error("Unknown donation.", 404) };
   if (!isOffline(row.tx_ref)) return { response: error("Only donations recorded by staff or reported by donors can be changed here.", 403) };
   return { row };
@@ -32,6 +33,7 @@ export const onRequestPatch = handle(async (context) => {
       .run();
   }
   const emailed = await thankDonor(context.env, context.env.DB, row.tx_ref, siteOrigin(context));
+  await logActivity(context, auth.email, "confirmed a donation", `from ${row.donor_name}`);
   await clearCampaign(context, row.campaign);
   return json({ ok: true, emailed });
 });
@@ -42,6 +44,7 @@ export const onRequestDelete = handle(async (context) => {
   const { row, response } = await offlineRow(context);
   if (response) return response;
   await context.env.DB.prepare("DELETE FROM donations WHERE id = ?").bind(row.id).run();
+  await logActivity(context, auth.email, "removed a donation", `from ${row.donor_name} (${row.tx_ref})`);
   await clearCampaign(context, row.campaign);
   return json({ ok: true });
 });

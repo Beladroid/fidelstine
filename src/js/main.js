@@ -20,7 +20,6 @@ const modules = [
   ["[data-thankyou]", () => import("./thankyou.js")],
   ["[data-report-form]", () => import("./report.js")],
   ["[data-newsletter-form], [data-contact-form]", () => import("./forms.js")],
-  ["[data-admin]", () => import("./admin.js")],
 ];
 
 for (const [selector, load] of modules) {

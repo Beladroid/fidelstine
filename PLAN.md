@@ -398,6 +398,15 @@ These go beyond what was asked. Each is marked for launch or later so the client
 
 ---
 
+## Update, 29 September 2026: the staff console
+
+- The old `/admin/` page is gone. A standalone console (its own design, no site header or footer) is served only at a private address held in the `ADMIN_PATH` secret; its build folder `/console-app/` always returns "not found".
+- Two structures: laptop (sidebar that collapses to icons, top bar, Ctrl K command search, drawers, split inbox) and phone (app bar, bottom tabs with a central record button, cards, swipe-down bottom sheets). Light and dark themes.
+- Individual staff accounts (PBKDF2-hashed passwords, owner and staff roles, signed 12-hour sessions tied to the password); the first owner is created with the setup key.
+- Photos uploaded from the console are resized in the browser and stored in D1 (`images` table), served from `/api/images/<id>/<l|s>`: profile photos, team and testimonial photos, and a "Latest from the home" section on the Gallery page.
+- Overview dashboard with figures, charts and team activity (`audit` table); inbox with read/unread; subscriber removal.
+- GTBank accounts in NGN, GBP, USD and EUR on every donate form, with the visitor's currency highlighted.
+
 ## Update, 29 September 2026: staff-editable content
 
 - The admin panel can now change, without a rebuild: the Christmas Scheme (headline, goal, closing date), exchange rates, the "what your gift does" examples, testimonials, team, spending breakdown, report links, contact details, FAQs and a site-wide announcement. It can also record gifts received by bank transfer, PayPal or cash, which count towards totals and the progress bar.

@@ -55,15 +55,20 @@ export default {
   onlineGiving: false,
 
   // Manual giving: shown instead of the online form while onlineGiving is false, and as an
-  // alternative on the Donate page afterwards. Kept in code on purpose (not in the admin panel), so a
-  // stolen admin login can never redirect donations. Until the account details arrive, the page offers
-  // to send them on request by WhatsApp.
+  // alternative on the Donate page afterwards. Kept in code on purpose (not in the console), so a
+  // stolen staff login can never redirect donations.
   manualGiving: {
     gtbank: {
       bank: "Guaranty Trust Bank (GTBank)",
+      // shown once the client confirms it
       accountName: "",
-      accountNumber: "",
-      currency: "Naira (NGN)",
+      // from the client (Uju), 29 Sep 2026
+      accounts: [
+        { currency: "NGN", label: "Naira", number: "3005582820" },
+        { currency: "GBP", label: "Pounds", number: "3005582985" },
+        { currency: "USD", label: "US dollars", number: "3005582947" },
+        { currency: "EUR", label: "Euros", number: "3005582961" },
+      ],
     },
     paypal: {
       email: "nwanokwai@gmail.com",
