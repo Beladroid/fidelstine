@@ -1,0 +1,15 @@
+# Every page ever published to this branch. scripts/deploy.mjs redirects any that disappear.
+/
+/about/
+/christmas-scheme/
+/console-app/
+/contact/
+/donate/
+/donate/thank-you/
+/donation-policy/
+/gallery/
+/privacy/
+/programmes/
+/safeguarding/
+/terms/
+/transparency/

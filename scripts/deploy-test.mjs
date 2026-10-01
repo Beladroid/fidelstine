@@ -7,6 +7,6 @@ import { execSync } from "node:child_process";
 const env = { ...process.env, ONLINE_GIVING: "1", SITE_URL: "https://flutterwave-test.fidelstine.pages.dev" };
 const run = (cmd) => execSync(cmd, { stdio: "inherit", shell: true, env });
 
-run("npx eleventy");
-run("npx wrangler pages deploy _site --project-name fidelstine --branch flutterwave-test --commit-dirty=true");
+// builds with the settings above, publishes, then checks every page shows the new version
+run("node scripts/deploy.mjs --branch flutterwave-test");
 console.log("\nTest site: https://flutterwave-test.fidelstine.pages.dev\nRun `npm run build` before deploying the public site again.");

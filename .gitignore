@@ -11,3 +11,4 @@ media/processed/
 *.log
 .DS_Store
 Thumbs.db
+.deploy/
