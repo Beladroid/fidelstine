@@ -51,12 +51,20 @@
               <a href="{{ site.addresses.head.map }}" target="_blank" rel="noopener" style="color:var(--pink); font-size:.82rem">View on Google Maps</a></div>
           </div>
           <div class="c-row">
+            <span class="c-ico">{% icon "globe" %}</span>
+            <div><span class="c-label">{{ site.addresses.international.label }}</span><address>{{ site.addresses.international.lines }}</address></div>
+          </div>
+          <div class="c-row">
             <span class="c-ico">{% icon "phone" %}</span>
             <div><span class="c-label">Phone (Nigeria)</span><span class="live-group" data-live="phones-ng">{% for p in site.phonesNigeria %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</span></div>
           </div>
           <div class="c-row">
             <span class="c-ico">{% icon "globe" %}</span>
             <div><span class="c-label">International</span><span class="live-group" data-live="phones-intl">{% for p in site.phonesInternational %}<a href="tel:{{ p.tel }}">{{ p.display }}</a>{% endfor %}</span></div>
+          </div>
+          <div class="c-row">
+            <span class="c-ico">{% icon "whatsapp" %}</span>
+            <div><span class="c-label">WhatsApp</span><span class="live-group" data-live="wa-lines">{% for w in site.whatsappList %}<a href="https://wa.me/{{ w.number }}" target="_blank" rel="noopener">{{ w.display }}{% if w.country %} ({{ w.country }}){% endif %}</a>{% endfor %}</span></div>
           </div>
           <div class="c-row">
             <span class="c-ico">{% icon "mail" %}</span>

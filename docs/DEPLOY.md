@@ -64,6 +64,8 @@ The D1 binding comes from `wrangler.toml`. Check Settings > Bindings shows `DB`.
 
 ## 5. Custom domain
 
+Done: **charity.fidelstine.org** is on the Pages project (domain bought at Cloudflare Registrar, October 2026). The steps below are kept for reference.
+
 1. Buy the domain. A `.org` costs about $10-12 a year at Cloudflare Registrar. A `.org.ng` or `.com.ng` costs about ₦5,000-10,000 a year from a Nigerian registrar such as Whogohost or Qservers.
 2. If bought elsewhere, add the domain to Cloudflare (Add a site, Free plan) and change the nameservers at the registrar to the two Cloudflare gives you.
 3. Pages project > Custom domains > Set up a domain. Add both `your-domain.org` and `www.your-domain.org`.
@@ -127,7 +129,7 @@ Useful commands:
 | Command | What it does |
 |---|---|
 | `npm run build` | Build the site into `_site` |
-| `npm run deploy` | Build and upload to https://fidelstine.pages.dev (works in PowerShell and bash). If it says the request timed out, the upload hit a slow connection: run it again |
+| `npm run deploy` | Build and upload to https://charity.fidelstine.org (works in PowerShell and bash), then check every page shows the new version (`scripts/deploy.mjs`: removed pages get a redirect, see HANDOVER). If it says the request timed out, the upload hit a slow connection: run it again |
 | `npm test` | Unit tests and end-to-end payment tests against a mock Flutterwave |
 | `npm run media` | Add new photos and videos from `media/incoming` |
 | `npm run media:report` | Show which sections still need media |

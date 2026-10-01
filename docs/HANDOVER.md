@@ -18,9 +18,17 @@ A quick reference for whoever maintains the Fidelstine website.
 
 Some text is temporary until the charity sends the real version. `docs/CONTENT-TODO.md` lists it. Most of it can be replaced from the admin panel without touching the code.
 
+## The address
+
+The site lives at **https://charity.fidelstine.org**. The domain fidelstine.org is registered at Cloudflare (renews yearly; keep auto-renew on); fidelstine.org itself is the landing page and business.fidelstine.org the business site, each its own Pages project. The old `fidelstine.pages.dev` sends visitors here with a permanent redirect (`functions/_middleware.js`, driven by `SITE_URL` in `wrangler.toml`). The Flutterwave test copy keeps its own address, flutterwave-test.fidelstine.pages.dev.
+
+## Publishing updates
+
+Publishing always goes through `scripts/deploy.mjs`, so visitors see an update at once. It stamps every page with a release number, redirects any page that has been removed (Cloudflare would otherwise keep showing a removed page for up to a week), publishes, then checks every page until it shows the new release and reports anything still out of date. It keeps a list of every page ever published in `deploy/` (keep it). To have it also empty Cloudflare’s cache for the domain, set `CF_ZONE_ID` (`597065964e245b5d8ab4fe0af1a97db0`) and `CF_API_TOKEN` (a token with Cache Purge permission) and it also empties Cloudflare's cache for the domain on every publish. `npm run deploy:test` does the same for the Flutterwave test copy.
+
 ## The staff console
 
-The console is a separate app with its own design, at a **private address** stored in the `ADMIN_PATH` Pages secret (for example `https://fidelstine.pages.dev/<ADMIN_PATH>/`). The address is not in the code or on the website, `/admin/` shows "page not found", and the page is never indexed. Keep the link private and bookmark it.
+The console is a separate app with its own design, at a **private address** stored in the `ADMIN_PATH` Pages secret (for example `https://charity.fidelstine.org/<ADMIN_PATH>/`). The address is not in the code or on the website, `/admin/` shows "page not found", and the page is never indexed. Keep the link private and bookmark it.
 
 - **Laptops:** sidebar (collapsible to icons), top bar with search (Ctrl K / ⌘K), notifications, light and dark mode.
 - **Phones:** app bar, bottom tabs (Home, Donations, a central **+** to record a donation, Inbox, More), cards, and bottom sheets you can swipe down.
@@ -85,7 +93,7 @@ In the Flutterwave dashboard (Test mode) > Settings > Webhooks: URL `https://flu
 
 **Going live** (once the live account is approved):
 1. Put the LIVE secret key and a new secret hash on the **production** environment: `npx wrangler pages secret put FLW_SECRET_KEY --project-name fidelstine` (and `FLW_SECRET_HASH`).
-2. In Flutterwave (Live mode) set the webhook URL to `https://fidelstine.pages.dev/api/webhooks/flutterwave` (or the real domain) with that hash.
+2. In Flutterwave (Live mode) set the webhook URL to `https://charity.fidelstine.org/api/webhooks/flutterwave` with that hash.
 3. Deploy the public site with card payments on: `ONLINE_GIVING=1` when building (PowerShell: `$env:ONLINE_GIVING="1"; npm run deploy`).
 4. Make one small real gift and refund it from the Flutterwave dashboard.
 
@@ -96,7 +104,7 @@ In the Flutterwave dashboard (Test mode) > Settings > Webhooks: URL `https://flu
 - Console address: `npx wrangler pages secret put ADMIN_PATH --project-name fidelstine` (letters, numbers and dashes, 6 to 64 characters), then redeploy. The old address stops working.
 - Setup key and session signing: `ADMIN_PASSWORD` (set `SESSION_SECRET` to sign sessions with a separate secret). Changing whichever one signs sessions signs everyone out.
 - A forgotten owner password with no other owner: a developer can reset it with `wrangler d1 execute` or delete the account so the setup key works again.
-- If Cloudflare Access is added: edit the Access policy and `ADMIN_EMAILS` to change who can open the console.
+- **To do now that the domain is on Cloudflare: put Cloudflare Access in front of the console.** Zero Trust is already switched on (team domain `red-limit-1a71.cloudflareaccess.com`), but Access could not protect `fidelstine.pages.dev` because that domain isn't in the account's domain list. When the domain is added: Zero Trust > Access > Applications > Self-hosted and private, with public hostname destinations `<domain>/<ADMIN_PATH>/*` and `<domain>/api/admin/*`; a policy "Staff" with Action Allow and Include **Emails** (the staff addresses, not "All authenticated users"); One-time PIN login; a 24-hour session. Leave the public pages and `/api/webhooks/*`, `/api/donations/*` and `/api/images/*` unprotected. Do **not** set `ACCESS_TEAM_DOMAIN` / `ACCESS_AUD` on the site: that would let an Access login replace the staff password, not add to it. Leave them unset, so staff pass Access first and then their own console login.
 - Thank-you emails need `RESEND_API_KEY` and `MAIL_FROM` (a verified domain address, so after the domain is bought). Until then they are skipped and nothing else is affected.
 
 ## Renewals

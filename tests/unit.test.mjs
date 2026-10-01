@@ -90,6 +90,11 @@ test("content sections validate and normalise", async () => {
   assert.throws(() => validateSection("giftImpact", { NGN: [{ amount: 500, text: "Pens" }, { amount: 400, text: "Food" }, { amount: 900, text: "More" }] }), /order/);
   assert.throws(() => validateSection("documents", { items: [{ title: "Report", url: "javascript:alert(1)" }] }), /https/);
   assert.throws(() => validateSection("contact", { ...defaults.contact, whatsapp: "12" }), /phone number/);
+  // each WhatsApp number gets a button labelled by country; a single saved number still works
+  const wa = validateSection("contact", { ...defaults.contact, whatsapp: "+234 802 342 5558\n+44 7398 277555" });
+  assert.deepEqual(wa.whatsapp, ["+234 802 342 5558", "+44 7398 277555"]);
+  assert.ok(render.waButtons(wa).includes("wa.me/2348023425558") && render.waButtons(wa).includes("WhatsApp UK"));
+  assert.ok(render.waLines({ whatsapp: "+234 802 342 5558" }).includes("(Nigeria)"));
   assert.throws(() => validateSection("announcement", { enabled: true, text: "" }), /message/);
   assert.throws(() => validateSection("nope", {}), /Unknown section/);
 

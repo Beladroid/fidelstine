@@ -364,15 +364,15 @@
   },
   "contact": {
     "email": "",
-    "whatsapp": "+234 802 342 5558",
+    "whatsapp": ["+234 802 342 5558", "+44 7398 277555"],
     "phonesNigeria": [
       "+234 802 342 5558",
       "+234 703 981 2282"
     ],
     "phonesInternational": [
+      "+44 7474 371109",
       "+44 7378 255045",
-      "+44 7398 277555",
-      "+44 7474 371109"
+      "+44 7398 277555"
     ],
     "facebook": "",
     "instagram": "https://www.instagram.com/fidelstine",

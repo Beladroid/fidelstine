@@ -24,9 +24,7 @@
 
     <div class="menu-panel__quick">
       <a class="quick-action" href="tel:{{ site.phonesNigeria[0].tel }}" data-live-call>{% icon "phone" %}Call</a>
-      {%- if site.whatsapp %}
-      <a class="quick-action" href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>
-      {%- endif %}
+      <span class="live-group" data-live="wa-quick">{% for w in site.whatsappList %}<a class="quick-action" href="https://wa.me/{{ w.number }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp {{ w.country }}</a>{% endfor %}</span>
       <a class="quick-action" href="{{ site.addresses.head.map }}" target="_blank" rel="noopener">{% icon "pin" %}Find us</a>
     </div>
 

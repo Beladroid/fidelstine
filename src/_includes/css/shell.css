@@ -121,7 +121,7 @@ body.has-hero .site-header:not(.is-scrolled) .primary-nav a.nav-link::after { ba
   display: grid; gap: var(--space-3);
 }
 .menu-panel__donate p { font-family: var(--font-serif); font-style: italic; font-size: 1.15rem; color: #fff; }
-.menu-panel__quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.menu-panel__quick { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-2); }
 .quick-action {
   display: grid; justify-items: center; gap: 6px; padding: 12px 6px; border-radius: var(--r-md);
   background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line-light); font-size: 0.78rem; font-weight: 600; color: #fff;

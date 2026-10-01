@@ -87,5 +87,5 @@
   .brand__tag { display: none; }
   .brand__name { font-size: 1.2rem; }
   .bottom-nav__item { font-size: 0.6rem; }
-  .menu-panel__quick { grid-template-columns: repeat(3, 1fr); }
+  .menu-panel__quick { grid-template-columns: repeat(2, 1fr); }
 }

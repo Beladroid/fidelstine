@@ -7,6 +7,8 @@ compatibility_date = "2026-09-01"
 
 [vars]
 SITE_ENV = "preview"
+# the live address: absolute links use it, and fidelstine.pages.dev redirects to it (functions/_middleware.js)
+SITE_URL = "https://charity.fidelstine.org"
 
 [[d1_databases]]
 binding = "DB"
