@@ -153,11 +153,20 @@ export default function initHero() {
   });
 
   if (caption && slides[0]) caption.textContent = slides[0].dataset.caption || "";
-  // give the LCP photo a moment before pulling video over the network
+  // Give the first photo a moment before pulling video over the network. On very slow connections
+  // (2G) the video waits until the visitor touches the page, and the full-quality photo slideshow runs
+  // meanwhile; on 3G it starts a little later so the words and photos arrive first. The video itself
+  // is never swapped for a lower-quality one.
+  const net = navigator.connection?.effectiveType || "";
+  const verySlow = /(^|-)2g$/.test(net);
   const kick = () => {
-    startVideo();
     startSlides();
+    if (!verySlow) return startVideo();
+    const go = () => { removeEventListener("pointerdown", go); removeEventListener("keydown", go); startVideo(); };
+    addEventListener("pointerdown", go, { once: true, passive: true });
+    addEventListener("keydown", go, { once: true });
   };
-  if (document.readyState === "complete") setTimeout(kick, 400);
-  else window.addEventListener("load", () => setTimeout(kick, 400), { once: true });
+  const delay = net === "3g" ? 2500 : 400;
+  if (document.readyState === "complete") setTimeout(kick, delay);
+  else window.addEventListener("load", () => setTimeout(kick, delay), { once: true });
 }
