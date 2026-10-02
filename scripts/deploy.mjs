@@ -47,7 +47,9 @@ const log = (...a) => console.log("•", ...a);
 /* ---------- 1. build ---------- */
 if (CONFIG.build && !noBuild) {
   log(`Building (${CONFIG.build})`);
-  execSync(CONFIG.build, { cwd: root, stdio: "inherit", shell: true, env: process.env });
+  // the live site takes card payments (Flutterwave live keys set 2 Oct 2026); ONLINE_GIVING=0 switches them off
+  const giving = branch === "main" ? { ONLINE_GIVING: "1" } : {};
+  execSync(CONFIG.build, { cwd: root, stdio: "inherit", shell: true, env: { ...giving, ...process.env } });
 }
 let dir = path.resolve(root, CONFIG.out);
 if (!fs.existsSync(dir)) throw new Error(`Nothing to publish: ${dir} is missing.`);
